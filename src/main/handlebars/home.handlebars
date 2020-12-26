@@ -1,0 +1,56 @@
+{{#> layout}}
+  {{#*inline "title"}}Home{{/inline}}
+  {{#*inline "content"}}
+    <h1>Murmur <small style="color: rgba(0,0,0,.4)">Yammer Feeds reimagined</small></h1>
+
+    <!-- User information -->
+    <div class="ui vertical segment" style="display: grid; grid-template-columns: 76px max-content auto; margin-bottom: 2em">
+      <img class="ui circular image" src="{{sub user.mugshot_url_template 'width=76&height=76'}}" width="76" height="76">
+      <div style="padding: 0 2.4em 0 2em">
+        <h2 class="ui header" style="margin-bottom: 0.2em">{{user.full_name}}</h2>
+        <p>
+          <a href="{{user.email}}">{{user.email}}</a>, {{user.department}}, {{user.location}}<br>
+          <span style="color: rgba(0,0,0,.4)">
+            On <strong>{{user.network_name}}</strong> Yammer since {{date user.activated_at 'd.m.Y'}}
+          </span>
+        </p>
+      </div>
+      <div class="ui statistics" style="margin-top: 0">
+        <div class="violet statistic">
+          <div class="value">{{user.stats.following}}</div>
+          <div class="label">Following</div>
+        </div>
+        <div class="violet statistic">
+          <div class="value">{{user.stats.followers}}</div>
+          <div class="label">Followers</div>
+        </div>
+        <div class="violet statistic">
+          <div class="value">{{size groups}}</div>
+          <div class="label">Groups</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- List variants -->
+    <div class="ui raised cards">
+      <div class="card">
+        <div class="content">
+          <div class="header"><a href="/following">Following</a></div>
+          <div class="meta">Feed</div>
+          <div class="description">Shows news from groups and people you're following on Yammer</div>
+        </div>
+        <div class="extra content"><i class="clock icon"></i> 3 - 5 seconds</div>
+      </div>
+
+      <div class="card">
+        <div class="content">
+          <div class="header"><a href="/grouped">Grouped</a></div>
+          <div class="meta">Feed</div>
+          <div class="description">Shows merged feed from selected groups</div>
+        </div>
+        <div class="extra content"><i class="clock icon"></i> 1 second</div>
+      </div>
+    </div>
+  {{/inline}}
+  {{#*inline "script"}}{{/inline}}
+{{/layout}}

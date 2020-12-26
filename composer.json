@@ -1,0 +1,25 @@
+{
+  "name": "enbw/murmur",
+  "description": "Murmur - aggregated Yammer feed",
+  "license": "proprietary",
+
+  "require": {
+    "xp-framework/core": "^10.0",
+    "xp-framework/compiler": "^6.0",
+    "xp-forge/web": "^2.0",
+    "xp-forge/web-auth": "^2.0",
+    "xp-forge/rest-client": "^2.0",
+    "xp-forge/rest-api": "^3.0",
+    "xp-forge/sessions": "^2.0",
+    "xp-forge/frontend": "^2.0",
+    "xp-forge/inject": "^5.0",
+    "xp-forge/handlebars": "^5.0",
+    "xp-forge/credentials": "^2.0",
+    "xp-lang/php-is-operator": "^1.0",
+    "xp-lang/php-compact-methods": "^1.0"
+  },
+
+  "require-dev": {
+    "xp-framework/unittest": "^11.0"
+  }
+}
