@@ -29,7 +29,8 @@ class Office365Integration {
       self::LOGIN_URL.'/'.$uri['host'].'/oauth2/v2.0/authorize',
       self::LOGIN_URL.'/'.$uri['host'].'/oauth2/v2.0/token',
       [$uri['user'], $uri['pass']],
-      isset($uri['query']) ? explode(',', $uri['query']) : ['User.Read'],
+      callback: '/',
+      scopes: isset($uri['query']) ? explode(',', $uri['query']) : ['User.Read'],
     );
     $this->flow->target($service ? new UseURL($service) : new UseRequest());
   }

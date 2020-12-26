@@ -7,7 +7,7 @@
     "xp-framework/core": "^10.0",
     "xp-framework/compiler": "^6.0",
     "xp-forge/web": "^2.0",
-    "xp-forge/web-auth": "^2.0",
+    "xp-forge/web-auth": "^2.1",
     "xp-forge/rest-client": "^2.0",
     "xp-forge/rest-api": "^3.0",
     "xp-forge/sessions": "^2.0",
