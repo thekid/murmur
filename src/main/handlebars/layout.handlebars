@@ -49,6 +49,13 @@
           return '';
         },
 
+        likes: function(content) {
+          if (content > 0) {
+            return new Html('<i class="heart outline like icon"></i> ' + content);
+          }
+          return '';
+        },
+
         date: function(content) {
           return content.replace(/ \+[0-9]+$/, '');
         },

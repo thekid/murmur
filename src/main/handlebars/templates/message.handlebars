@@ -7,8 +7,7 @@
         <div class="meta">
           <span class="date"><a title="{{message.id}}" class="date" href="{{message.web_url}}">{{format.date(message.created_at)}}</a></span>
           <span class="right floated">
-            <i class="heart outline like icon"></i>
-            {{message.liked_by.count}}
+            {{format.likes(message.liked_by.count)}}
           </span>
         </div>
         <div class="description">
