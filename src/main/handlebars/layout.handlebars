@@ -19,6 +19,37 @@
 
     <script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/fomantic-ui@2.8.7/dist/semantic.min.js"></script>
+    <script type="text/javascript">
+      const format = {
+        placeholders : new RegExp(/\{\{([^}]+)\}\}/g),
+
+        html: function(content) {
+          const entities = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'};
+          if (typeof(content) === 'string') {
+            return content.replace(/[&<>"']/g, s => entities[s]);
+          } else {
+            return '' + content;
+          }
+        },
+
+        date: function(content) {
+          return content.replace(/ \+[0-9]+$/, '');
+        },
+
+        first: function(content) {
+          let p = content.match(/[^,]\n\n/);
+          let s = content.match(/([.?!]( |\n|$))/);
+
+          if (null === p && null === s) {
+            return content;
+          } else if (null === p || s.index < p.index) {
+            return content.substring(0, s.index + 1);
+          } else {
+            return content.substring(0, p.index + 1);
+          }
+        }
+      };
+    </script>
     {{> script}} 
   </body>
 </html>

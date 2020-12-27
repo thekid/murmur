@@ -20,24 +20,26 @@
     <div class="ui vertical segment">
       {{{{template}}}}
         <template id="event">
-          <div class="event">
-            <div class="label">
-              <img src="{{sender.mugshot_url}}">
-            </div>
+          <div class="card">
             <div class="content">
-              <div class="summary">
-                <a href="{{sender.web_url}}">{{sender.full_name}}</a> posted in <a href="{{group.web_url}}">{{group.full_name}}</a>
-                <a title="{{message.id}}" class="date" href="{{message.web_url}}">{{message.created_at}}</a>
+              <div class="header">New post in <a href="{{group.web_url}}">{{group.full_name}}</a></div>
+              <div class="meta">
+                <span class="date"><a title="{{message.id}}" class="date" href="{{message.web_url}}">{{format.date(message.created_at)}}</a></span>
               </div>
-              <div class="extra text" style="max-width: 640px !important">
-                {{first(message.content_excerpt)}}
+              <div class="description">
+                <p class="excerpt" data-content="{{message.content_excerpt}}" data-variation="wide inverted">{{format.first(message.content_excerpt)}}</p>
+              </div>
+            </div>
+            <div class="extra content">
+              <div class="center aligned author">
+                <img class="ui avatar image" src="{{sender.mugshot_url}}"> <a href="{{sender.web_url}}">{{sender.full_name}}</a>
               </div>
             </div>
           </div>
         </template>
       {{{{/template}}}}
 
-      <div class="ui large feed" id="feed">
+      <div class="ui cards" id="feed">
         Select one or more groups
       </div>
 
@@ -51,11 +53,6 @@
       const results = {};
       const selected = {};
       let debounce = null;
-
-      function first(content) {
-        let s = content.match(/[^,]\n\n/) || content.match(/([.?!]( |\n|$))/);
-        return s ? content.substring(0, s.index + 1) : content;
-      }
 
       function toggle($el) {
         clearTimeout(debounce);
@@ -74,7 +71,6 @@
         const $feed = document.getElementById('feed');
         const $loading = document.getElementById('loading');
         const template = document.getElementById('event').innerHTML;
-        const placeholders = new RegExp(/\{\{([^}]+)\}\}/g);
 
         let todo = Object.keys(selected).length;
         if (0 === todo) {
@@ -110,18 +106,19 @@
           for (const message of messages) {
             let sender = references.user[message.sender_id];
             let group = references.group[message.group_id];
-            html += template.replaceAll(placeholders, (match, placeholder) => eval(placeholder));
+            html += template.replaceAll(format.placeholders, (match, placeholder) => format.html(eval(placeholder)));
           }
 
           $feed.innerHTML = html;
           $loading.classList.remove('active');
+          $('.excerpt').popup();
         }
         for (const id in selected) {
           if (typeof(results[id]) === 'undefined') {
             fetch('/api/feed/group/' + id + '?limit=3', {method: 'GET', credentials: 'same-origin'})
               .then(res => res.json())
               .then(result => { results[id] = result; completed(); })
-              .catch(error => { console.error(error); completed(); })
+              .catch(error => { results[id] = {references: [], messages: []}; console.error(error); completed(); })
             ;
           } else {
             completed();
