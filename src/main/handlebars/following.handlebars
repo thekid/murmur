@@ -2,88 +2,91 @@
   {{#*inline "title"}}Feed{{/inline}}
   {{#*inline "content"}}
     <h1>Following Feed</h1>
-    <div class="ui vertical segment" style="display: grid; grid-template-columns: calc(640px - 2.64286em) max-content">
-      <div style="align-items: center">
-        <p>
-          {{#if cached}}Retrieved from cache{{else}}Fetched from Yammer in {{duration}} seconds{{/if}}
-          <em>(stored until {{date until "H:i:s"}})</em>
-        </p>
-      </div>
-      <form method="POST">
-        <button class="ui tiny labeled icon button" type="submit" onclick="this.classList.add('loading')">
-          <i class="refresh icon"></i>
-          Refresh
-        </button>
-      </form>
+    <div class="ui vertical segment">
+      <!-- Empty -->
     </div>
-    <div class="ui large feed">
-      {{#each feed.data.messages}}
-        {{feed.reference 'sender' 'user' sender_id}}
-        {{feed.reference 'group' 'group' group_id}}
 
-        <div class="event">
-          <div class="label">
-            <img src="{{sender.mugshot_url}}">
+    <!-- Feed -->
+    <div class="ui vertical segment" id="content">
+      {{{{template}}}}
+        <template id="event">
+          <div class="card">
+            <div class="content">
+              <div class="header">New {{message.message_type}} in <a href="{{group.web_url}}">{{group.full_name}}</a></div>
+              <div class="meta">
+                <span class="date"><a title="{{message.id}}" class="date" href="{{message.web_url}}">{{format.date(message.created_at)}}</a></span>
+              </div>
+              <div class="description">
+                <p class="excerpt" data-content="{{message.content_excerpt}}" data-variation="wide inverted">{{format.first(message.content_excerpt)}}</p>
+              </div>
+            </div>
+            <div class="extra content">
+              <div class="center aligned author">
+                <img class="ui avatar image" src="{{sender.mugshot_url}}"> <a href="{{sender.web_url}}">{{sender.full_name}}</a>
+              </div>
+            </div>
           </div>
+        </template>
+      {{{{/template}}}}
+
+      <div class="ui cards" id="feed">
+        <div class="card">
           <div class="content">
-            <div class="summary">
-              <a href="{{sender.web_url}}">{{sender.full_name}}</a> posted in <a href="{{group.web_url}}">{{group.full_name}}</a>
-              <a title="{{id}}" class="date" href="{{web_url}}">
-                {{date created_at "d.m.Y H:i"}}
-              </a>
+            <div class="ui placeholder">
+              <div class="header"><div class="medium line"></div></div>
+              <div class="meta"><div class="short line"></div></div>
             </div>
-            <div class="extra text" style="max-width: 640px !important">
-              {{content_excerpt}}
+            <div class="ui placeholder">
+              <div class="description"><div class="line"></div></div>
             </div>
-
-            <!-- Reactions -->
-            <div class="meta">
-              <span class="like">
-                {{#if liked_by.count}}
-                  <i class="red like icon"></i>{{liked_by.count}} reaction(s) by
-                  {{#each liked_by.names}}
-                    <a class="user">{{full_name}}</a>{{#unless @last}}, {{/unless}}
-                  {{/each}}
-                {{else}}
-                  <i class="like icon"></i> no reactions so far
-                {{/if}}
-              </span>
+          </div>
+          <div class="extra content">
+            <div class="center aligned author">
+              <div class="ui placeholder">
+                <div class="avatar image"></div>
+              </div>
             </div>
-
-            <!-- Threaded -->
-            {{#with (lookup feed.data.threaded_extended thread_id)}}
-              {{#if .}}
-                <div class="extra content">
-                  <div class="ui segment" style="background-color: #fcfcfc; max-width: 640px">
-                    <div class="ui small feed">
-                      {{#each .}}
-                        {{feed.reference 'sender' 'user' sender_id}}
-                        <div class="event">
-                          <div class="label">
-                            <img src="{{sender.mugshot_url}}">
-                          </div>
-                          <div class="content">
-                            <div class="summary">
-                              <a href="{{sender.web_url}}">{{sender.full_name}}</a> replied
-                              <a title="{{id}}" class="date" href="{{web_url}}">
-                                {{date created_at "d.m.Y H:i"}}
-                              </a>
-                            </div>
-                            <div class="extra text">
-                              {{content_excerpt}}
-                            </div>
-                          </div>
-                        </div>
-                      {{/each}}
-                    </div>
-                  </div>
-                </div>
-              {{/if}}
-            {{/with}}
           </div>
         </div>
-      {{/each}}
+      </div>
     </div>
   {{/inline}}
-  {{#*inline "script"}}{{/inline}}
+  {{#*inline "script"}}
+    <script type="text/javascript">
+      window.onload = function() {
+        const $content = document.getElementById('content');
+        const $feed = document.getElementById('feed');
+        const template = document.getElementById('event').innerHTML;        
+
+        const completed = function(result) {
+          let references = [];
+
+          for (const reference of result.references) {
+            if (typeof(references[reference.type]) === 'undefined') {
+              references[reference.type] = {};
+            }
+            references[reference.type][reference.id] = reference;
+          }
+
+          let html = '';
+          for (const message of result.messages) {
+            let sender = references.user[message.sender_id];
+            let group = references.group[message.group_id];
+            html += template.replaceAll(format.placeholders, (match, placeholder) => format.html(eval(placeholder)));
+          }
+
+          $feed.innerHTML = html;
+          $content.classList.remove('loading');
+          $('.excerpt').popup();
+        }
+
+        $content.classList.add('loading');
+        fetch('/api/feed/following?limit=15', {method: 'GET', credentials: 'same-origin'})
+          .then(res => res.json())
+          .then(result => { completed(result); })
+          .catch(error => { completed({references: [], messages: []}); console.error(error); completed(); })
+        ;
+      };
+    </script>
+  {{/inline}}
 {{/layout}}

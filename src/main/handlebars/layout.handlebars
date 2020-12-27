@@ -37,15 +37,22 @@
         },
 
         first: function(content) {
-          let p = content.match(/[^,]\n\n/);
-          let s = content.match(/([.?!]( |\n|$))/);
+          const p = content.match(/[^,]\n\n/);
+          const s = content.match(/[^0-9][.?!]( |\n|$)/);
+          let pos = 0;
 
           if (null === p && null === s) {
-            return content;
+            pos = content.length;
           } else if (null === p || s.index < p.index) {
-            return content.substring(0, s.index + 1);
+            pos = s.index + 2;
           } else {
-            return content.substring(0, p.index + 1);
+            pos = p.index + 1;
+          }
+
+          if (pos > 100) {
+            return content.substring(0, 100) + '…';
+          } else {
+            return content.substring(0, pos);
           }
         }
       };
