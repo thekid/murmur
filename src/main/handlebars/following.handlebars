@@ -2,32 +2,16 @@
   {{#*inline "title"}}Feed{{/inline}}
   {{#*inline "content"}}
     <h1>Following Feed</h1>
-    <div class="ui vertical segment">
-      <!-- Empty -->
+    <div class="ui vertical clearing segment">
+      <button class="ui right floated tiny labeled icon button" type="submit" onclick="update()"><i class="refresh icon"></i> Refresh</button>
+      <p>
+        <i class="clock icon"></i> <span id="timing">...</span>
+      </p>
     </div>
 
     <!-- Feed -->
     <div class="ui vertical segment" id="content">
-      {{{{template}}}}
-        <template id="event">
-          <div class="card">
-            <div class="content">
-              <div class="header">New {{message.message_type}} in <a href="{{group.web_url}}">{{group.full_name}}</a></div>
-              <div class="meta">
-                <span class="date"><a title="{{message.id}}" class="date" href="{{message.web_url}}">{{format.date(message.created_at)}}</a></span>
-              </div>
-              <div class="description">
-                <p class="excerpt" data-content="{{message.content_excerpt}}" data-variation="wide inverted">{{format.first(message.content_excerpt)}}</p>
-              </div>
-            </div>
-            <div class="extra content">
-              <div class="center aligned author">
-                <img class="ui avatar image" src="{{sender.mugshot_url}}"> <a href="{{sender.web_url}}">{{sender.full_name}}</a>
-              </div>
-            </div>
-          </div>
-        </template>
-      {{{{/template}}}}
+      {{> templates/message}}
 
       <div class="ui cards" id="feed">
         <div class="card">
@@ -53,10 +37,12 @@
   {{/inline}}
   {{#*inline "script"}}
     <script type="text/javascript">
-      window.onload = function() {
+      function update() {
         const $content = document.getElementById('content');
         const $feed = document.getElementById('feed');
-        const template = document.getElementById('event').innerHTML;        
+        const $timing = document.getElementById('timing');
+        const template = document.getElementById('event').innerHTML;    
+        const start = new Date().getTime();  
 
         const completed = function(result) {
           let references = [];
@@ -77,6 +63,7 @@
 
           $feed.innerHTML = html;
           $content.classList.remove('loading');
+          $timing.innerHTML = ((new Date().getTime() - start) / 1000) + ' seconds';
           $('.excerpt').popup();
         }
 
@@ -87,6 +74,8 @@
           .catch(error => { completed({references: [], messages: []}); console.error(error); completed(); })
         ;
       };
+
+      window.onload = update;
     </script>
   {{/inline}}
 {{/layout}}

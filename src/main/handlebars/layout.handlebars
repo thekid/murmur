@@ -20,6 +20,16 @@
     <script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/fomantic-ui@2.8.7/dist/semantic.min.js"></script>
     <script type="text/javascript">
+      class Html {
+        constructor(source) {
+          this.source = source;
+        }
+
+        toString() {
+          return this.source;
+        }
+      }
+
       const format = {
         placeholders : new RegExp(/\{\{([^}]+)\}\}/g),
 
@@ -30,6 +40,13 @@
           } else {
             return '' + content;
           }
+        },
+
+        label: function(content) {
+          if ('question' === content) {
+            return new Html('<a class="ui green right corner label"><i class="compass icon"></i></a>');
+          }
+          return '';
         },
 
         date: function(content) {

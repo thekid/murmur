@@ -1,0 +1,25 @@
+{{{{template}}}}
+  <template id="event">
+    <div class="card">
+      {{format.label(message.message_type)}}
+      <div class="content">
+        <div class="header">New {{message.message_type}} in <a href="{{group.web_url}}">{{group.full_name}}</a></div>
+        <div class="meta">
+          <span class="date"><a title="{{message.id}}" class="date" href="{{message.web_url}}">{{format.date(message.created_at)}}</a></span>
+          <span class="right floated">
+            <i class="heart outline like icon"></i>
+            {{message.liked_by.count}}
+          </span>
+        </div>
+        <div class="description">
+          <p class="excerpt" data-content="{{message.content_excerpt}}" data-variation="wide inverted">{{format.first(message.content_excerpt)}}</p>
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="center aligned author">
+          <img class="ui avatar image" src="{{sender.mugshot_url}}"> <a href="{{sender.web_url}}">{{sender.full_name}}</a>
+        </div>
+      </div>
+    </div>
+  </template>
+{{{{/template}}}}
