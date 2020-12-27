@@ -1,7 +1,7 @@
 {{#> layout}}
-  {{#*inline "title"}}Feed{{/inline}}
+  {{#*inline "title"}}The {{kind}} Feed{{/inline}}
   {{#*inline "content"}}
-    <h1>Following Feed</h1>
+    <h1>The {{kind}} feed</h1>
     <div class="ui vertical clearing segment">
       <button class="ui right floated tiny labeled icon button" type="submit" onclick="update()"><i class="refresh icon"></i> Refresh</button>
       <p>
@@ -68,7 +68,7 @@
         }
 
         $content.classList.add('loading');
-        fetch('/api/feed/following?limit=15', {method: 'GET', credentials: 'same-origin'})
+        fetch('/api/feed/{{kind}}?limit=15', {method: 'GET', credentials: 'same-origin'})
           .then(res => res.json())
           .then(result => { completed(result); })
           .catch(error => { completed({references: [], messages: []}); console.error(error); completed(); })

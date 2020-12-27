@@ -44,7 +44,9 @@
 
         label: function(content) {
           if ('question' === content) {
-            return new Html('<a class="ui green right corner label"><i class="compass icon"></i></a>');
+            return new Html('<a class="ui olive right corner label"><i class="compass icon"></i></a>');
+          } else if ('announcement' === content) {
+            return new Html('<a class="ui orange right corner label"><i class="rss icon"></i></a>');
           }
           return '';
         },

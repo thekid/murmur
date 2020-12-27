@@ -8,6 +8,15 @@ class Feed {
 
   public function __construct(private YammerAPI $yammer) { }
 
+  #[Get('/all')]
+  public function all(#[Param] $limit= 10, #[Value] $user) {
+    return $this->yammer->as($user['token'])
+      ->resource('messages.json')
+      ->get(['limit' => $limit, 'threaded' => 'true'])
+      ->value()
+    ;
+  }
+
   #[Get('/following')]
   public function following(#[Param] $limit= 10, #[Value] $user) {
     return $this->yammer->as($user['token'])
