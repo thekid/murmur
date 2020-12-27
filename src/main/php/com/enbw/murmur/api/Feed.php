@@ -9,7 +9,7 @@ class Feed {
   public function __construct(private YammerAPI $yammer) { }
 
   #[Get('/all')]
-  public function all(#[Param] $limit= 10, #[Value] $user) {
+  public function all(#[Value] $user, #[Param] $limit= 10) {
     return $this->yammer->as($user['token'])
       ->resource('messages.json')
       ->get(['limit' => $limit, 'threaded' => 'true'])
@@ -18,7 +18,7 @@ class Feed {
   }
 
   #[Get('/following')]
-  public function following(#[Param] $limit= 10, #[Value] $user) {
+  public function following(#[Value] $user, #[Param] $limit= 10) {
     return $this->yammer->as($user['token'])
       ->resource('messages/following.json')
       ->get(['limit' => $limit, 'threaded' => 'true'])
@@ -27,7 +27,7 @@ class Feed {
   }
 
   #[Get('/group/{id}')]
-  public function group($id, #[Param] $limit= 10, #[Value] $user) {
+  public function group(#[Value] $user, $id, #[Param] $limit= 10) {
     return $this->yammer->as($user['token'])
       ->resource('messages/in_group/{0}.json', [$id])
       ->get(['limit' => $limit, 'threaded' => 'true'])
