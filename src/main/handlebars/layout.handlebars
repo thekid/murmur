@@ -10,7 +10,11 @@
   </head>
   <body class="pushable">
     <nav class="ui top fixed inverted menu">
-      <a class="active violet item" href="/">Murmur</a>
+      <a class="{{#if (equals scope 'home')}}active violet{{/if}} item" href="/">Murmur</a>
+      <a class="{{#if (equals kind 'all')}}active violet{{/if}} item" href="/all">All</a>
+      <a class="{{#if (equals kind 'discovery')}}active violet{{/if}} item" href="/discovery">Discovery</a>
+      <a class="{{#if (equals kind 'following')}}active violet{{/if}} item" href="/following">Following</a>
+      <a class="{{#if (equals scope 'grouped')}}active violet{{/if}} item" href="/grouped">Grouped</a>
     </nav>
 
     <main class="pusher" style="padding: 50px 10px 0 10px">
@@ -19,81 +23,73 @@
 
     <script src="//cdn.jsdelivr.net/npm/jquery@3.3.1/dist/jquery.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/fomantic-ui@2.8.7/dist/semantic.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/handlebars@v4.7.6/dist/handlebars.js"></script>
     <script type="text/javascript">
-      class Html {
-        constructor(source) {
-          this.source = source;
-        }
-
-        toString() {
-          return this.source;
+      function contentState(threadStarter) {
+        if (threadStarter.body.parsed !== undefined) {
+          return threadStarter.body.parsed;
+        } else if (null !== threadStarter.body.serializedContentState) {
+          return threadStarter.body.parsed = JSON.parse(threadStarter.body.serializedContentState);
+        } else if (null !== threadStarter.sharedMessage) {
+          return threadStarter.body.parsed = JSON.parse(threadStarter.sharedMessage.body.serializedContentState);
+        } else {
+          return threadStarter.body.parsed = {blocks: []};
         }
       }
 
-      const format = {
-        placeholders : new RegExp(/\{\{([^}]+)\}\}/g),
-
-        html: function(content) {
-          const entities = {'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'};
-          if (typeof(content) === 'string') {
-            return content.replace(/[&<>"']/g, s => entities[s]);
-          } else {
-            return '' + content;
-          }
-        },
-
-        first: function(body) {
-          let content = body.blocks[0].text;
-
-          if (content.length > 100) {
-            return content.substring(0, 100) + '…';
-          } else {
-            return content;
-          }
-        },
-
-        body: function(body) {
-          let content = '';
-          for (const block of body.blocks) {
-            content += block.text;
-          }
-          return content;
-        },
-
-        avatar: function(user) {
-          return user.avatarUrlTemplate.replaceAll(/\{(width|height)\}/g, 48);
-        },
-
-        type: function(message) {
-          if (message.threadStarter.isQuestion) {
-            return 'question';
-          } else if (message.isAnnouncement) {
-            return 'announcement';
-          } else {
-            return 'update';
-          }
-        },
-
-        label: function(message) {
-          if (message.threadStarter.isQuestion) {
-            return new Html('<a class="ui olive right corner label"><i class="compass icon"></i></a>');
-          } else if (message.isAnnouncement) {
-            return new Html('<a class="ui orange right corner label"><i class="rss icon"></i></a>');
-          }
-          return '';
-        },
-
-        likes: function(reactions) {
-          if (reactions.totalCount > 0) {
-            return new Html('<i class="heart outline like icon"></i> ' + reactions.totalCount);
-          }
-          return '';
-        },
-
-        date: function(content) {
-          return content.replace('T', ' ').replace(/\.[0-9]+Z$/, '');
+      Handlebars.registerHelper('label', function(message) {
+        if (message.threadStarter.isQuestion) {
+          return '<a class="ui olive right corner label"><i class="compass icon"></i></a>';
+        } else if (message.isAnnouncement) {
+          return '<a class="ui orange right corner label"><i class="rss icon"></i></a>';
         }
-      };
+        return '';
+      });
+
+      Handlebars.registerHelper('type', function(message) {
+        if (message.threadStarter.isQuestion) {
+          return 'question';
+        } else if (message.isAnnouncement) {
+          return 'announcement';
+        } else {
+          return 'update';
+        }
+      });
+
+      Handlebars.registerHelper('date', function(value) {
+        return value.replace('T', ' ').replace(/\.[0-9]+Z$/, '');
+      });
+
+      Handlebars.registerHelper('avatar', function(user) {
+        return user.avatarUrlTemplate.replaceAll(/\{(width|height)\}/g, 48);
+      });
+
+      Handlebars.registerHelper('likes', function(reactions) {
+        if (reactions.totalCount > 0) {
+          return '<i class="heart outline like icon"></i> ' + reactions.totalCount;
+        }
+        return '';
+      });
+
+      Handlebars.registerHelper('first', function(threadStarter) {
+        const content = contentState(threadStarter).blocks[0].text;
+
+        if (content.length > 100) {
+          return content.substring(0, 100) + '…';
+        } else {
+          return content;
+        }
+      });
+
+      Handlebars.registerHelper('body', function(threadStarter) {
+        const body = contentState(threadStarter);
+
+        let content = '';
+        for (const block of body.blocks) {
+          content += block.text;
+        }
+        return content;
+      });
     </script>
     {{> script}} 
   </body>

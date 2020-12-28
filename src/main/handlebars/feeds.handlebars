@@ -11,8 +11,6 @@
 
     <!-- Feed -->
     <div class="ui vertical segment" id="content">
-      {{> templates/message}}
-
       <div class="ui cards" id="feed">
         <div class="card">
           <div class="content">
@@ -41,32 +39,19 @@
         const $content = document.getElementById('content');
         const $feed = document.getElementById('feed');
         const $timing = document.getElementById('timing');
-        const template = document.getElementById('event').innerHTML;    
-        const start = new Date().getTime();  
 
-        const completed = function(result) {
-          let html = '';
+        const start = new Date().getTime();
+        const template = Handlebars.compile(`{{{source 'templates/messages'}}}`);
+
+        const completed = function(result, error) {
           if (result !== null) {
             const edges = result.viewer.homeFeed.homeFeedCards.edges;
             edges.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
-
-            for (const edge of edges) {
-              const message = edge.node;
-
-              let content;
-              if (null !== message.threadStarter.body.serializedContentState) {
-                content = JSON.parse(message.threadStarter.body.serializedContentState);
-              } else if (null !== message.threadStarter.sharedMessage) {
-                content = JSON.parse(message.threadStarter.sharedMessage.body.serializedContentState);
-              } else {
-                content = {blocks: []};
-              }
-
-              html += template.replaceAll(format.placeholders, (match, placeholder) => format.html(eval(placeholder)));
-            }
+            $feed.innerHTML = template({edges});
+          } else {
+            $feed.innerHTML = template({error});
           }
 
-          $feed.innerHTML = html;
           $content.classList.remove('loading');
           $timing.innerHTML = ((new Date().getTime() - start) / 1000) + ' seconds';
           $('.excerpt').popup();
@@ -74,9 +59,9 @@
 
         $content.classList.add('loading');
         fetch('/api/feed/{{kind}}?limit=15', {method: 'GET', credentials: 'same-origin'})
-          .then(res => res.json())
-          .then(result => { completed(result); })
-          .catch(error => { completed(null); console.error(error); completed(); })
+          .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
+          .then(result => completed(result, null))
+          .catch(error => completed(null, error))
         ;
       };
 
