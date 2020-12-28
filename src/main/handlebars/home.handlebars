@@ -81,10 +81,10 @@
           const $live = document.getElementById('live');
           const template = Handlebars.compile(`{{{source 'templates/events'}}}`);
 
-          if (result !== null) {
-            $live.innerHTML = template({edges: result.activeBroadcasts.edges, errors: []});
+          if (error !== null) {
+            console.log('Ignoring', error);
           } else {
-            $live.innerHTML = template({edges: [], errors: [error.name + ': ' + error.message]});
+            $live.innerHTML = template({edges: result.activeBroadcasts.edges, errors: []});
           }
           setTimeout(update, 10 * 1000);
         }
