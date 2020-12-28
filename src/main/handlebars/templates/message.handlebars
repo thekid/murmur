@@ -1,22 +1,22 @@
 {{{{template}}}}
   <template id="event">
     <div class="card">
-      {{format.label(message.message_type)}}
+      {{format.label(message)}}
       <div class="content">
-        <div class="header">New {{message.message_type}} in <a href="{{group.web_url}}">{{group.full_name}}</a></div>
+        <div class="header">New {{format.type(message)}} in <a href="https://web.yammer.com/main/groups/{{message.group.id}}">{{message.group.displayName}}</a></div>
         <div class="meta">
-          <span class="date"><a title="{{message.id}}" class="date" href="{{message.web_url}}">{{format.date(message.created_at)}}</a></span>
+          <span class="date"><a title="{{message.databaseId}}" class="date" href="https://web.yammer.com/main/threads/{{message.id}}">{{format.date(message.updatedAt)}}</a></span>
           <span class="right floated">
-            {{format.likes(message.liked_by.count)}}
+            {{format.likes(message.threadStarter.reactionsConnection)}}
           </span>
         </div>
         <div class="description">
-          <p class="excerpt" data-content="{{message.content_excerpt}}" data-variation="wide inverted">{{format.first(message.content_excerpt)}}</p>
+          <p class="excerpt" data-content="{{format.body(content)}}" data-variation="wide inverted">{{format.first(content)}}</p>
         </div>
       </div>
       <div class="extra content">
         <div class="center aligned author">
-          <img class="ui avatar image" src="{{sender.mugshot_url}}"> <a href="{{sender.web_url}}">{{sender.full_name}}</a>
+          <img class="ui avatar image" src="{{format.avatar(message.threadStarter.sender)}}" onerror="this.src='/static/default-avatar.png'"> <a href="https://web.yammer.com/main/users/{{message.threadStarter.sender.id}}">{{message.threadStarter.sender.displayName}}</a>
         </div>
       </div>
     </div>

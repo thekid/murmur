@@ -42,44 +42,56 @@
           }
         },
 
-        label: function(content) {
-          if ('question' === content) {
+        first: function(body) {
+          let content = body.blocks[0].text;
+
+          if (content.length > 100) {
+            return content.substring(0, 100) + '…';
+          } else {
+            return content;
+          }
+        },
+
+        body: function(body) {
+          let content = '';
+          for (const block of body.blocks) {
+            content += block.text;
+          }
+          return content;
+        },
+
+        avatar: function(user) {
+          return user.avatarUrlTemplate.replaceAll(/\{(width|height)\}/g, 48);
+        },
+
+        type: function(message) {
+          if (message.threadStarter.isQuestion) {
+            return 'question';
+          } else if (message.isAnnouncement) {
+            return 'announcement';
+          } else {
+            return 'update';
+          }
+        },
+
+        label: function(message) {
+          if (message.threadStarter.isQuestion) {
             return new Html('<a class="ui olive right corner label"><i class="compass icon"></i></a>');
-          } else if ('announcement' === content) {
+          } else if (message.isAnnouncement) {
             return new Html('<a class="ui orange right corner label"><i class="rss icon"></i></a>');
           }
           return '';
         },
 
-        likes: function(content) {
-          if (content > 0) {
-            return new Html('<i class="heart outline like icon"></i> ' + content);
+        likes: function(reactions) {
+          if (reactions.totalCount > 0) {
+            return new Html('<i class="heart outline like icon"></i> ' + reactions.totalCount);
           }
           return '';
         },
 
         date: function(content) {
-          return content.replace(/ \+[0-9]+$/, '');
-        },
-
-        first: function(content) {
-          const p = content.match(/[^,]\n\n/);
-          const s = content.match(/[^0-9][.?!]( |\n|$)/);
-          let pos = 0;
-
-          if (null === p && null === s) {
-            pos = content.length;
-          } else if (null === p || s.index < p.index) {
-            pos = s.index + 2;
-          } else {
-            pos = p.index + 1;
-          }
-
-          if (pos > 100) {
-            return content.substring(0, 100) + '…';
-          } else {
-            return content.substring(0, pos);
-          }
+          return content.replace('T', ' ').replace(/\.[0-9]+Z$/, '');
         }
       };
     </script>

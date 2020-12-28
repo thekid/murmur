@@ -10,7 +10,6 @@ class Grouped {
 
   #[Get]
   public function index(#[Value] $user) {
-    $api= $this->yammer->as($user['token']);
-    return ['groups' => $api->resource('groups/for_user/{id}.json', $user['identity'])->get()->value()];
+    return ['groups' => $this->yammer->as($user['token'])->api('groups/for_user/{id}n', $user['identity'])->get()->value()];
   }
 }

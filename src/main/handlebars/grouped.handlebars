@@ -60,29 +60,30 @@
           todo--;
           if (todo > 0) return;
 
-          let references = [];
-          let messages = [];
+          let edges = [];
           for (const id in selected) {
-            if (typeof(results[id]) === 'undefined') {
+            if (typeof(results[id]) === 'undefined' || null === results[id]) {
               console.log('Missing result', id);
-              continue;
+            } else {
+              edges = edges.concat(results[id].group.feed.threads.edges);
             }
-
-            for (const reference of results[id].references) {
-              if (typeof(references[reference.type]) === 'undefined') {
-                references[reference.type] = {};
-              }
-              references[reference.type][reference.id] = reference;
-            }
-            messages = messages.concat(results[id].messages);
           }
 
-          messages.sort((a, b) => b.id - a.id);
+          edges.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
 
           let html = '';
-          for (const message of messages) {
-            let sender = references.user[message.sender_id];
-            let group = references.group[message.group_id];
+          for (const edge of edges) {
+            const message = edge.node;
+
+            let content;
+            if (null !== message.threadStarter.body.serializedContentState) {
+              content = JSON.parse(message.threadStarter.body.serializedContentState);
+            } else if (null !== message.threadStarter.sharedMessage) {
+              content = JSON.parse(message.threadStarter.sharedMessage.body.serializedContentState);
+            } else {
+              content = {blocks: []};
+            }
+
             html += template.replaceAll(format.placeholders, (match, placeholder) => format.html(eval(placeholder)));
           }
 
@@ -95,7 +96,7 @@
             fetch('/api/feed/group/' + id + '?limit=5', {method: 'GET', credentials: 'same-origin'})
               .then(res => res.json())
               .then(result => { results[id] = result; completed(); })
-              .catch(error => { results[id] = {references: [], messages: []}; console.error(error); completed(); })
+              .catch(error => { results[id] = null; console.error(error); completed(); })
             ;
           } else {
             completed();

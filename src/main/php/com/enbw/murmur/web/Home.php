@@ -11,7 +11,7 @@ class Home {
 
   #[Get]
   public function index(#[Value] $user) {
-    $api= $this->yammer->as($user['token']);
+    $endpoints= $this->yammer->as($user['token']);
 
     // Cache groups
     $id= $user['identity']['id'];
@@ -19,7 +19,7 @@ class Home {
       while (sizeof(self::$groups) > 100) {
         unset(self::$groups[key(self::$groups)]);
       }
-      self::$groups[$id]= $api->resource('groups/for_user/{id}.json', $user['identity'])->get()->value();
+      self::$groups[$id]= $endpoints->api('groups/for_user/{id}', $user['identity'])->get()->value();
     }
 
     return ['user' => $user['identity'], 'groups' => self::$groups[$id]];

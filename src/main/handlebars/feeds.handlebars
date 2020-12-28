@@ -45,20 +45,25 @@
         const start = new Date().getTime();  
 
         const completed = function(result) {
-          let references = [];
-
-          for (const reference of result.references) {
-            if (typeof(references[reference.type]) === 'undefined') {
-              references[reference.type] = {};
-            }
-            references[reference.type][reference.id] = reference;
-          }
-
           let html = '';
-          for (const message of result.messages) {
-            let sender = references.user[message.sender_id];
-            let group = references.group[message.group_id];
-            html += template.replaceAll(format.placeholders, (match, placeholder) => format.html(eval(placeholder)));
+          if (result !== null) {
+            const edges = result.viewer.homeFeed.homeFeedCards.edges;
+            edges.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
+
+            for (const edge of edges) {
+              const message = edge.node;
+
+              let content;
+              if (null !== message.threadStarter.body.serializedContentState) {
+                content = JSON.parse(message.threadStarter.body.serializedContentState);
+              } else if (null !== message.threadStarter.sharedMessage) {
+                content = JSON.parse(message.threadStarter.sharedMessage.body.serializedContentState);
+              } else {
+                content = {blocks: []};
+              }
+
+              html += template.replaceAll(format.placeholders, (match, placeholder) => format.html(eval(placeholder)));
+            }
           }
 
           $feed.innerHTML = html;
@@ -71,7 +76,7 @@
         fetch('/api/feed/{{kind}}?limit=15', {method: 'GET', credentials: 'same-origin'})
           .then(res => res.json())
           .then(result => { completed(result); })
-          .catch(error => { completed({references: [], messages: []}); console.error(error); completed(); })
+          .catch(error => { completed(null); console.error(error); completed(); })
         ;
       };
 

@@ -13,6 +13,11 @@ class Feeds {
     return View::named('feeds')->with(['kind' => 'all']);
   }
 
+  #[Get('/discovery')]
+  public function discovery(#[Value] $user) {
+    return View::named('feeds')->with(['kind' => 'discovery']);
+  }
+
   #[Get('/following')]
   public function following(#[Value] $user) {
     return View::named('feeds')->with(['kind' => 'following']);
