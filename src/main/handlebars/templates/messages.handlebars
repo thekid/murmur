@@ -1,29 +1,33 @@
-{{#unless error}}
-  {{#each edges}}
-    <div class="card">
-      {{&label node}}
-      <div class="content">
-        <div class="header">New {{type node}} in <a href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a></div>
-        <div class="meta">
-          <span class="date"><a title="{{node.databaseId}}" class="date" href="https://web.yammer.com/main/threads/{{node.id}}">{{date node.updatedAt}}</a></span>
-          <span class="right floated">
-            {{&likes node.threadStarter.reactionsConnection}}
-          </span>
-        </div>
-        <div class="description">
-          <p class="excerpt" data-content="{{body node.threadStarter}}" data-variation="wide inverted">{{first node.threadStarter}}</p>
-        </div>
+{{#each edges}}
+  <div class="card">
+    {{&label node}}
+    <div class="content">
+      <div class="header">New {{type node}} in <a href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a></div>
+      <div class="meta">
+        <span class="date"><a title="{{node.databaseId}}" class="date" href="https://web.yammer.com/main/threads/{{node.id}}">{{date node.updatedAt}}</a></span>
+        <span class="right floated">
+          {{&likes node.threadStarter.reactionsConnection}}
+        </span>
       </div>
-      <div class="extra content">
-        <div class="center aligned author">
-          <img class="ui avatar image" src="{{avatar node.threadStarter.sender}}" onerror="this.src='/static/default-avatar.png'"> <a href="https://web.yammer.com/main/users/{{node.threadStarter.sender.id}}">{{node.threadStarter.sender.displayName}}</a>
-        </div>
+      <div class="description">
+        <p class="excerpt" data-content="{{body node.threadStarter}}" data-variation="wide inverted">{{first node.threadStarter}}</p>
       </div>
     </div>
-  {{/each}}
-{{else}}
-  <div class="ui negative message">
-    <div class="header">Cannot load messages</div>
-    <p>{{error.message}}</p>
+    <div class="extra content">
+      <div class="center aligned author">
+        <img class="ui avatar image" src="{{avatar node.threadStarter.sender}}" onerror="this.src='/static/default-avatar.png'"> <a href="https://web.yammer.com/main/users/{{node.threadStarter.sender.id}}">{{node.threadStarter.sender.displayName}}</a>
+      </div>
+    </div>
   </div>
-{{/unless}}
+{{/each}}
+
+{{#if errors}}
+  <div class="ui negative message">
+    <div class="header">An error occurred when loading the messages</div>
+    <ul class="list">
+      {{#each errors}}
+        <li>{{.}}</li>
+      {{/each}}
+    </ul>
+  </div>
+{{/if}}

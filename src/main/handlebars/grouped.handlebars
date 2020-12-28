@@ -54,35 +54,34 @@
         }
 
         $content.classList.add('loading');
-        let completed = (error) => {
+        let completed = () => {
           todo--;
           if (todo > 0) return;
 
           let edges = [];
+          let errors = [];
           for (const id in selected) {
-            if (typeof(results[id]) === 'undefined' || null === results[id]) {
-              console.log('Missing result', id);
+            if (undefined === results[id]) {
+              errors.push('Missing result for group #' + id);
+            } else if (null === results[id].error) {
+              edges = edges.concat(results[id].result.group.feed.threads.edges);
             } else {
-              edges = edges.concat(results[id].group.feed.threads.edges);
+              errors.push('Error fetching group #' + id + ': ' + results[id].error.message);
             }
           }
 
           edges.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
 
-          if (null === error) {
-            $feed.innerHTML = template({edges});
-          } else {
-            $feed.innerHTML = template({error});
-          }
+          $feed.innerHTML = template({edges: edges, errors: errors});
           $content.classList.remove('loading');
           $('.excerpt').popup();
         }
         for (const id in selected) {
           if (typeof(results[id]) === 'undefined') {
             fetch('/api/feed/group/' + id + '?limit=5', {method: 'GET', credentials: 'same-origin'})
-              .then(res => res.json())
-              .then(result => { results[id] = result; completed(null); })
-              .catch(error => { results[id] = null; completed(error); })
+              .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
+              .then(result => { results[id] = {result: result, error: null}; completed(); })
+              .catch(error => { results[id] = {result: null, error: error}; completed(); })
             ;
           } else {
             completed();

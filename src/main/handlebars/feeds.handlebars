@@ -47,9 +47,9 @@
           if (result !== null) {
             const edges = result.viewer.homeFeed.homeFeedCards.edges;
             edges.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
-            $feed.innerHTML = template({edges});
+            $feed.innerHTML = template({edges: edges, errors: []});
           } else {
-            $feed.innerHTML = template({error});
+            $feed.innerHTML = template({edges: [], errors: [error.name + ': ' + error.message]});
           }
 
           $content.classList.remove('loading');
