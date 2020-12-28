@@ -77,7 +77,7 @@
           $('.excerpt').popup();
         }
         for (const id in selected) {
-          if (typeof(results[id]) === 'undefined') {
+          if (undefined === results[id]) {
             fetch('/api/feed/group/' + id + '?limit=5', {method: 'GET', credentials: 'same-origin'})
               .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
               .then(result => { results[id] = {result: result, error: null}; completed(); })
