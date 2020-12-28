@@ -1,6 +1,16 @@
 {{#each edges}}
   <div class="card">
-    {{&label node}}
+    {{#if node.threadStarter.isQuestion}}
+      {{#if node.bestReply}}
+        <a class="ui olive right corner label excerpt" data-html="<div class='header'>Best answer by {{node.bestReply.message.sender.displayName}}</div>{{body node.bestReply.message}}" data-variation="wide"><i class="compass icon"></i></a>
+      {{else}}
+        <a class="ui blue right corner label excerpt" data-content="No answer yet"><i class="compass icon"></i></a>
+      {{/if}}
+    {{else}}
+      {{#if node.isAnnouncement}}
+        <a class="ui orange right corner label excerpt" data-content="Announcement"><i class="rss icon"></i></a>
+      {{/if}}
+    {{/if}}
     <div class="content">
       <div class="header">New {{type node}} in <a href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a></div>
       <div class="meta">

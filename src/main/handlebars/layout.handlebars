@@ -37,15 +37,6 @@
         }
       }
 
-      Handlebars.registerHelper('label', function(message) {
-        if (message.threadStarter.isQuestion) {
-          return '<a class="ui olive right corner label"><i class="compass icon"></i></a>';
-        } else if (message.isAnnouncement) {
-          return '<a class="ui orange right corner label"><i class="rss icon"></i></a>';
-        }
-        return '';
-      });
-
       Handlebars.registerHelper('type', function(message) {
         if (message.threadStarter.isQuestion) {
           return 'question';
