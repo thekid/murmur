@@ -82,11 +82,11 @@
           const template = Handlebars.compile(`{{{source 'templates/events'}}}`);
 
           if (result !== null) {
-            console.log("Live events", result);
             $live.innerHTML = template({edges: result.activeBroadcasts.edges, errors: []});
           } else {
             $live.innerHTML = template({edges: [], errors: [error.name + ': ' + error.message]});
           }
+          setTimeout(update, 10 * 1000);
         }
 
         fetch('/api/events', {method: 'GET', credentials: 'same-origin'})
