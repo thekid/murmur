@@ -1,0 +1,46 @@
+{{#if edges}}
+  <div style="margin: 0 -10px 2em -10px; padding: 1em 10px 1.5em 10px; background: #201140; color: #fff">
+    <h2>Currently running live events</h2>
+    <div class="ui four inverted stackable cards">
+      {{#each edges}}
+        <div class="card" style="background: rgba(0,0,0,.4)">
+          <a href="https://web.yammer.com/main/events/{{node.broadcastId}}" class="image">
+            <img src="{{image node.group.coverImageUrlTemplate width=680 height=275}}">
+          </a>
+          <div class="content">
+            <a href="https://web.yammer.com/main/events/{{node.broadcastId}}" class="header">
+              <i class="red broadcast tower icon"></i>
+              {{node.title}}
+            </a>
+            <div class="meta">{{date node.startAt}} - {{date node.endAt}}</div>
+            <div class="description">{{node.description}}</div>
+          </div>
+          <div class="extra content">
+            <div class="right floated author">
+              <a title="{{node.organizer.displayName}}" href="https://web.yammer.com/main/users/{{node.organizer.id}}">
+                <img class="ui avatar image" src="{{avatar node.organizer}}" onerror="this.src='/static/default-avatar.png'">
+              </a>
+              {{#each node.presenters}}
+                <a title="{{displayName}}" href="https://web.yammer.com/main/users/{{id}}">
+                  <img class="ui avatar image" src="{{avatar .}}" onerror="this.src='/static/default-avatar.png'">
+                </a>
+              {{/each}}
+            </div>  
+            <a href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+{{/if}}
+
+{{#if errors}}
+  <div class="ui negative message">
+    <div class="header">An error occurred when loading the messages</div>
+    <ul class="list">
+      {{#each errors}}
+        <li>{{.}}</li>
+      {{/each}}
+    </ul>
+  </div>
+{{/if}}

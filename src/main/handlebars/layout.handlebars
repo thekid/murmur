@@ -55,6 +55,10 @@
         return user.avatarUrlTemplate.replaceAll(/\{(width|height)\}/g, 48);
       });
 
+      Handlebars.registerHelper('image', function(template, context) {
+        return template.replaceAll(/\{([^}]+)\}/g, (match, placeholder) => context.hash[placeholder]);
+      });
+
       Handlebars.registerHelper('likes', function(reactions) {
         if (reactions.totalCount > 0) {
           return '<i class="heart outline like icon"></i> ' + reactions.totalCount;

@@ -31,8 +31,11 @@
       </div>
     </div>
 
+    <!-- Live events -->
+    <div id="live"></div>
+
     <!-- List variants -->
-    <div class="ui raised cards">
+    <div class="ui four raised stackable cards">
       <div class="card">
         <div class="content">
           <div class="header"><a href="/all">All</a></div>
@@ -71,5 +74,29 @@
       </div>
     </div>
   {{/inline}}
-  {{#*inline "script"}}{{/inline}}
+  {{#*inline "script"}}
+    <script type="text/javascript">
+      function update() {
+        const completed = function(result, error) {
+          const $live = document.getElementById('live');
+          const template = Handlebars.compile(`{{{source 'templates/events'}}}`);
+
+          if (result !== null) {
+            console.log("Live events", result);
+            $live.innerHTML = template({edges: result.activeBroadcasts.edges, errors: []});
+          } else {
+            $live.innerHTML = template({edges: [], errors: [error.name + ': ' + error.message]});
+          }
+        }
+
+        fetch('/api/events', {method: 'GET', credentials: 'same-origin'})
+          .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
+          .then(result => completed(result, null))
+          .catch(error => completed(null, error))
+        ;
+      };
+
+      window.onload = update;
+    </script>
+  {{/inline}}
 {{/layout}}
