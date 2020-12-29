@@ -22,6 +22,6 @@ class Group {
       if ($group['id'] === $id) return View::named('group')->with(['group' => $group]);
     }
 
-    throw new IllegalAccessException(404, 'No such group #'.$id);
+    throw new Error(404, 'No such group #'.$id);
   }
 }
