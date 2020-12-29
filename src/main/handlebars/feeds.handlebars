@@ -1,7 +1,7 @@
 {{#> layout}}
-  {{#*inline "title"}}The {{kind}} Feed{{/inline}}
+  {{#*inline "title"}}{{lookup navigation request.uri.path}} feed{{/inline}}
   {{#*inline "content"}}
-    <h1>The {{kind}} feed</h1>
+    <h1>{{> title}}</h1>
     <div class="ui vertical clearing segment">
       <button class="ui right floated tiny labeled icon button" type="submit" onclick="update()"><i class="refresh icon"></i> Refresh</button>
       <p>
@@ -58,7 +58,7 @@
         }
 
         $content.classList.add('loading');
-        fetch('/api/feed/{{kind}}?limit=15', {method: 'GET', credentials: 'same-origin'})
+        fetch('/api{{request.uri.path}}?limit=15', {method: 'GET', credentials: 'same-origin'})
           .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
           .then(result => completed(result, null))
           .catch(error => completed(null, error))

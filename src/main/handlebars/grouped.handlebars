@@ -1,9 +1,7 @@
 {{#> layout}}
-  {{#*inline "title"}}Grouped Feed{{/inline}}
+  {{#*inline "title"}}{{lookup navigation request.uri.path}}{{/inline}}
   {{#*inline "content"}}
-    <h1>Grouped Feed</h1>
-
-    <!-- Groups -->
+    <h1>{{> title}}</h1>
     <div class="ui vertical segment">
       <div class="ui labels">
         {{#each groups}}
@@ -78,7 +76,7 @@
         }
         for (const id in selected) {
           if (undefined === results[id]) {
-            fetch('/api/feed/group/' + id + '?limit=5', {method: 'GET', credentials: 'same-origin'})
+            fetch('/api{{request.uri.path}}/' + id + '?limit=5', {method: 'GET', credentials: 'same-origin'})
               .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
               .then(result => { results[id] = {result: result, error: null}; completed(); })
               .catch(error => { results[id] = {result: null, error: error}; completed(); })

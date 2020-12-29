@@ -1,4 +1,12 @@
 <!DOCTYPE html>
+{{declare 'navigation'
+  /='Home'
+  /feed/all='All'
+  /feed/discovery='Discovery'
+  /feed/following='Following'
+  /grouped/all='Grouped'
+  /grouped/questions='Questions'
+}}
 <html>
   <head>
     <meta charset="utf-8"/>
@@ -10,11 +18,9 @@
   </head>
   <body class="pushable">
     <nav class="ui top fixed inverted menu">
-      <a class="{{#if (equals scope 'home')}}active violet{{/if}} item" href="/">Murmur</a>
-      <a class="{{#if (equals kind 'all')}}active violet{{/if}} item" href="/all">All</a>
-      <a class="{{#if (equals kind 'discovery')}}active violet{{/if}} item" href="/discovery">Discovery</a>
-      <a class="{{#if (equals kind 'following')}}active violet{{/if}} item" href="/following">Following</a>
-      <a class="{{#if (equals scope 'grouped')}}active violet{{/if}} item" href="/grouped">Grouped</a>
+      {{#each navigation}}
+        <a class="{{#if (equals request.uri.path @key)}}active violet{{/if}} item" href="{{@key}}">{{.}}</a>
+      {{/each}}
     </nav>
 
     <main class="pusher" style="padding: 50px 10px 0 10px">

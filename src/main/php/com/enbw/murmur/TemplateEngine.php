@@ -15,6 +15,10 @@ class TemplateEngine implements Templates {
       ->withHelper('size', fn($in, $context, $options) => sizeof($options[0]))
       ->withHelper('encode', fn($in, $context, $options) => rawurlencode($options[0]))
       ->withHelper('equals', fn($in, $context, $options) => ($options[0] ?? '') === ($options[1] ?? ''))
+      ->withHelper('declare', fn($in, $context, $options) => {
+        $context->variables[$options[0]]= array_slice($options, 1);
+        return null;
+      })
       ->withHelper('source', fn($in, $context, $options) => {
         $source= $this->backing->templates()->source($options[0]);
         return str_replace('{{', '\\{{', $source->code());

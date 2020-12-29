@@ -1,25 +1,12 @@
 <?php namespace com\enbw\murmur\web;
 
-use com\enbw\murmur\YammerAPI;
 use web\frontend\{Handler, Get, Value, View};
 
-#[Handler('/')]
+#[Handler('/feed')]
 class Feeds {
 
-  public function __construct(private YammerAPI $api) { }
-
-  #[Get('/all')]
+  #[Get('/{kind}')]
   public function all(#[Value] $user) {
-    return View::named('feeds')->with(['kind' => 'all']);
-  }
-
-  #[Get('/discovery')]
-  public function discovery(#[Value] $user) {
-    return View::named('feeds')->with(['kind' => 'discovery']);
-  }
-
-  #[Get('/following')]
-  public function following(#[Value] $user) {
-    return View::named('feeds')->with(['kind' => 'following']);
+    return View::named('feeds');
   }
 }

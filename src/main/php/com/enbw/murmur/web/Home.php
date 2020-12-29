@@ -1,27 +1,23 @@
 <?php namespace com\enbw\murmur\web;
 
-use com\enbw\murmur\YammerAPI;
+use com\enbw\murmur\{YammerAPI, Cache};
 use web\frontend\{Handler, Get, Value};
 
 #[Handler('/')]
 class Home {
   private static $groups= [];
 
-  public function __construct(private YammerAPI $yammer) { }
+  public function __construct(private YammerAPI $yammer, private Cache $cache) { }
 
   #[Get]
   public function index(#[Value] $user) {
-    $endpoints= $this->yammer->as($user['token']);
-
-    // Cache groups
-    $id= $user['identity']['id'];
-    if (!isset(self::$groups[$id])) {
-      while (sizeof(self::$groups) > 100) {
-        unset(self::$groups[key(self::$groups)]);
-      }
-      self::$groups[$id]= $endpoints->api('groups/for_user/{id}', $user['identity'])->get()->value();
-    }
-
-    return ['user' => $user['identity'], 'groups' => self::$groups[$id]];
+    return [
+      'user'   => $user['identity'],
+      'groups' => $this->cache->lookup(
+        $user['identity']['id'],
+        'groups',
+        fn() => $this->yammer->as($user['token'])->api('groups/for_user/{id}', $user['identity'])->get()->value()
+      )
+    ];
   }
 }
