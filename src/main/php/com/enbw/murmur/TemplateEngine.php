@@ -3,7 +3,6 @@
 use com\github\mustache\InMemory;
 use com\handlebarsjs\{HandlebarsEngine, FilesIn};
 use io\Path;
-use io\streams\Streams;
 use util\Date;
 use web\frontend\Templates;
 
@@ -17,8 +16,8 @@ class TemplateEngine implements Templates {
       ->withHelper('encode', fn($in, $context, $options) => rawurlencode($options[0]))
       ->withHelper('equals', fn($in, $context, $options) => ($options[0] ?? '') === ($options[1] ?? ''))
       ->withHelper('source', fn($in, $context, $options) => {
-        $in= $this->backing->templates()->load($options[0]);
-        return str_replace('{{', '\\{{', Streams::readAll($in));
+        $source= $this->backing->templates()->source($options[0]);
+        return str_replace('{{', '\\{{', $source->code());
       })
       ->withHelper('sub', fn($in, $context, $options) => {
         parse_str($options[1], $params);
