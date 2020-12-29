@@ -4,6 +4,7 @@ use com\github\mustache\InMemory;
 use com\handlebarsjs\{HandlebarsEngine, FilesIn};
 use io\Path;
 use util\Date;
+use util\log\Logging;
 use web\frontend\Templates;
 
 class TemplateEngine implements Templates {
@@ -28,6 +29,7 @@ class TemplateEngine implements Templates {
         return preg_replace_callback('/\{([a-z]+)\}/', fn($matches) => $params[$matches[1]], $options[0]);
       })
     ;
+    $this->backing->withLogger(Logging::named('trace')->toConsole());
     $templates && $this->backing->withTemplates(new FilesIn($templates));
   }
 
