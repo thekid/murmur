@@ -15,12 +15,65 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>{{> title}} - Murmur</title>
     <link href="//cdn.jsdelivr.net/npm/fomantic-ui@2.8.7/dist/semantic.min.css" rel="stylesheet" type="text/css">
+    <style type="text/css">
+      .user-info {
+        display: grid;
+        grid-template: none / 480px auto;
+      }
+
+      .hamburger {
+        display: hidden;
+        border: none;
+        background: none;
+        padding: 0;
+      }
+
+      @media only screen and (max-width: 767.98px) {
+        .user-info {
+          grid-template: max-content auto / none;
+          grid-gap: 2em;
+        }
+
+        .hamburger {
+          width: 18px;
+          height: 18px;
+          position: absolute;
+          right: 10px;
+          top: 13px;
+          cursor: pointer;
+          display: block;
+        }
+
+        .hamburger div {
+          height: 3px;
+          background: white;
+          margin: 0 0 3px 0;
+        }
+
+        .ui.stackable.menu .item:not(.active) {
+          display: none;
+        }
+
+        .ui.stackable.menu.open .item:not(.active) {
+          display: block;
+        }
+
+        .ui.stackable.menu a:last-of-type {
+          box-shadow: 0 5px 10px rgba(0,0,0,.3);
+        }
+      }
+    </style>
   </head>
   <body class="pushable">
-    <nav class="ui top fixed inverted menu">
+    <nav class="ui top fixed inverted stackable menu">
       {{#each navigation}}
         <a class="{{#if (equals request.uri.path @key)}}active violet{{/if}} item" href="{{@key}}">{{.}}</a>
       {{/each}}
+      <button class="hamburger" onclick="$(this).parent().toggleClass('open')">
+        <div></div>
+        <div></div>
+        <div></div>
+      </button>
     </nav>
 
     <main class="pusher" style="padding: 50px 10px 0 10px">
