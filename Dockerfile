@@ -6,7 +6,7 @@ RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/te
 
 ENV LD_PRELOAD /usr/lib/preloadable_libiconv.so php
 
-RUN curl -sSL https://dl.bintray.com/xp-runners/generic/xp-run-8.2.0.sh > /usr/bin/xp-run
+RUN curl -sSL https://dl.bintray.com/xp-runners/generic/xp-run-8.3.0.sh > /usr/bin/xp-run
 
 RUN mkdir /app
 
