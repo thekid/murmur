@@ -1,14 +1,37 @@
 {{#> layout}}
   {{#*inline "title"}}{{group.full_name}} feed{{/inline}}
   {{#*inline "content"}}
-    <h1><img class="ui avatar image" src="{{group.mugshot_url}}"> {{> title}}</h1>
 
+    <!-- Group -->
+    <div class="ui vertical segment user-info" style="border-bottom: 0">
+      <div style="display: grid; grid-template-columns: 80px auto">
+        <img class="ui circular image" src="{{sub group.mugshot_url_template 'width=76&height=76'}}" width="76" height="76">
+        <div style="padding: 0 2.4em 0 2em">
+          <h2 class="ui header" style="margin-bottom: 0.2em">{{group.full_name}}</h2>
+          <p>
+            {{group.description}}<br>
+            <span style="color: rgba(0,0,0,.4)">
+              Created {{date group.created_at 'd.m.Y'}}
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="ui statistics" style="margin-top: 0">
+        <div class="violet statistic">
+          <div class="value">{{group.stats.members}}</div>
+          <div class="label">Members</div>
+        </div>
+      </div>
+    </div>
     <div class="ui vertical clearing segment">
       <button class="ui right floated tiny labeled icon button" type="submit" onclick="update()"><i class="refresh icon"></i> Refresh</button>
       <p>
         <i class="clock icon"></i> <span id="timing">...</span>
       </p>
     </div>
+
+    <!-- Live events -->
+    <div id="live"></div>
 
     <!-- Feed -->
     <div class="ui vertical segment" id="content">
@@ -44,7 +67,7 @@
         const start = new Date().getTime();
         const template = Handlebars.compile(`{{{source 'templates/messages'}}}`);
 
-        const completed = function(result, error) {
+        const feed = function(result, error) {
           if (result !== null) {
             const edges = result.group.feed.threads.edges;
             edges.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
@@ -58,13 +81,39 @@
           $('.excerpt').popup();
         }
 
+
         $content.classList.add('loading');
         fetch('/api/grouped/all/{{group.id}}?limit=20', {method: 'GET', credentials: 'same-origin'})
           .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
-          .then(result => completed(result, null))
-          .catch(error => completed(null, error))
+          .then(result => feed(result, null))
+          .catch(error => feed(null, error))
         ;
+
+        // Fetch these in parallel
+        events();
       };
+
+      function events() {
+        const live = function(group, error) {
+          const $live = document.getElementById('live');
+          const template = Handlebars.compile(`{{{source 'templates/events'}}}`);
+
+          if (error !== null) {
+            console.log('Ignoring', error);
+          } else {
+            $live.innerHTML = template({
+              edges  : group.currentEvents.edges.concat(group.futureEvents.edges).concat(group.pastEvents.edges),
+              errors : []
+            });
+          }
+          setTimeout(events, 10 * 1000);
+        }
+        fetch('/api/events/group/{{group.id}}?start=1+week+ago', {method: 'GET', credentials: 'same-origin'})
+          .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
+          .then(result => live(result.group, null))
+          .catch(error => live(null, error))
+        ;
+      }
 
       window.onload = update;
     </script>
