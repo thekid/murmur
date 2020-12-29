@@ -17,7 +17,7 @@ class Groups {
     return $this->yammer->as($user['token'])
       ->query('FeedGroupClients', '0079bf67919fe5d57572a9144e3eb6efc3354a7da8713a68c1e804061f928fed')
       ->execute([
-        'groupId'       => base64_encode(json_encode(['_type' => 'Group', 'id' => $id])),
+        'groupId'       => $this->yammer->id('Group', $id),
         'threadCount'   => $limit,
         'replyCount'    => 0,
         'groupFeedType' => self::TYPES[$type]
