@@ -75,7 +75,7 @@
           $('.excerpt').popup();
         }
         for (const id in selected) {
-          if (undefined === results[id]) {
+          if (undefined === results[id] || null !== results[id].error) {
             fetch('/api{{request.uri.path}}/' + id + '?limit=5', {method: 'GET', credentials: 'same-origin'})
               .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
               .then(result => { results[id] = {result: result, error: null}; completed(); })
