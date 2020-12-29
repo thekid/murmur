@@ -4,7 +4,11 @@
       {{#if node.bestReply}}
         <a class="ui olive right corner label excerpt" data-html="<div class='header'>Best answer by {{node.bestReply.message.sender.displayName}}</div>{{body node.bestReply.message}}" data-variation="wide"><i class="compass icon"></i></a>
       {{else}}
-        <a class="ui blue right corner label excerpt" data-content="No answer yet"><i class="compass icon"></i></a>
+        {{#if node.replies.totalCount}}
+          <a class="ui teal right corner label excerpt" data-content="{{node.replies.totalCount}} answer(s), but none marked as accepted yet"><i class="compass icon"></i></a>
+        {{else}}
+          <a class="ui blue right corner label excerpt" data-content="No answer yet"><i class="compass icon"></i></a>
+        {{/if}}
       {{/if}}
     {{else}}
       {{#if node.isAnnouncement}}
