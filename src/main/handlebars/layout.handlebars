@@ -79,6 +79,9 @@
       {{#each navigation}}
         <a class="{{#if (equals request.uri.path @key)}}active violet{{/if}} item" href="{{@key}}">{{.}}</a>
       {{/each}}
+      {{#if group}}
+        <a class="active item" href="{{request.uri.path}}" style="background-color: {{group.color}}">{{group.full_name}}</a>
+      {{/if}}
       <button class="hamburger" onclick="$(this).parent().toggleClass('open')">
         <div></div>
         <div></div>

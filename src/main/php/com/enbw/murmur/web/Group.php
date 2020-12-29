@@ -1,25 +1,27 @@
 <?php namespace com\enbw\murmur\web;
 
 use com\enbw\murmur\{YammerAPI, Cache};
-use web\frontend\{Handler, Get, Value};
+use web\Error;
+use web\frontend\{Handler, Get, Value, View};
 
-#[Handler('/')]
-class Home {
+#[Handler('/group')]
+class Group {
   private static $groups= [];
 
   public function __construct(private YammerAPI $yammer, private Cache $cache) { }
 
-  #[Get]
-  public function index(#[Value] $user) {
+  #[Get('/{id}')]
+  public function index(#[Value] $user, int $id) {
     $groups= $this->cache->lookup($user['identity']['id'], 'groups', fn() => $this->yammer
       ->as($user['token'])
       ->api('groups/for_user/{id}', $user['identity'])
       ->get()
       ->value()
     );
+    foreach ($groups as $group) {
+      if ($group['id'] === $id) return View::named('group')->with(['group' => $group]);
+    }
 
-    // Sort groups by most recently updated
-    usort($groups, fn($a, $b) => $b['stats']['last_message_id'] <=> $a['stats']['last_message_id']);
-    return ['user' => $user['identity'], 'groups' => $groups];
+    throw new IllegalAccessException(404, 'No such group #'.$id);
   }
 }
