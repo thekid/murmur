@@ -6,7 +6,6 @@ use web\frontend\{Handler, Get, Value, View};
 
 #[Handler('/group')]
 class Group {
-  private static $groups= [];
 
   public function __construct(private YammerAPI $yammer, private Cache $cache) { }
 

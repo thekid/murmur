@@ -5,7 +5,6 @@ use web\frontend\{Handler, Get, Value};
 
 #[Handler('/')]
 class Home {
-  private static $groups= [];
 
   public function __construct(private YammerAPI $yammer, private Cache $cache) { }
 
