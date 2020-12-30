@@ -109,6 +109,17 @@
         }
       }
 
+      Handlebars.registerHelper('match', function(value, options) {
+        this.match = value;
+        return options.fn(this);
+      });
+
+      Handlebars.registerHelper('case', function(value, options) {
+        if (value == this.match) {
+          return options.fn(this);
+        }
+      });
+
       Handlebars.registerHelper('type', function(message) {
         if (message.threadStarter.isQuestion) {
           return 'question';
