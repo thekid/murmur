@@ -101,10 +101,13 @@
           if (error !== null) {
             console.log('Ignoring', error);
           } else {
-            $live.innerHTML = template({
+            const html = template({
               edges  : group.currentEvents.edges.concat(group.futureEvents.edges).concat(group.pastEvents.edges),
               errors : []
             });
+
+            // Do not repaint if event has not changed
+            if (html !== $live.innerHTML) $live.innerHTML = html;
           }
           setTimeout(events, 10 * 1000);
         }

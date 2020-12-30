@@ -122,7 +122,10 @@
           if (error !== null) {
             console.log('Ignoring', error);
           } else {
-            $live.innerHTML = template({edges: result.activeBroadcasts.edges, errors: []});
+            const html = template({edges: result.activeBroadcasts.edges, errors: []});
+
+            // Do not repaint if event has not changed
+            if (html !== $live.innerHTML) $live.innerHTML = html;
           }
           setTimeout(update, 10 * 1000);
         }
