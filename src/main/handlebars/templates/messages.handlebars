@@ -1,20 +1,30 @@
 {{#each edges}}
   <div class="card">
-    {{#if node.threadStarter.isQuestion}}
-      {{#if node.bestReply}}
-        <a class="ui olive right corner label excerpt" data-html="<div class='header'>Best answer by {{node.bestReply.message.sender.displayName}}</div>{{body node.bestReply.message}}" data-variation="wide"><i class="compass icon"></i></a>
-      {{else}}
-        {{#if node.replies.totalCount}}
-          <a class="ui teal right corner label excerpt" data-content="{{node.replies.totalCount}} answer(s), but none marked as accepted yet"><i class="compass icon"></i></a>
+    <!-- Type marker -->
+    {{#match (type node)}}
+      {{#case 'question'}}
+        {{#if node.bestReply}}
+          <a class="ui olive right corner label excerpt" data-html="<div class='header'>Best answer by {{node.bestReply.message.sender.displayName}}</div>{{body node.bestReply.message}}" data-variation="wide"><i class="compass icon"></i></a>
         {{else}}
-          <a class="ui blue right corner label excerpt" data-content="No answer yet"><i class="compass icon"></i></a>
+          {{#if node.replies.totalCount}}
+            <a class="ui teal right corner label excerpt" data-content="{{node.replies.totalCount}} answer(s), but none marked as accepted yet"><i class="compass icon"></i></a>
+          {{else}}
+            <a class="ui blue right corner label excerpt" data-content="No answer yet"><i class="compass icon"></i></a>
+          {{/if}}
         {{/if}}
-      {{/if}}
-    {{else}}
-      {{#if node.isAnnouncement}}
+      {{/case}}
+
+      {{#case 'announcement'}}
         <a class="ui orange right corner label excerpt" data-content="Announcement"><i class="rss icon"></i></a>
-      {{/if}}
-    {{/if}}
+      {{/case}}
+
+      {{#case 'poll'}}
+        {{log node.threadStarter.content.options}}
+        <a class="ui yellow right corner label excerpt" data-html="<div class='ui middle aligned relaxed divided list'>{{#each node.threadStarter.content.options}}<div class='item'><div class='right floated content'><a class='ui {{#if viewerHasSelected}}violet{{/if}} circular label'>{{voteCount}}</a></div><div class='content'>{{displayName}}</div></div>{{/each}}</div>" data-variation="wide"><i class="poll icon"></i></a>
+      {{/case}}
+    {{/match}}
+
+    <!-- Content -->
     <div class="content">
       <div class="header">New {{type node}} in <a href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a></div>
       <div class="meta">

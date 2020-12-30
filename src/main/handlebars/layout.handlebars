@@ -121,10 +121,12 @@
       });
 
       Handlebars.registerHelper('type', function(message) {
-        if (message.threadStarter.isQuestion) {
-          return 'question';
-        } else if (message.isAnnouncement) {
+        if (message.isAnnouncement) {
           return 'announcement';
+        } else if (message.threadStarter.isQuestion) {
+          return 'question';
+        } else if ('PollMessageContent' === message.threadStarter.content.__typename) {
+          return 'poll';
         } else {
           return 'update';
         }
