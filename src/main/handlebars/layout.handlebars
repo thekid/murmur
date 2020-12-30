@@ -127,6 +127,8 @@
           return 'question';
         } else if ('PollMessageContent' === message.threadStarter.content.__typename) {
           return 'poll';
+        } else if ('PraiseMessageContent' === message.threadStarter.content.__typename) {
+          return 'praise';
         } else {
           return 'update';
         }

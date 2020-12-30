@@ -1,5 +1,6 @@
 {{#each edges}}
   <div class="card">
+
     <!-- Type marker -->
     {{#match (type node)}}
       {{#case 'question'}}
@@ -19,8 +20,11 @@
       {{/case}}
 
       {{#case 'poll'}}
-        {{log node.threadStarter.content.options}}
         <a class="ui yellow right corner label excerpt" data-html="<div class='ui middle aligned relaxed divided list'>{{#each node.threadStarter.content.options}}<div class='item'><div class='right floated content'><a class='ui {{#if viewerHasSelected}}violet{{/if}} circular label'>{{voteCount}}</a></div><div class='content'>{{displayName}}</div></div>{{/each}}</div>" data-variation="wide"><i class="poll icon"></i></a>
+      {{/case}}
+
+      {{#case 'praise'}}
+        <a class="ui pink right corner label excerpt" data-html="For {{#each node.threadStarter.content.users}}{{displayName}}{{#unless @last}}, {{/unless}}{{/each}}"><i class="heart icon"></i></a>
       {{/case}}
     {{/match}}
 
