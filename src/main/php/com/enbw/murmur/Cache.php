@@ -17,4 +17,8 @@ class Cache {
   public function lookup(string $user, string $key, mixed $default= null): mixed {
     return $this->buckets[$user][$key] ??= is_callable($default) ? $default() : $default;
   }
+
+  public function clear(string $user) {
+    unset($this->buckets[$user]);
+  }
 }
