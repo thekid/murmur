@@ -1,12 +1,18 @@
 <?php namespace com\enbw\murmur\web;
 
 use com\enbw\murmur\{YammerAPI, Cache};
-use web\frontend\{Handler, Get, Value};
+use web\frontend\{Handler, Get, Post, Value, View};
 
 #[Handler('/')]
 class Home {
 
   public function __construct(private YammerAPI $yammer, private Cache $cache) { }
+
+  #[Post]
+  public function refresh(#[Value] $user) {
+    $this->cache->clear($user['identity']['id']);
+    return View::redirect('/');
+  }
 
   #[Get]
   public function index(#[Value] $user) {

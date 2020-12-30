@@ -4,7 +4,7 @@
     <h1>Murmur <small style="color: rgba(0,0,0,.4)">Yammer Feeds reimagined</small></h1>
 
     <!-- User information -->
-    <div class="ui vertical segment user-info" style="margin-bottom: 2em">
+    <div class="ui vertical segment user-info" style="border-bottom: none">
       <div style="display: grid; grid-template-columns: 80px auto">
         <img class="ui circular image" src="{{sub user.mugshot_url_template 'width=76&height=76'}}" width="76" height="76">
         <div style="padding: 0 2.4em 0 2em">
@@ -31,6 +31,14 @@
           <div class="label">Groups</div>
         </div>
       </div>
+    </div>
+    <div class="ui vertical clearing segment" style="margin-bottom: 2em">
+      <form method="POST">
+        <button class="ui right floated tiny labeled icon button" type="submit" onclick="this.classList.add('loading')">
+          <i class="refresh icon"></i>
+          Refresh
+        </button>
+      </form>
     </div>
 
     <!-- Live events -->
