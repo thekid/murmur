@@ -1,18 +1,25 @@
 {{#if edges}}
   <div style="margin: 0 -10px 2em -10px; padding: 1em 10px 1.5em 10px; background: #201140; color: #fff">
-    <h2>Currently running live events</h2>
+    <h2>Live events</h2>
     <div class="ui four inverted stackable cards">
       {{#each edges}}
         <div class="card" style="background: rgba(0,0,0,.4)">
-          <a href="https://web.yammer.com/main/events/{{node.broadcastId}}" class="image">
+          <a href="https://web.yammer.com/main/events/{{node.broadcastId}}" class="ui image">
+            {{#match node.status}}
+              {{#case 'CREATED'}}<div title="Scheduled" class="ui purple right ribbon icon label"><i class="calendar check icon"></i></div>{{/case}}
+              {{#case 'STARTED'}}<div title="Live!" class="ui red right ribbon icon label"><i class="broadcast tower icon"></i></div>{{/case}}
+            {{/match}}
             <img src="{{image node.group.coverImageUrlTemplate width=680 height=275}}">
           </a>
           <div class="content">
-            <a href="https://web.yammer.com/main/events/{{node.broadcastId}}" class="header">
-              <i class="red broadcast tower icon"></i>
-              {{node.title}}
-            </a>
-            <div class="meta">{{date node.startAt}} - {{date node.endAt}}</div>
+            <a href="https://web.yammer.com/main/events/{{node.broadcastId}}" class="header">{{node.title}}</a>
+            <div class="meta">
+              {{#match node.status}}
+                {{#case 'CREATED'}}Scheduled for {{date node.startAt}}{{/case}}
+                {{#case 'STARTED'}}Started at {{date node.startAt}}{{/case}}
+                {{#case 'ENDED'}}Live from {{date node.startAt}} - {{date node.endAt}}{{/case}}
+              {{/match}}
+            </div>
             <div class="description">{{node.description}}</div>
           </div>
           <div class="extra content">
