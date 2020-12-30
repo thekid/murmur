@@ -20,11 +20,12 @@ class Group {
     );
     foreach ($groups as $group) {
       if ($group['id'] === $id) {
+        $identifier= $this->yammer->id('Group', $id);
         $activity= $endpoints
           ->query('GroupActivitySummaryClients', 'ad34e6417baf4057bc4a03f0e47b4761bd4c48c7e254cee70b7622e685429ed1')
-          ->execute(['groupId' => $this->yammer->id('Group', $id)])
+          ->execute(['groupId' => $identifier])
         ;
-        return View::named('group')->with(['group' => $group, 'activity' => $activity]);
+        return View::named('group')->with(['group' => $group, 'activity' => $activity, 'identifier' => $identifier]);
       }
     }
 
