@@ -11,14 +11,21 @@ class Group {
 
   #[Get('/{id}')]
   public function index(#[Value] $user, int $id) {
-    $groups= $this->cache->lookup($user['identity']['id'], 'groups', fn() => $this->yammer
-      ->as($user['token'])
+    $endpoints= $this->yammer->as($user['token']);
+
+    $groups= $this->cache->lookup($user['identity']['id'], 'groups', fn() => $endpoints
       ->api('groups/for_user/{id}', $user['identity'])
       ->get()
       ->value()
     );
     foreach ($groups as $group) {
-      if ($group['id'] === $id) return View::named('group')->with(['group' => $group]);
+      if ($group['id'] === $id) {
+        $activity= $endpoints
+          ->query('GroupActivitySummaryClients', 'ad34e6417baf4057bc4a03f0e47b4761bd4c48c7e254cee70b7622e685429ed1')
+          ->execute(['groupId' => $this->yammer->id('Group', $id)])
+        ;
+        return View::named('group')->with(['group' => $group, 'activity' => $activity]);
+      }
     }
 
     throw new Error(404, 'No such group #'.$id);
