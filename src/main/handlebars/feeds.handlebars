@@ -35,11 +35,12 @@
   {{/inline}}
   {{#*inline "script"}}
     <script type="text/javascript">
+      const following = {{{following}}};
+
       function update() {
         const $content = document.getElementById('content');
         const $feed = document.getElementById('feed');
         const $timing = document.getElementById('timing');
-
         const start = new Date().getTime();
         const template = Handlebars.compile(`{{{source 'templates/messages'}}}`);
 
@@ -47,9 +48,9 @@
           if (result !== null) {
             const edges = result.viewer.homeFeed.homeFeedCards.edges;
             edges.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
-            $feed.innerHTML = template({edges: edges, errors: []});
+            $feed.innerHTML = template({edges: edges, following: following, errors: []});
           } else {
-            $feed.innerHTML = template({edges: [], errors: [error.name + ': ' + error.message]});
+            $feed.innerHTML = template({edges: [], following: following, errors: [error.name + ': ' + error.message]});
           }
 
           $content.classList.remove('loading');
