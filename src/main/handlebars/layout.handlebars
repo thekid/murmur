@@ -135,7 +135,7 @@
       });
 
       Handlebars.registerHelper('date', function(value) {
-        return value.replace('T', ' ').replace(/\.[0-9]+Z$/, '');
+        return value.replace('T', ' ').replace(/:[0-9]+\.[0-9]+Z$/, '');
       });
 
       Handlebars.registerHelper('avatar', function(user) {

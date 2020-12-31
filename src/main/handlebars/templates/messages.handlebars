@@ -28,23 +28,28 @@
       {{/case}}
     {{/match}}
 
-    <!-- Content -->
     <div class="content">
-      <div class="header">New {{type node}} in <a href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a></div>
-      <div class="meta">
-        <span class="date"><a title="{{node.databaseId}}" class="date" href="https://web.yammer.com/main/threads/{{node.id}}">{{date node.updatedAt}}</a></span>
-        <span class="right floated">
-          {{&likes node.threadStarter.reactionsConnection}}
-        </span>
+      <img class="ui left floated avatar image" src="{{avatar node.threadStarter.sender}}" onerror="this.src='/static/default-avatar.png'">
+      <div class="header">
+        <a href="https://web.yammer.com/main/users/{{node.threadStarter.sender.id}}">{{node.threadStarter.sender.displayName}}</a>
       </div>
-      <div class="description">
+      <div class="date">
+        <a href="https://web.yammer.com/main/threads/{{node.id}}">{{date node.updatedAt}}</a> 
+      </div>
+      <div class="description" style="margin-top: 1em">
         <p class="excerpt" data-content="{{body node.threadStarter}}" data-variation="wide inverted">{{first node.threadStarter}}</p>
       </div>
     </div>
     <div class="extra content">
-      <div class="center aligned author">
-        <img class="ui avatar image" src="{{avatar node.threadStarter.sender}}" onerror="this.src='/static/default-avatar.png'"> <a href="https://web.yammer.com/main/users/{{node.threadStarter.sender.id}}">{{node.threadStarter.sender.displayName}}</a>
+      <div class="right floated content" style="max-width: 50%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+        <a title="{{node.group.displayName}}" href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a>
       </div>
+
+      <i class="heart outline icon"></i> {{node.threadStarter.reactionsConnection.totalCount}}
+      &#160;
+      <i class="comment alternate outline icon"></i> {{node.replies.totalCount}}
+      &#160;
+      <i class="fire icon"></i> {{node.seenByCount}}
     </div>
   </div>
 {{/each}}
