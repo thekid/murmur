@@ -172,6 +172,55 @@
         }
         return content;
       });
+
+      Handlebars.registerHelper('render', function(threadStarter) {
+        const body = contentState(threadStarter);
+        const markup = {
+          ITALIC : 'em',
+          BOLD   : 'strong'
+        };
+
+        console.log(body);
+        const format = function(block) {
+          let result = '';
+
+          let start = 0;
+          for (const range of block.inlineStyleRanges) {
+            let before = block.text.substring(start, range.offset);
+            let between = block.text.substring(range.offset, range.offset + range.length);
+
+            result += before + '<' + markup[range.style] + '>' + between + '</' + markup[range.style] + '>';
+            start = range.offset + range.length;
+          }
+
+          return result + block.text.substring(start);
+        };
+
+        let result = '';
+        let list = false;
+        for (const block of body.blocks) {
+          switch (block.type) {
+            case 'unordered-list-item':
+              if (!list) result += "<ul>\n";
+              list= true;
+              result += '<li>' + format(block) + '</li>';
+              break;
+
+            case 'unstyled':
+              if (list) result += "</ul>\n";
+              list= false;
+              result += format(block) + '<br>';
+              break;
+
+            default:
+              console.error('Ignorning unknown block type ' + block.type, block);
+          }
+
+          // For readability only
+          result += "\n";
+        }
+        return result;
+      });
     </script>
     {{> script}} 
   </body>
