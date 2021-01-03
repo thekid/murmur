@@ -17,7 +17,7 @@ class Home {
       // Refresh user and groups
       $endpoints= $this->yammer->as($user['token']);
       $user['user']= $endpoints->api('users/current')->get()->value();
-      $user['groups']= []; $endpoints->api('groups/for_user/{id}', $user['identity'])->get()->value();
+      $user['groups']= $endpoints->api('groups/for_user/{id}', $user['identity'])->get()->value();
 
       $session->register('user', $user);
     }
