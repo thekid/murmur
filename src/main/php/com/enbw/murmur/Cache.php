@@ -1,5 +1,6 @@
 <?php namespace com\enbw\murmur;
 
+/** Memory-based cache */
 class Cache {
   private $buckets= [];
 

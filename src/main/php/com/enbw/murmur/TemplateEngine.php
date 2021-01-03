@@ -7,6 +7,7 @@ use util\Date;
 use util\log\Logging;
 use web\frontend\Templates;
 
+/** Template engine implementation using handlebars */
 class TemplateEngine implements Templates {
   private $backing;
 

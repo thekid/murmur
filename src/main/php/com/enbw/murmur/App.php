@@ -10,6 +10,7 @@ use web\rest\{RestApi, ResourcesIn};
 use web\session\{InFileSystem, Cookies};
 use web\{Application, Filters};
 
+/** Murmur web application */
 class App extends Application {
 
   /** Returns routing for this web application */
