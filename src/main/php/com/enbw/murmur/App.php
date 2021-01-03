@@ -7,7 +7,7 @@ use security\credentials\{Credentials, FromEnvironment, FromFile};
 use web\frontend\{Frontend, HandlersIn, Templates};
 use web\handler\FilesFrom;
 use web\rest\{RestApi, ResourcesIn};
-use web\session\{InFileSystem, Cookies};
+use web\session\{Sessions, InFileSystem, Cookies};
 use web\{Application, Filters};
 
 /** Murmur web application */
@@ -17,6 +17,7 @@ class App extends Application {
   public function routes() {
     $webroot= $this->environment->webroot();
     $credentials= new Credentials(new FromEnvironment(), new FromFile(new Path($webroot, 'credentials')));
+
     $inject= new Injector(Bindings::using()
       ->properties($credentials->expanding($this->environment->properties('inject')))
       ->singleton(Templates::class, TemplateEngine::class)
@@ -31,6 +32,7 @@ class App extends Application {
     if ('dev' === $this->environment->profile()) {
       $sessions->via(new Cookies()->insecure(true));
     }
+    $inject->bind(Sessions::class, $sessions);
 
     $auth= $inject->get(Office365Integration::class)->using($sessions);
     $files= new FilesFrom(new Path($webroot, 'src/main/webapp'));
