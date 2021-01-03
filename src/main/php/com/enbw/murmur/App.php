@@ -37,10 +37,10 @@ class App extends Application {
     return [
       '/favicon.ico' => $files,
       '/static'      => $files,
-      '/api'         => new Filters([$auth], new RestApi(
+      '/api'         => $auth->required(new RestApi(
         new ResourcesIn('com.enbw.murmur.api', [$inject, 'get'])
       )),
-      '/'            => new Filters([$auth], new Frontend(
+      '/'            => $auth->required(new Frontend(
         new HandlersIn('com.enbw.murmur.web', [$inject, 'get']),
         $inject->get(Templates::class),
         '/'
