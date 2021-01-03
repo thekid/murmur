@@ -1,27 +1,20 @@
 <?php namespace com\enbw\murmur\web;
 
-use com\enbw\murmur\{YammerAPI, Cache};
+use com\enbw\murmur\YammerAPI;
 use web\Error;
 use web\frontend\{Handler, Get, Value, View};
 
 #[Handler('/group')]
 class Group {
 
-  public function __construct(private YammerAPI $yammer, private Cache $cache) { }
+  public function __construct(private YammerAPI $yammer) { }
 
   #[Get('/{id}')]
   public function index(#[Value] $user, int $id) {
-    $endpoints= $this->yammer->as($user['token']);
-
-    $groups= $this->cache->lookup($user['identity']['id'], 'groups', fn() => $endpoints
-      ->api('groups/for_user/{id}', $user['identity'])
-      ->get()
-      ->value()
-    );
-    foreach ($groups as $group) {
+    foreach ($user['groups'] as $group) {
       if ($group['id'] === $id) {
         $identifier= $this->yammer->id('Group', $id);
-        $activity= $endpoints
+        $activity= $this->yammer->as($user['token'])
           ->query('GroupActivitySummaryClients', 'ad34e6417baf4057bc4a03f0e47b4761bd4c48c7e254cee70b7622e685429ed1')
           ->execute(['groupId' => $identifier])
         ;

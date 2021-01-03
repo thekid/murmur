@@ -1,21 +1,15 @@
 <?php namespace com\enbw\murmur\web;
 
-use com\enbw\murmur\{YammerAPI, Cache};
+use com\enbw\murmur\YammerAPI;
 use web\frontend\{Handler, Get, Value, View};
 
 #[Handler('/grouped')]
 class Grouped {
 
-  public function __construct(private YammerAPI $yammer, private Cache $cache) { }
+  public function __construct(private YammerAPI $yammer) { }
 
   #[Get('/{kind}')]
   public function index(#[Value] $user) {
-    return View::named('grouped')->with([
-      'groups' => $this->cache->lookup(
-        $user['identity']['id'],
-        'groups',
-        fn() => $this->yammer->as($user['token'])->api('groups/for_user/{id}', $user['identity'])->get()->value()
-      )
-    ]);
+    return View::named('grouped')->with(['groups' => $user['groups']]);
   }
 }
