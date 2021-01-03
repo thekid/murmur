@@ -49,7 +49,8 @@ class Office365Integration {
 
       $token= $response->value()[0]['token'];
       $identity= $session->fetch(self::YAMMER_API.'/v1/users/current.json')->value();
-      return ['identity' => $identity, 'token' => $token];
+      $groups= $session->fetch(self::YAMMER_API.'/v1/groups/for_user/'.$identity['id'])->value();
+      return ['identity' => $identity, 'token' => $token, 'groups' => $groups];
     });
   }
 }
