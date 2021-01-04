@@ -29,9 +29,7 @@ class App extends Application {
 
     // Allow insecure session cookies in "dev" environment
     $sessions= new InFileSystem(Environment::tempDir());
-    if ('dev' === $this->environment->profile()) {
-      $sessions->via(new Cookies()->insecure(true));
-    }
+    $sessions->via(new Cookies()->insecure('dev' === $this->environment->profile()));
     $inject->bind(Sessions::class, $sessions);
 
     $auth= $inject->get(Office365Integration::class)->using($sessions);
