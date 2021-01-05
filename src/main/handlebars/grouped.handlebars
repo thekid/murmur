@@ -1,7 +1,7 @@
 {{#> layout}}
   {{#*inline "title"}}{{lookup navigation request.uri.path}}{{/inline}}
   {{#*inline "content"}}
-    <h1>{{> title}}</h1>
+    <h1 title="{{lookup help request.uri.path}}">{{> title}}</h1>
     <div class="ui vertical segment">
       <div class="ui labels">
         {{#each groups}}
