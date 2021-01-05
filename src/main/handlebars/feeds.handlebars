@@ -2,7 +2,7 @@
   {{#*inline "title"}}{{lookup navigation request.uri.path}} feed{{/inline}}
   {{#*inline "content"}}
     <h1 title="{{lookup help request.uri.path}}">{{> title}}</h1>
-    <div class="ui vertical clearing segment">
+    <div class="ui vertical clearing segment" style="border-bottom: none">
       <div style="display: grid; grid-template-columns: auto max-content; align-items: center;">
         <div><i class="clock icon"></i> <span id="timing">...</span></div>
         <button class="ui tiny labeled icon button" type="submit" onclick="update(true)">
@@ -10,23 +10,23 @@
         </button>
       </div>
     </div>
+    <div class="ui vertical clearing segment" style="padding-top: 0">
+      <select class="ui dropdown" id="grouping">
+        <option value="none">No grouping</option>
+        <option value="adjacent">Adjacent messages in group</option>
+        <option value="person">All by author</option>
+      </select>
+
+      <select class="ui dropdown" id="ordering">
+        <option value="date">Order by date</option>
+        <option value="views">Order by views</option>
+        <option value="likes">Order by likes</option>
+        <option value="rank">Order by rank</option>
+      </select>
+    </div>
 
     <!-- Feed -->
     <div class="ui vertical segment" id="content">
-      <div style="margin-bottom: 1em">
-        <select class="ui dropdown" id="grouping">
-          <option value="none">No grouping</option>
-          <option value="adjacent">Adjacent messages in group</option>
-          <option value="person">All by author</option>
-        </select>
-
-        <select class="ui dropdown" id="ordering">
-          <option value="date">Order by date</option>
-          <option value="views">Order by views</option>
-          <option value="likes">Order by likes</option>
-          <option value="rank">Order by rank</option>
-        </select>
-      </div>
       <div class="ui stackable cards" id="feed">
         <div class="card">
           <div class="content">
@@ -53,6 +53,20 @@
     <script type="text/javascript">
       const following = {{{following}}};
       const group = {
+        none : function(results) {
+          let list = [];
+          for (const edge of results) {
+            list.push({
+              ...edge,
+              stats   : {
+                viewed  : edge.node.seenByCount,
+                liked   : edge.node.threadStarter.reactionsConnection.totalCount,
+                replied : edge.node.replies.totalCount
+              },
+            });
+          }
+          return list;
+        },
         adjacent : function(results) {
           let previous = null;
           let adjacent = [];
@@ -61,13 +75,22 @@
             if (key === previous) {
               with (adjacent[adjacent.length - 1]) {
                 stacked.push(edge);
-                node.seenByCount += edge.node.seenByCount;
-                node.replies.totalCount += edge.node.replies.totalCount;
-                node.threadStarter.reactionsConnection.totalCount += edge.node.threadStarter.reactionsConnection.totalCount;
+                stats.viewed += edge.node.seenByCount;
+                stats.replied += edge.node.replies.totalCount;
+                stats.liked += edge.node.threadStarter.reactionsConnection.totalCount;
               }
             } else {
               previous = key;
-              adjacent.push({...edge, stacked: [], groups: {[edge.node.group.id]: edge.node.group}});
+              adjacent.push({
+                ...edge,
+                stats   : {
+                  viewed  : edge.node.seenByCount,
+                  liked   : edge.node.threadStarter.reactionsConnection.totalCount,
+                  replied : edge.node.replies.totalCount
+                },
+                stacked : [],
+                groups  : {[edge.node.group.id]: edge.node.group}
+              });
             }
           }
           return adjacent;
@@ -77,16 +100,25 @@
           for (const edge of results) {
             let sender = edge.node.threadStarter.sender.id;
             if (undefined === grouped[sender]) {
-              grouped[sender]= {...edge, stacked: [], groups: {}};
+              grouped[sender]= {
+                ...edge,
+                stats   : {
+                  viewed  : edge.node.seenByCount,
+                  liked   : edge.node.threadStarter.reactionsConnection.totalCount,
+                  replied : edge.node.replies.totalCount
+                },
+                stacked : [],
+                groups  : {[edge.node.group.id]: edge.node.group}
+              };
             } else {
               with (grouped[sender]) {
                 stacked.push(edge);
-                node.seenByCount += edge.node.seenByCount;
-                node.replies.totalCount += edge.node.replies.totalCount;
-                node.threadStarter.reactionsConnection.totalCount += edge.node.threadStarter.reactionsConnection.totalCount;
+                groups[edge.node.group.id] = edge.node.group;
+                stats.viewed += edge.node.seenByCount;
+                stats.replied += edge.node.replies.totalCount;
+                stats.liked += edge.node.threadStarter.reactionsConnection.totalCount;
               }
             }
-            grouped[sender].groups[edge.node.group.id] = edge.node.group;
           }
           return Object.values(grouped);
         },
@@ -96,13 +128,14 @@
           results.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
         },
         views: function(results) {
-          results.sort((a, b) => b.node.seenByCount - a.node.seenByCount);
+          results.sort((a, b) => b.stats.viewed - a.stats.viewed);
         },
         likes: function(results) {
-          results.sort((a, b) => b.node.threadStarter.reactionsConnection.totalCount - a.node.threadStarter.reactionsConnection.totalCount);
+          results.sort((a, b) => b.stats.liked - a.stats.liked);
         },
         rank: function(results) {
-          results.sort((a, b) => ranking(b.node) - ranking(a.node));
+          let ranking = (stats) => (stats.viewed * 11 + stats.liked * 29 + stats.replied * 60);
+          results.sort((a, b) => ranking(b.stats) - ranking(a.stats));
         },
       };
       let results;
@@ -118,13 +151,12 @@
 
         const completed = function(error) {
           if (null !== error) {
+            console.error(error);
             $feed.innerHTML = template({edges: [], following: following, errors: [error.name + ': ' + error.message]});
-          } else if ('none' === groupby) {
-            order[orderby](results);
-            $feed.innerHTML = template({edges: results, following: following, errors: []});
           } else {
-            order[orderby](results);
-            $feed.innerHTML = template({edges: group[groupby](results), following: following, errors: []});
+            let grouped = group[groupby](results);
+            order[orderby](grouped);
+            $feed.innerHTML = template({edges: grouped, following: following, errors: []});
           }
 
           $content.classList.remove('loading');

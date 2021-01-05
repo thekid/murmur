@@ -119,14 +119,6 @@
         }
       }
 
-      function ranking(node) {
-        return (
-          node.seenByCount * 11 +
-          node.threadStarter.reactionsConnection.totalCount * 19 +
-          node.replies.totalCount * 70
-        );
-      }
-
       Handlebars.registerHelper('match', function(value, options) {
         this.match = value;
         return options.fn(this);

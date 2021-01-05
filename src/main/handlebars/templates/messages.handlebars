@@ -51,11 +51,11 @@
           </div>
         {{/if}}
 
-        <i class="heart outline icon"></i> {{node.threadStarter.reactionsConnection.totalCount}}
+        <i class="heart outline icon"></i> {{stats.liked}}
         &#160;
-        <i class="comment alternate outline icon"></i> {{node.replies.totalCount}}
+        <i class="comment alternate outline icon"></i> {{stats.replied}}
         &#160;
-        <i class="fire icon"></i> {{node.seenByCount}}
+        <i class="fire icon"></i> {{stats.viewed}}
       </div>
     </div>
   {{else}}
@@ -108,11 +108,11 @@
           <a title="{{node.group.displayName}}" href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a>
         </div>
 
-        <i class="heart outline icon"></i> {{node.threadStarter.reactionsConnection.totalCount}}
+        <i class="heart outline icon"></i> {{stats.liked}}
         &#160;
-        <i class="comment alternate outline icon"></i> {{node.replies.totalCount}}
+        <i class="comment alternate outline icon"></i> {{stats.replied}}
         &#160;
-        <i class="fire icon"></i> {{node.seenByCount}}
+        <i class="fire icon"></i> {{stats.viewed}}
       </div>
     </div>
   {{/if}}
