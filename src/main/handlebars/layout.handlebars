@@ -172,8 +172,10 @@
 
         if (content.length > 100) {
           return content.substring(0, 100) + '…';
-        } else {
+        } else if (content) {
           return content;
+        } else {
+          return '…';
         }
       });
 
