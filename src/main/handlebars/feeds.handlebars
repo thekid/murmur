@@ -53,8 +53,7 @@
               adjacent[adjacent.length - 1].stacked.push(edge);
             } else {
               previous = key;
-              adjacent.push({...edge, stacked: [], groups: {}});
-              adjacent[adjacent.length - 1].groups[edge.node.group.id] = edge.node.group;
+              adjacent.push({...edge, stacked: [], groups: {[edge.node.group.id]: edge.node.group}});
             }
           }
           return adjacent;
