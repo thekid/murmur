@@ -5,8 +5,8 @@
     <div class="ui vertical clearing segment">
       <div style="display: grid; grid-template-columns: auto max-content max-content; gap: 1em; align-items: center;">
         <div><i class="clock icon"></i> <span id="timing">...</span></div>
-        <select class="ui search dropdown" id="grouping" onchange="update(false)">
-          <option value="">No grouping</option>
+        <select class="ui search dropdown" id="grouping">
+          <option value="none">No grouping</option>
           <option value="adjacent">Adjacent messages in group</option>
           <option value="person">All by author</option>
         </select>
@@ -85,10 +85,10 @@
         const completed = function(error) {
           if (null !== error) {
             $feed.innerHTML = template({edges: [], following: following, errors: [error.name + ': ' + error.message]});
-          } else if (groupby) {
-            $feed.innerHTML = template({edges: group[groupby](results), following: following, errors: []});
-          } else {
+          } else if ('none' === groupby) {
             $feed.innerHTML = template({edges: results, following: following, errors: []});
+          } else {
+            $feed.innerHTML = template({edges: group[groupby](results), following: following, errors: []});
           }
 
           $content.classList.remove('loading');
@@ -113,7 +113,7 @@
       };
 
       window.onload = function() {
-        $('.ui.checkbox').checkbox();
+        $('#grouping').dropdown({onChange: () => update(false)});
         update(true);
       };
     </script>
