@@ -3,10 +3,16 @@
   {{#*inline "content"}}
     <h1>{{> title}}</h1>
     <div class="ui vertical clearing segment">
-      <button class="ui right floated tiny labeled icon button" type="submit" onclick="update()"><i class="refresh icon"></i> Refresh</button>
-      <p>
-        <i class="clock icon"></i> <span id="timing">...</span>
-      </p>
+      <div style="display: grid; grid-template-columns: auto max-content max-content; gap: 1em; align-items: center;">
+        <div><i class="clock icon"></i> <span id="timing">...</span></div>
+        <div class="ui toggle checkbox">
+          <input type="checkbox" name="grouped" id="grouping" onchange="update(false)">
+          <label>Grouped</label>
+        </div>
+        <button class="ui tiny labeled icon button" type="submit" onclick="update(true)">
+          <i class="refresh icon"></i> Refresh
+        </button>
+      </div>
     </div>
 
     <!-- Feed -->
@@ -36,21 +42,34 @@
   {{#*inline "script"}}
     <script type="text/javascript">
       const following = {{{following}}};
+      let results;
 
-      function update() {
+      function update(reload) {
         const $content = document.getElementById('content');
         const $feed = document.getElementById('feed');
         const $timing = document.getElementById('timing');
         const start = new Date().getTime();
         const template = Handlebars.compile(`{{{source 'templates/messages'}}}`);
+        const grouping = document.getElementById('grouping').checked;
 
-        const completed = function(result, error) {
-          if (result !== null) {
-            const edges = result.viewer.homeFeed.homeFeedCards.edges;
-            edges.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
-            $feed.innerHTML = template({edges: edges, following: following, errors: []});
-          } else {
+        const completed = function(error) {
+          if (null !== error) {
             $feed.innerHTML = template({edges: [], following: following, errors: [error.name + ': ' + error.message]});
+          } else if (grouping) {
+            let previous = null;
+            let grouped = [];
+            for (const edge of results) {
+              const key = edge.node.threadStarter.sender.id + '@' + edge.node.group.id;
+              if (key === previous) {
+                grouped[grouped.length - 1].stacked.push(edge);
+              } else {
+                previous = key;
+                grouped.push({...edge, stacked: []});
+              }
+            }
+            $feed.innerHTML = template({edges: grouped, following: following, errors: []});
+          } else {
+            $feed.innerHTML = template({edges: results, following: following, errors: []});
           }
 
           $content.classList.remove('loading');
@@ -59,14 +78,25 @@
         }
 
         $content.classList.add('loading');
-        fetch('/api{{request.uri.path}}?limit=15', {method: 'GET', credentials: 'same-origin'})
-          .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
-          .then(result => completed(result, null))
-          .catch(error => completed(null, error))
-        ;
+        if (reload) {
+          fetch('/api{{request.uri.path}}?limit=15', {method: 'GET', credentials: 'same-origin'})
+            .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
+            .then(result => {
+              results = result.viewer.homeFeed.homeFeedCards.edges;
+              results.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
+              completed(null)
+            })
+            .catch(error => completed(error))
+          ;
+        } else {
+          completed(null);
+        }
       };
 
-      window.onload = update;
+      window.onload = function() {
+        $('.ui.checkbox').checkbox();
+        update(true);
+      };
     </script>
   {{/inline}}
 {{/layout}}

@@ -135,6 +135,10 @@
         }
       });
 
+      Handlebars.registerHelper('add', function(value, add) {
+        return Number(value) + Number(add);
+      });
+
       Handlebars.registerHelper('date', function(value) {
         return value.replace('T', ' ').replace(/:[0-9]+\.[0-9]+Z$/, '');
       });

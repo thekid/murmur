@@ -1,60 +1,96 @@
 {{#each edges}}
-  <div class="card">
+  {{#if stacked}}
+    <div class="card">
+      <a class="ui yellow right corner label excerpt" data-content="Group of posts"><i class="plus square icon"></i></a>
 
-    <!-- Type marker -->
-    {{#match (type node)}}
-      {{#case 'question'}}
-        {{#if node.bestReply}}
-          <a class="ui olive right corner label excerpt" data-html="<div class='header'>Best answer by {{node.bestReply.message.sender.displayName}}</div>{{body node.bestReply.message}}" data-variation="wide"><i class="compass icon"></i></a>
-        {{else}}
-          {{#if node.replies.totalCount}}
-            <a class="ui teal right corner label excerpt" data-content="{{node.replies.totalCount}} answer(s), but none marked as accepted yet"><i class="compass icon"></i></a>
-          {{else}}
-            <a class="ui blue right corner label excerpt" data-content="No answer yet"><i class="compass icon"></i></a>
+      <div class="content">
+        <img class="ui left floated avatar image" src="{{avatar node.threadStarter.sender}}" onerror="this.src='/static/default-avatar.png'">
+        <div class="header">
+          <a href="https://web.yammer.com/main/users/{{node.threadStarter.sender.id}}">{{node.threadStarter.sender.displayName}}</a>
+        </div>
+        <div class="meta">
+          {{add stacked.length 1}} posts
+        </div>
+        <div class="description" style="margin-top: 1em; max-height: 8em; overflow-y: scroll">
+          <ul class="ui list">
+            <li title="{{type node}} @ {{date node.updatedAt}}" class="item">
+              <a href="https://web.yammer.com/main/threads/{{node.id}}">{{first node.threadStarter}}</a>
+            </li>
+            {{#each stacked}}
+              <li title="{{type node}} @ {{date node.updatedAt}}" class="item">
+                <a href="https://web.yammer.com/main/threads/{{node.id}}">{{first node.threadStarter}}</a>
+              </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="right floated content" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+          {{#if (lookup ../following node.group.databaseId)}}
+            <i title="You are following this group" class="check circle outline icon"></i>
           {{/if}}
-        {{/if}}
-      {{/case}}
-
-      {{#case 'announcement'}}
-        <a class="ui orange right corner label excerpt" data-content="Announcement"><i class="rss icon"></i></a>
-      {{/case}}
-
-      {{#case 'poll'}}
-        <a class="ui yellow right corner label excerpt" data-html="<div class='ui middle aligned relaxed divided list'>{{#each node.threadStarter.content.options}}<div class='item'><div class='right floated content'><a class='ui {{#if viewerHasSelected}}violet{{/if}} circular label'>{{voteCount}}</a></div><div class='content'>{{displayName}}</div></div>{{/each}}</div>" data-variation="wide"><i class="poll icon"></i></a>
-      {{/case}}
-
-      {{#case 'praise'}}
-        <a class="ui pink right corner label excerpt" data-html="For {{#each node.threadStarter.content.users}}{{displayName}}{{#unless @last}}, {{/unless}}{{/each}}"><i class="heart icon"></i></a>
-      {{/case}}
-    {{/match}}
-
-    <div class="content">
-      <img class="ui left floated avatar image" src="{{avatar node.threadStarter.sender}}" onerror="this.src='/static/default-avatar.png'">
-      <div class="header">
-        <a href="https://web.yammer.com/main/users/{{node.threadStarter.sender.id}}">{{node.threadStarter.sender.displayName}}</a>
-      </div>
-      <div class="date">
-        <a href="https://web.yammer.com/main/threads/{{node.id}}">{{date node.updatedAt}}</a> 
-      </div>
-      <div class="description" style="margin-top: 1em">
-        <p class="excerpt" data-content="{{body node.threadStarter}}" data-variation="wide inverted">{{first node.threadStarter}}</p>
+          <a title="{{node.group.displayName}}" href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a>
+        </div>
       </div>
     </div>
-    <div class="extra content">
-      <div class="right floated content" style="max-width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-        {{#if (lookup ../following node.group.databaseId)}}
-          <i title="You are following this group" class="check circle outline icon"></i>
-        {{/if}}
-        <a title="{{node.group.displayName}}" href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a>
-      </div>
+  {{else}}
+    <div class="card">
 
-      <i class="heart outline icon"></i> {{node.threadStarter.reactionsConnection.totalCount}}
-      &#160;
-      <i class="comment alternate outline icon"></i> {{node.replies.totalCount}}
-      &#160;
-      <i class="fire icon"></i> {{node.seenByCount}}
+      <!-- Type marker -->
+      {{#match (type node)}}
+        {{#case 'question'}}
+          {{#if node.bestReply}}
+            <a class="ui olive right corner label excerpt" data-html="<div class='header'>Best answer by {{node.bestReply.message.sender.displayName}}</div>{{body node.bestReply.message}}" data-variation="wide"><i class="compass icon"></i></a>
+          {{else}}
+            {{#if node.replies.totalCount}}
+              <a class="ui teal right corner label excerpt" data-content="{{node.replies.totalCount}} answer(s), but none marked as accepted yet"><i class="compass icon"></i></a>
+            {{else}}
+              <a class="ui blue right corner label excerpt" data-content="No answer yet"><i class="compass icon"></i></a>
+            {{/if}}
+          {{/if}}
+        {{/case}}
+
+        {{#case 'announcement'}}
+          <a class="ui orange right corner label excerpt" data-content="Announcement"><i class="rss icon"></i></a>
+        {{/case}}
+
+        {{#case 'poll'}}
+          <a class="ui yellow right corner label excerpt" data-html="<div class='ui middle aligned relaxed divided list'>{{#each node.threadStarter.content.options}}<div class='item'><div class='right floated content'><a class='ui {{#if viewerHasSelected}}violet{{/if}} circular label'>{{voteCount}}</a></div><div class='content'>{{displayName}}</div></div>{{/each}}</div>" data-variation="wide"><i class="poll icon"></i></a>
+        {{/case}}
+
+        {{#case 'praise'}}
+          <a class="ui pink right corner label excerpt" data-html="For {{#each node.threadStarter.content.users}}{{displayName}}{{#unless @last}}, {{/unless}}{{/each}}"><i class="heart icon"></i></a>
+        {{/case}}
+      {{/match}}
+
+      <div class="content">
+        <img class="ui left floated avatar image" src="{{avatar node.threadStarter.sender}}" onerror="this.src='/static/default-avatar.png'">
+        <div class="header">
+          <a href="https://web.yammer.com/main/users/{{node.threadStarter.sender.id}}">{{node.threadStarter.sender.displayName}}</a>
+        </div>
+        <div class="date">
+          <a href="https://web.yammer.com/main/threads/{{node.id}}">{{date node.updatedAt}}</a> 
+        </div>
+        <div class="description" style="margin-top: 1em">
+          <p class="excerpt" data-content="{{body node.threadStarter}}" data-variation="wide inverted">{{first node.threadStarter}}</p>
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="right floated content" style="max-width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+          {{#if (lookup ../following node.group.databaseId)}}
+            <i title="You are following this group" class="check circle outline icon"></i>
+          {{/if}}
+          <a title="{{node.group.displayName}}" href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a>
+        </div>
+
+        <i class="heart outline icon"></i> {{node.threadStarter.reactionsConnection.totalCount}}
+        &#160;
+        <i class="comment alternate outline icon"></i> {{node.replies.totalCount}}
+        &#160;
+        <i class="fire icon"></i> {{node.seenByCount}}
+      </div>
     </div>
-  </div>
+  {{/if}}
 {{/each}}
 
 {{#if errors}}
