@@ -26,10 +26,13 @@
       </div>
       <div class="extra content">
         <div class="right floated content" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-          {{#if (lookup ../following node.group.databaseId)}}
-            <i title="You are following this group" class="check circle outline icon"></i>
-          {{/if}}
-          <a title="{{node.group.displayName}}" href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a>
+          {{#each groups}}
+            {{#if (lookup ../../following databaseId)}}
+              <i title="You are following this group" class="check circle outline icon"></i>
+            {{/if}}
+            <a title="{{displayName}}" href="https://web.yammer.com/main/groups/{{@key}}">{{displayName}}</a>
+            {{#unless @last}}&amp;{{/unless}}
+          {{/each}}
         </div>
       </div>
     </div>

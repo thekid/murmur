@@ -5,10 +5,11 @@
     <div class="ui vertical clearing segment">
       <div style="display: grid; grid-template-columns: auto max-content max-content; gap: 1em; align-items: center;">
         <div><i class="clock icon"></i> <span id="timing">...</span></div>
-        <div class="ui toggle checkbox">
-          <input type="checkbox" name="grouped" id="grouping" onchange="update(false)">
-          <label>Grouped</label>
-        </div>
+        <select class="ui search dropdown" id="grouping" onchange="update(false)">
+          <option value="">No grouping</option>
+          <option value="adjacent">Adjacent messages in group</option>
+          <option value="person">All by author</option>
+        </select>
         <button class="ui tiny labeled icon button" type="submit" onclick="update(true)">
           <i class="refresh icon"></i> Refresh
         </button>
@@ -42,6 +43,36 @@
   {{#*inline "script"}}
     <script type="text/javascript">
       const following = {{{following}}};
+      const group = {
+        adjacent : function(results) {
+          let previous = null;
+          let adjacent = [];
+          for (const edge of results) {
+            const key = edge.node.threadStarter.sender.id + '@' + edge.node.group.id;
+            if (key === previous) {
+              adjacent[adjacent.length - 1].stacked.push(edge);
+            } else {
+              previous = key;
+              adjacent.push({...edge, stacked: [], groups: {}});
+              adjacent[adjacent.length - 1].groups[edge.node.group.id] = edge.node.group;
+            }
+          }
+          return adjacent;
+        },
+        person : function(results) {
+          let grouped = {};
+          for (const edge of results) {
+            let sender = edge.node.threadStarter.sender.id;
+            if (undefined === grouped[sender]) {
+              grouped[sender]= {...edge, stacked: [], groups: {}};
+            } else{
+              grouped[sender].stacked.push(edge);
+            }
+            grouped[sender].groups[edge.node.group.id] = edge.node.group;
+          }
+          return Object.values(grouped);
+        },
+      };
       let results;
 
       function update(reload) {
@@ -50,24 +81,13 @@
         const $timing = document.getElementById('timing');
         const start = new Date().getTime();
         const template = Handlebars.compile(`{{{source 'templates/messages'}}}`);
-        const grouping = document.getElementById('grouping').checked;
+        const groupby = document.getElementById('grouping').value;
 
         const completed = function(error) {
           if (null !== error) {
             $feed.innerHTML = template({edges: [], following: following, errors: [error.name + ': ' + error.message]});
-          } else if (grouping) {
-            let previous = null;
-            let grouped = [];
-            for (const edge of results) {
-              const key = edge.node.threadStarter.sender.id + '@' + edge.node.group.id;
-              if (key === previous) {
-                grouped[grouped.length - 1].stacked.push(edge);
-              } else {
-                previous = key;
-                grouped.push({...edge, stacked: []});
-              }
-            }
-            $feed.innerHTML = template({edges: grouped, following: following, errors: []});
+          } else if (groupby) {
+            $feed.innerHTML = template({edges: group[groupby](results), following: following, errors: []});
           } else {
             $feed.innerHTML = template({edges: results, following: following, errors: []});
           }
