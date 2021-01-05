@@ -1,7 +1,7 @@
 {{#each edges}}
   {{#if stacked}}
     <div class="card">
-      <a class="ui yellow right corner label excerpt" data-content="Group of posts"><i class="plus square icon"></i></a>
+      <a class="ui yellow right corner label excerpt" data-content="Group of posts"><i class="stream icon"></i></a>
 
       <div class="content">
         <img class="ui left floated avatar image" src="{{avatar node.threadStarter.sender}}" onerror="this.src='/static/default-avatar.png'">
@@ -14,11 +14,11 @@
         <div class="description" style="margin-top: 1em; max-height: 8em; overflow-y: scroll">
           <ul class="ui list">
             <li title="{{type node}} @ {{date node.updatedAt}}" class="item">
-              <a href="https://web.yammer.com/main/threads/{{node.id}}">{{first node.threadStarter}}</a>
+              <a class="excerpt" data-html="<div class='header'>{{type node}} @ {{date node.updatedAt}}</div>{{body node.threadStarter}}" data-variation="wide inverted" href="https://web.yammer.com/main/threads/{{node.id}}">{{first node.threadStarter}}</a>
             </li>
             {{#each stacked}}
-              <li title="{{type node}} @ {{date node.updatedAt}}" class="item">
-                <a href="https://web.yammer.com/main/threads/{{node.id}}">{{first node.threadStarter}}</a>
+              <li class="item">
+                <a class="excerpt" data-html="<div class='header'>{{type node}} @ {{date node.updatedAt}}</div>{{body node.threadStarter}}" data-variation="wide inverted" href="https://web.yammer.com/main/threads/{{node.id}}">{{first node.threadStarter}}</a>
               </li>
             {{/each}}
           </ul>
