@@ -119,6 +119,14 @@
         }
       }
 
+      function ranking(node) {
+        return (
+          node.seenByCount * 11 +
+          node.threadStarter.reactionsConnection.totalCount * 19 +
+          node.replies.totalCount * 70
+        );
+      }
+
       Handlebars.registerHelper('match', function(value, options) {
         this.match = value;
         return options.fn(this);
@@ -128,6 +136,10 @@
         if (value == this.match) {
           return options.fn(this);
         }
+      });
+
+      Handlebars.registerHelper('size', function(value) {
+        return Object.keys(value).length;
       });
 
       Handlebars.registerHelper('type', function(message) {
@@ -146,6 +158,10 @@
 
       Handlebars.registerHelper('add', function(value, add) {
         return Number(value) + Number(add);
+      });
+
+      Handlebars.registerHelper('equals', function(value, compare) {
+        return value == compare;
       });
 
       Handlebars.registerHelper('date', function(value) {

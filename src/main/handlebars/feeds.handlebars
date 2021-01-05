@@ -3,13 +3,8 @@
   {{#*inline "content"}}
     <h1 title="{{lookup help request.uri.path}}">{{> title}}</h1>
     <div class="ui vertical clearing segment">
-      <div style="display: grid; grid-template-columns: auto max-content max-content; gap: 1em; align-items: center;">
+      <div style="display: grid; grid-template-columns: auto max-content; align-items: center;">
         <div><i class="clock icon"></i> <span id="timing">...</span></div>
-        <select class="ui search dropdown" id="grouping">
-          <option value="none">No grouping</option>
-          <option value="adjacent">Adjacent messages in group</option>
-          <option value="person">All by author</option>
-        </select>
         <button class="ui tiny labeled icon button" type="submit" onclick="update(true)">
           <i class="refresh icon"></i> Refresh
         </button>
@@ -18,6 +13,20 @@
 
     <!-- Feed -->
     <div class="ui vertical segment" id="content">
+      <div style="margin-bottom: 1em">
+        <select class="ui dropdown" id="grouping">
+          <option value="none">No grouping</option>
+          <option value="adjacent">Adjacent messages in group</option>
+          <option value="person">All by author</option>
+        </select>
+
+        <select class="ui dropdown" id="ordering">
+          <option value="date">Order by date</option>
+          <option value="views">Order by views</option>
+          <option value="likes">Order by likes</option>
+          <option value="rank">Order by rank</option>
+        </select>
+      </div>
       <div class="ui stackable cards" id="feed">
         <div class="card">
           <div class="content">
@@ -50,7 +59,12 @@
           for (const edge of results) {
             const key = edge.node.threadStarter.sender.id + '@' + edge.node.group.id;
             if (key === previous) {
-              adjacent[adjacent.length - 1].stacked.push(edge);
+              with (adjacent[adjacent.length - 1]) {
+                stacked.push(edge);
+                node.seenByCount += edge.node.seenByCount;
+                node.replies.totalCount += edge.node.replies.totalCount;
+                node.threadStarter.reactionsConnection.totalCount += edge.node.threadStarter.reactionsConnection.totalCount;
+              }
             } else {
               previous = key;
               adjacent.push({...edge, stacked: [], groups: {[edge.node.group.id]: edge.node.group}});
@@ -64,12 +78,31 @@
             let sender = edge.node.threadStarter.sender.id;
             if (undefined === grouped[sender]) {
               grouped[sender]= {...edge, stacked: [], groups: {}};
-            } else{
-              grouped[sender].stacked.push(edge);
+            } else {
+              with (grouped[sender]) {
+                stacked.push(edge);
+                node.seenByCount += edge.node.seenByCount;
+                node.replies.totalCount += edge.node.replies.totalCount;
+                node.threadStarter.reactionsConnection.totalCount += edge.node.threadStarter.reactionsConnection.totalCount;
+              }
             }
             grouped[sender].groups[edge.node.group.id] = edge.node.group;
           }
           return Object.values(grouped);
+        },
+      };
+      const order = {
+        date: function(results) {
+          results.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
+        },
+        views: function(results) {
+          results.sort((a, b) => b.node.seenByCount - a.node.seenByCount);
+        },
+        likes: function(results) {
+          results.sort((a, b) => b.node.threadStarter.reactionsConnection.totalCount - a.node.threadStarter.reactionsConnection.totalCount);
+        },
+        rank: function(results) {
+          results.sort((a, b) => ranking(b.node) - ranking(a.node));
         },
       };
       let results;
@@ -81,30 +114,30 @@
         const start = new Date().getTime();
         const template = Handlebars.compile(`{{{source 'templates/messages'}}}`);
         const groupby = document.getElementById('grouping').value;
+        const orderby = document.getElementById('ordering').value;
 
         const completed = function(error) {
           if (null !== error) {
             $feed.innerHTML = template({edges: [], following: following, errors: [error.name + ': ' + error.message]});
           } else if ('none' === groupby) {
+            order[orderby](results);
             $feed.innerHTML = template({edges: results, following: following, errors: []});
           } else {
+            order[orderby](results);
             $feed.innerHTML = template({edges: group[groupby](results), following: following, errors: []});
           }
 
           $content.classList.remove('loading');
           $timing.innerHTML = ((new Date().getTime() - start) / 1000) + ' seconds';
           $('.excerpt').popup();
+          $('.details').dropdown({on: 'hover'});
         }
 
         $content.classList.add('loading');
         if (reload) {
           fetch('/api{{request.uri.path}}?limit=15', {method: 'GET', credentials: 'same-origin'})
             .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
-            .then(result => {
-              results = result.viewer.homeFeed.homeFeedCards.edges;
-              results.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
-              completed(null)
-            })
+            .then(result => { results = result.viewer.homeFeed.homeFeedCards.edges; completed(null); })
             .catch(error => completed(error))
           ;
         } else {
@@ -113,7 +146,7 @@
       };
 
       window.onload = function() {
-        $('#grouping').dropdown({onChange: () => update(false)});
+        $('.ui.dropdown').dropdown({onChange: () => update(false)});
         update(true);
       };
     </script>

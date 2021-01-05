@@ -25,15 +25,37 @@
         </div>
       </div>
       <div class="extra content">
-        <div class="right floated content" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
-          {{#each groups}}
-            {{#if (lookup ../../following databaseId)}}
+        {{#if (equals (size groups) 1)}}
+          <div class="right floated content" style="max-width: 40%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">
+            {{#if (lookup ../following node.group.databaseId)}}
               <i title="You are following this group" class="check circle outline icon"></i>
             {{/if}}
-            <a title="{{displayName}}" href="https://web.yammer.com/main/groups/{{@key}}">{{displayName}}</a>
-            {{#unless @last}}&amp;{{/unless}}
-          {{/each}}
-        </div>
+            <a title="{{node.group.displayName}}" href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a>
+          </div>
+        {{else}}
+          <div class="right floated content">
+            <div class="details ui dropdown">
+              <div class="text">{{size groups}} Groups</div>
+              <i class="dropdown icon"></i>
+              <div class="menu">
+                {{#each groups}}
+                  <div class="item">
+                    {{#if (lookup ../../following databaseId)}}
+                      <i title="You are following this group" class="check circle outline icon"></i>
+                    {{/if}}
+                    <a title="{{displayName}}" href="https://web.yammer.com/main/groups/{{@key}}">{{displayName}}</a>
+                  </div>
+                {{/each}}
+              </div>
+            </div>
+          </div>
+        {{/if}}
+
+        <i class="heart outline icon"></i> {{node.threadStarter.reactionsConnection.totalCount}}
+        &#160;
+        <i class="comment alternate outline icon"></i> {{node.replies.totalCount}}
+        &#160;
+        <i class="fire icon"></i> {{node.seenByCount}}
       </div>
     </div>
   {{else}}
