@@ -1,0 +1,42 @@
+# f4f68808e7114076c0b23d2e01a21ef01efde60e1e6538537a4f9ed91c373383
+query GroupEventsSidebarClients($groupId: ID!) {
+  group: node(id: $groupId) {
+    ... on Group {
+      ...GroupFields
+      ...ViewerCommunityRelationshipFields
+    }
+  }
+}
+
+fragment ViewerCommunityRelationshipFields on Group {
+  id
+  privacy
+  state
+  viewerMembershipStatus
+  viewerIsAdmin
+  viewerHasFavorited
+  viewerCanStartThread
+  isThreadStarterRestricted
+  isDynamicMembership
+  isAllCompanyGroup
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}

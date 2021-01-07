@@ -1,0 +1,9 @@
+# 40bf998e1be4e21c7622f6f89172bff35c1597ef9833a6a07bb6fab00b8c70be
+query DismissablePromptsClients($promptKeys: [String!]!) {
+  viewer {
+    dismissablePrompts(promptKeys: $promptKeys) {
+      promptKey
+      isDismissed
+    }
+  }
+}

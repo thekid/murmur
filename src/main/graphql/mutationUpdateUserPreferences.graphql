@@ -1,0 +1,8 @@
+# 94bde5f79ad4fbfa1d1e49ee91584d44985476f83ded5f97a679c2608088ef6d
+mutation UpdateUserPreferencesClients($isModernClientPreferred: Boolean!) {
+  updateUserPreferences(input: {isModernClientPreferred: $isModernClientPreferred}) {
+    userPreferences {
+      webClientPreference
+    }
+  }
+}

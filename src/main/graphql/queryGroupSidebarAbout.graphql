@@ -1,0 +1,8 @@
+# 6ebf397dfc7d2057b144d9ce758b361e7520a5b2ecaedd86156c4d9d4befa0df
+query GroupSidebarAboutClients($groupId: ID!) {
+  group: node(id: $groupId) {
+    ... on Group {
+      description
+    }
+  }
+}

@@ -1,0 +1,14 @@
+# fad369b6d123b94b0578455d74d3548ad15d56f6b3fadc31ccea882e11b65dde
+query CurrentNetworkLogoClients($maxWidth: Int = 392) {
+  settings {
+    network {
+      logo {
+        ...NetworkLogoFields
+      }
+    }
+  }
+}
+
+fragment NetworkLogoFields on NetworkLogo {
+  imageUrlWithMaxWidth(pixels: $maxWidth)
+}

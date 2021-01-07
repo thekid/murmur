@@ -1,0 +1,51 @@
+# 52497842d85704a25393a9f0777f3c032e3e70bda5eeba162f7a38fe0505ac81
+mutation ResolveWebLinkClients($link: URI!) {
+  resolveWebLink(input: {link: $link}) {
+    webObject {
+      __typename
+      ...WebLinkFields
+      ...WebImageFields
+      ...WebVideoFields
+      ...SharePointFileLinkFields
+    }
+  }
+}
+
+fragment SharePointFileLinkFields on SharePointFileLink {
+  __typename
+  id
+  url
+  title
+  displayName
+  description
+  previewImage
+}
+
+fragment WebVideoFields on WebVideo {
+  __typename
+  id
+  url
+  title
+  description
+  previewImage
+  embedUrl
+  provider
+}
+
+fragment WebImageFields on WebImage {
+  __typename
+  id
+  url
+  title
+  description
+  previewImage
+}
+
+fragment WebLinkFields on WebLink {
+  __typename
+  id
+  url
+  title
+  description
+  previewImage
+}

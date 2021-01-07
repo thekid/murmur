@@ -1,0 +1,6 @@
+# e2a221e7add885fd49c35ea6c12494fff5720804c60c08742f7c307e6c6f5637
+mutation UpdateAppActivityStateClients($input: UpdateAppActivityStateInput!) {
+  updateAppActivityState(input: $input) {
+    userId
+  }
+}

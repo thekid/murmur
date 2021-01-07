@@ -1,0 +1,8 @@
+# 2c1f1c1819fe5e170cf40b213e161a08e8aa14b0fb2c1d04e64dad37b3b196f5
+mutation RemoveFavoriteGroupClients($input: RemoveFavoriteGroupInput!) {
+  removeFavoriteGroup(input: $input) {
+    group {
+      id
+    }
+  }
+}

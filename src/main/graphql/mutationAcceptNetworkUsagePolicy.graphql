@@ -1,0 +1,6 @@
+# c8a5a5584969b64ff6734613bf6c052c60bedcab3ff4c967eb45044a0f639e42
+mutation AcceptNetworkUsagePolicyClients {
+  acceptNetworkUsagePolicy {
+    viewerHasAccepted
+  }
+}

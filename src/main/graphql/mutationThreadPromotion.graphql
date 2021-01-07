@@ -1,0 +1,17 @@
+# 91b125da62d2ea11e03b0b0acee8d58d556264808833f6c3b0d39c8a94062737
+mutation AddThreadPromotionInDiscoveryClients($threadId: ID!, $promotionEndTime: DateTime!) {
+  addThreadPromotionInDiscovery(input: {threadId: $threadId, promotionEndTime: $promotionEndTime}) {
+    thread {
+      id
+      promotionEndTime
+    }
+  }
+}
+
+mutation RemoveThreadPromotionInDiscoveryClients($threadId: ID!) {
+  removeThreadPromotionInDiscovery(input: {threadId: $threadId}) {
+    thread {
+      id
+    }
+  }
+}

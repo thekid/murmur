@@ -1,0 +1,21 @@
+# ad34e6417baf4057bc4a03f0e47b4761bd4c48c7e254cee70b7622e685429ed1
+fragment ActivityDetails on GroupActionActivityDetails {
+  actionType
+  actionsCount
+  deltaActions
+}
+
+query GroupActivitySummaryClients($groupId: ID!) {
+  group: node(id: $groupId) {
+    ... on Group {
+      month: activity(timeframe: TWENTYEIGHT_DAYS) {
+        messagesCreated: actionActivityDetails(filter: MESSAGES_CREATED) {
+          ...ActivityDetails
+        }
+        deltaActiveUsers
+        timeframe
+        totalActiveUsers
+      }
+    }
+  }
+}

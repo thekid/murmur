@@ -1,0 +1,12 @@
+# 0aac768f6941d099916ff74cf56e15fd7dd38ab1270e27b9588ec64e24c9adea
+mutation HideGroupForViewerInDiscoveryClients($groupId: ID!) {
+  hideForViewerInDiscovery(input: {id: $groupId}) {
+    id
+  }
+}
+
+mutation UnhideGroupForViewerInDiscoveryClients($groupId: ID!) {
+  unhideForViewerInDiscovery(input: {id: $groupId}) {
+    id
+  }
+}

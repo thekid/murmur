@@ -1,0 +1,6 @@
+# 638c43c5d7b09ea42f98cdaeeedfc1e3ef69d3821f64938bac4c3fde6ec58989
+mutation RegisterGroupVisitClients($groupId: ID!) {
+  registerGroupVisit(input: {groupId: $groupId}) {
+    groupId
+  }
+}

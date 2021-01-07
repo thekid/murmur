@@ -1,0 +1,16 @@
+# 413e7c573f3e5a0d127c40260c20326417915bd9c26167ddcb6d92f9b8e5c520
+mutation AddUserToGroupClients($groupId: ID!, $userId: ID!) {
+  addUserToGroup(input: {groupId: $groupId, userId: $userId}) {
+    group {
+      id
+    }
+  }
+}
+
+mutation RemoveUserFromGroupClients($groupId: ID!, $userId: ID!) {
+  removeUserFromGroup(input: {groupId: $groupId, userId: $userId}) {
+    group {
+      id
+    }
+  }
+}

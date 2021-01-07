@@ -1,0 +1,14 @@
+# 8794f8f75af2e5635f2b80ef02efb1011686fd1b0f09f2771b1f42a680e86ddf
+query GroupDiscoverySettingsClients($groupId: ID!) {
+  group: node(id: $groupId) {
+    ... on Group {
+      ...GroupDiscoverySettingFields
+    }
+  }
+}
+
+fragment GroupDiscoverySettingFields on Group {
+  id
+  hiddenForNetworkInDiscovery
+  hiddenForViewerInDiscovery
+}

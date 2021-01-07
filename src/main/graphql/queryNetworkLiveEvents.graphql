@@ -1,0 +1,147 @@
+# d0e0c0055f8df84dbd9fb54b8f03c8cf6efc0e9175c8a967ca344e422fa2608f
+query NetworkLiveEventsClients($first: Int = 10) {
+  ...NavigationGroupsEventRealtimeChannels
+  activeBroadcasts: activeBroadcasts(first: $first) {
+    ...BroadcastConnectionFieldsWithRealtimeChannel
+  }
+}
+
+fragment NavigationGroupsEventRealtimeChannels on Query {
+  publicGroupEventRealtimeChannelId
+  viewer {
+    privateGroupEventRealtimeChannelId
+  }
+}
+
+fragment BroadcastConnectionFieldsWithRealtimeChannel on BroadcastConnection {
+  realtimeChannelId
+  ...BroadcastConnectionFields
+}
+
+fragment BroadcastConnectionFields on BroadcastConnection {
+  edges {
+    ...BroadcastEdgeFields
+  }
+  pageInfo {
+    hasNextPage
+  }
+}
+
+fragment BroadcastEdgeFields on BroadcastEdge {
+  cursor
+  node {
+    ...BroadcastFields
+  }
+}
+
+fragment BroadcastFields on Broadcast {
+  id
+  broadcastEventType
+  organizer {
+    ...UserFields
+  }
+  network {
+    id
+  }
+  title
+  description
+  isDiscoverable
+  startAt
+  endAt
+  isEmbeddable
+  isPublished
+  isThreadStarterRestricted
+  isThreadStarterAdminModerated
+  viewerCanStartThread
+  presenters {
+    ...UserFields
+  }
+  producers {
+    ...UserFields
+  }
+  joinLink
+  editLink
+  streamsLink
+  metricsLink
+  productionEmbedUrl
+  isGroupCalendarInviteSent
+  realtimeChannelId
+  createdAt
+  calendarDownloadUrl
+  ingest {
+    ...BroadcastIngestFields
+  }
+  ...BroadcastStatusFields
+}
+
+fragment BroadcastIngestFields on Ingest {
+  urls {
+    ...BroadcastIngestUrlFields
+  }
+}
+
+fragment BroadcastIngestUrlFields on IngestUrl {
+  url
+  protocol
+  type
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}
+
+fragment BroadcastStatusFields on Broadcast {
+  broadcastId
+  group {
+    ...GroupFields
+    ...GroupCoverImageFields
+  }
+  status
+  isCancelled
+}
+
+fragment GroupCoverImageFields on Group {
+  coverImageUrlTemplate
+  hasDefaultCoverImage
+  defaultCoverImageUrlTemplate
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}

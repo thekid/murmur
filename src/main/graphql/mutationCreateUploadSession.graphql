@@ -1,0 +1,38 @@
+# fbabc281d60293bfdc1a537fbe5102faf1bf30127fcfe60efafc981c84aed420
+mutation CreateGroupUploadSessionClients($fileName: String!, $groupId: ID!, $networkId: ID!, $threadId: ID) {
+  createGroupUploadSessionForNetwork(input: {filename: $fileName, groupId: $groupId, networkId: $networkId, threadId: $threadId}) {
+    uploadSession {
+      ...UploadSessionFields
+    }
+  }
+}
+
+mutation CreateDirectMessageUploadSessionClients($fileName: String!, $networkId: ID!, $threadId: ID) {
+  createDirectMessageUploadSessionForNetwork(input: {filename: $fileName, networkId: $networkId, threadId: $threadId}) {
+    uploadSession {
+      ...UploadSessionFields
+    }
+  }
+}
+
+fragment AzureUploadSessionFields on AzureUploadSession {
+  sessionId
+  fileId
+  fileVersionId
+  url
+  sasValidator
+  sasTokenExpirationTime
+}
+
+fragment SharePointUploadSessionFields on SharePointUploadSession {
+  sessionId
+  fileId
+  fileVersionId
+  url
+}
+
+fragment UploadSessionFields on UploadSession {
+  __typename
+  ...AzureUploadSessionFields
+  ...SharePointUploadSessionFields
+}

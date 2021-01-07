@@ -1,0 +1,21 @@
+# e99a33c7bb7f940959c6b1e4d36a1ef8bf843125a9cc50eb34b996ac2ddfe922
+query ViewerCommunityRelationshipClients($communityId: ID!) {
+  node(id: $communityId) {
+    ... on Group {
+      ...ViewerCommunityRelationshipFields
+    }
+  }
+}
+
+fragment ViewerCommunityRelationshipFields on Group {
+  id
+  privacy
+  state
+  viewerMembershipStatus
+  viewerIsAdmin
+  viewerHasFavorited
+  viewerCanStartThread
+  isThreadStarterRestricted
+  isDynamicMembership
+  isAllCompanyGroup
+}

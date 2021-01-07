@@ -1,0 +1,12 @@
+# ba96eeef772efcf1e0a52f148fdca86e0cdd28be9d85a076ba80776b0fa66a68
+query NotificationUnseenCountClients {
+  viewer {
+    ...NotificationUnseenCountsField
+  }
+}
+
+fragment NotificationUnseenCountsField on Viewer {
+  notifications {
+    viewerUnseenCount
+  }
+}

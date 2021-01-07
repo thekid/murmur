@@ -1,0 +1,29 @@
+# de5ec7caebfaa0af86d4114d814768c204a399ac8dac5000d195c5fe5f62641f
+mutation RemoveThreadTopicClients($input: RemoveThreadTopicInput!) {
+  removeThreadTopic(input: $input) {
+    thread {
+      ...ThreadTopics
+    }
+  }
+}
+
+fragment ThreadTopics on Thread {
+  id
+  topics(first: 100) {
+    ...ThreadTopicList
+  }
+}
+
+fragment ThreadTopicList on ThreadTopicConnection {
+  edges {
+    node {
+      ...TopicFields
+    }
+  }
+}
+
+fragment TopicFields on Topic {
+  id
+  displayName
+  databaseId
+}

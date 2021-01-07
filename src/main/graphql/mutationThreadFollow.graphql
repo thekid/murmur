@@ -1,0 +1,16 @@
+# 123be94e9bbf063377dd1e366fc6238ed631c277ff2904334ec1eb05aa04ee42
+mutation FollowThreadClients($threadId: ID!) {
+  followThread(input: {threadMutationId: $threadId}) {
+    thread {
+      id
+    }
+  }
+}
+
+mutation UnfollowThreadClients($threadId: ID!) {
+  unfollowThread(input: {threadMutationId: $threadId}) {
+    thread {
+      id
+    }
+  }
+}

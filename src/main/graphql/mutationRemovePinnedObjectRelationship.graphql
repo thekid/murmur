@@ -1,0 +1,8 @@
+# b57118de31e541b4179329e23fb61bb41dec390d83dda9810a357f78e7cba25e
+mutation RemovePinnedObjectRelationshipClients($pinnedObjectEdgeId: ID!) {
+  removePinnedObjectRelationship(input: {id: $pinnedObjectEdgeId}) {
+    group {
+      id
+    }
+  }
+}

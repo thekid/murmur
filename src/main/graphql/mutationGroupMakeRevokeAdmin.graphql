@@ -1,0 +1,16 @@
+# e044bcad55de9b9e7b7db53f442a96a4b00ca56c7f269245426c4ac3a0816f93
+mutation MakeAdminGroupClients($groupId: ID!, $userId: ID!) {
+  makeAdminOfGroup(input: {groupId: $groupId, userId: $userId}) {
+    group {
+      id
+    }
+  }
+}
+
+mutation RevokeAdminGroupClients($groupId: ID!, $userId: ID!) {
+  revokeAdminFromGroup(input: {groupId: $groupId, userId: $userId}) {
+    group {
+      id
+    }
+  }
+}

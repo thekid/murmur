@@ -1,0 +1,43 @@
+# a9dd779e54c98ea776a7a3c70ed889818c4148286ffd60fb0d79855872f2b24d
+query GroupMemberSearchClients($searchText: String!, $groupIds: [ID!]!, $userResultFilter: AutocompleteUserResultFilter = null) {
+  autocompleteSuggestions(query: $searchText) {
+    groupUsers: users(first: 100, groupIds: $groupIds) {
+      ...GroupMemberSearchFields
+    }
+    networkUsers: users(first: 100, excludeGroupIds: $groupIds, resultFilter: $userResultFilter) {
+      ...GroupMemberSearchFields
+    }
+  }
+}
+
+fragment GroupMemberSearchFields on UserAutocompleteResultConnection {
+  edges {
+    node {
+      ...UserFields
+    }
+  }
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}

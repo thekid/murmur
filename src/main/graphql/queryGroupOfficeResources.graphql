@@ -1,0 +1,14 @@
+# 67eeab0e54a59e6e4ca98acd75dc650f1003371ef6563dfdc1f34ce97cb42a75
+query GroupOfficeResourcesClients($groupId: ID!) {
+  group: node(id: $groupId) {
+    ... on Group {
+      officeResources {
+        oneNoteUrl
+        plannerUrl
+        sharePointSiteUrl
+        sharePointDocumentLibraryUrl
+        sharePointSiteYammerFileUrl
+      }
+    }
+  }
+}

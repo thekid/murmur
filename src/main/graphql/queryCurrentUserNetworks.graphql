@@ -1,0 +1,30 @@
+# 1109e9a5b531c31da41f72c04e810eabcba880b4619930e950cc34095d66eff9
+query CurrentUserNetworksClients($networkCount: Int = 20) {
+  viewer {
+    networks(first: $networkCount) {
+      ... on ViewerNetworkConnection {
+        edges {
+          ...CurrentUserNetworkFields
+        }
+      }
+    }
+  }
+}
+
+fragment CurrentUserNetworkFields on ViewerNetworkEdge {
+  permalink
+  isCurrent
+  isPrimary
+  isLegacyExternalNetwork
+  isGuestGroupAccessEnabled
+  viewerUnreadContentCount
+  logo
+  node {
+    ...NetworkFields
+  }
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}

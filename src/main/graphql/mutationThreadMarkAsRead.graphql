@@ -1,0 +1,12 @@
+# ab3eb9ca0c46ed63e7a04d4ea1d9067afb257226ab7c450c6c9126d5fafa95ba
+mutation MarkInboxThreadAsReadClients($threadId: ID!, $messageId: ID!) {
+  markInboxThreadAsRead(input: {threadMutationId: $threadId, viewerLastReadMessageId: $messageId}) {
+    threadId
+  }
+}
+
+mutation MarkInboxThreadAsUnreadClients($threadId: ID!) {
+  markInboxThreadAsUnread(input: {threadMutationId: $threadId}) {
+    threadId
+  }
+}

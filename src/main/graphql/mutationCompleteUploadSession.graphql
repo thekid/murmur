@@ -1,0 +1,99 @@
+# 4200873e33b32c3d3f1fec8ce617b651f6d8365343fe79da5556957d2ff72de9
+mutation CompleteAzureUploadSessionClients($sessionId: String!) {
+  completeAzureUploadSession(input: {sessionId: $sessionId}) {
+    file {
+      __typename
+      ...VideoFileFields
+      ...ImageFileFields
+      ...FileFields
+    }
+  }
+}
+
+mutation CompleteSharePointUploadSessionClients($sessionId: String!, $sharePointFileId: String!) {
+  completeSharePointUploadSession(input: {sessionId: $sessionId, sharePointFileId: $sharePointFileId}) {
+    file {
+      __typename
+      ...VideoFileFields
+      ...ImageFileFields
+      ...FileFields
+    }
+  }
+}
+
+fragment FileFields on File {
+  __typename
+  id
+  displayName
+  fileDescription: description
+  fullPageEditorUrl
+  mimeType
+  downloadLink
+  previewImage
+  embeddablePreviewUrl
+  databaseId
+  state
+  group {
+    ...GroupFields
+  }
+}
+
+fragment ImageFileFields on ImageFile {
+  __typename
+  id
+  displayName
+  fileDescription: description
+  downloadLink
+  width
+  height
+  smallImage
+  mediumImage
+  largeImage
+  databaseId
+  state
+  storageProvider
+}
+
+fragment VideoFileFields on VideoFile {
+  __typename
+  id
+  displayName
+  fileDescription: description
+  downloadLink
+  previewImage
+  databaseId
+  state
+  width
+  height
+  group {
+    ...GroupFields
+  }
+  azureVideoSource {
+    streamUrlProvider
+    transcodingStatus
+  }
+  sharePointVideoSource {
+    embeddablePreviewUrl
+    streamUrlProvider
+  }
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}

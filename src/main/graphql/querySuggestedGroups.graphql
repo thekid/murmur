@@ -1,0 +1,104 @@
+# 25a9d00b48ad694ab02916dae40da2fc6e29a1e6f83fa336a64fbcdb6b857b34
+query SuggestedGroupsClients($groupsCount: Int!, $rankedBy: GroupSuggestionRank!, $featuredMembersCount: Int = 6) {
+  viewer {
+    suggestedGroups(first: $groupsCount, rankedBy: $rankedBy) {
+      ...SuggestedGroupFields
+    }
+  }
+}
+
+fragment SuggestedGroupFields on GroupSuggestionConnection {
+  edges {
+    node {
+      ...GroupRelatedOrSuggestedCardFields
+    }
+    ...SuggestedGroupFeaturedMemberFields
+  }
+}
+
+fragment SuggestedGroupFeaturedMemberFields on GroupSuggestionEdge {
+  featuredMembers(first: $featuredMembersCount) {
+    edges {
+      node {
+        ...UserFields
+      }
+    }
+  }
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}
+
+fragment GroupRelatedOrSuggestedCardFields on Group {
+  ...GroupFields
+  ...GroupMemberCountFields
+  ...ViewerCommunityRelationshipFields
+  ...GroupCoverImageFields
+}
+
+fragment GroupCoverImageFields on Group {
+  coverImageUrlTemplate
+  hasDefaultCoverImage
+  defaultCoverImageUrlTemplate
+}
+
+fragment ViewerCommunityRelationshipFields on Group {
+  id
+  privacy
+  state
+  viewerMembershipStatus
+  viewerIsAdmin
+  viewerHasFavorited
+  viewerCanStartThread
+  isThreadStarterRestricted
+  isDynamicMembership
+  isAllCompanyGroup
+}
+
+fragment GroupMemberCountFields on Group {
+  id
+  memberCount: members {
+    totalCount
+  }
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}

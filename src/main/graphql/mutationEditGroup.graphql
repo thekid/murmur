@@ -1,0 +1,81 @@
+# 96c41a58af5bc5de176ad3e1bb956f1bd3bfdc2145e35a82ac58d63f20d8c2de
+mutation EditGroupClients($groupId: ID!, $displayName: String, $description: String, $isPrivate: Boolean, $classificationName: String, $threadStarterDefaultContentType: MessageContentType = null) {
+  editGroup(input: {groupId: $groupId, displayName: $displayName, description: $description, isPrivate: $isPrivate, classificationName: $classificationName, threadStarterDefaultContentType: $threadStarterDefaultContentType}) {
+    group {
+      ...GroupFields
+      ...ViewerCommunityRelationshipFields
+      ...GroupPublisherSettingsFields
+    }
+  }
+}
+
+fragment GroupPublisherSettingsFields on Group {
+  id
+  threadStarterDefaultContentType
+  onBehalfOfSenders(first: 20) {
+    edges {
+      node {
+        ...UserFields
+      }
+      canViewThreadsInGroup
+      canStartThreadInGroup
+    }
+  }
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}
+
+fragment ViewerCommunityRelationshipFields on Group {
+  id
+  privacy
+  state
+  viewerMembershipStatus
+  viewerIsAdmin
+  viewerHasFavorited
+  viewerCanStartThread
+  isThreadStarterRestricted
+  isDynamicMembership
+  isAllCompanyGroup
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}

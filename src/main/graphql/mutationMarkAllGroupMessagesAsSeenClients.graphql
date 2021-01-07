@@ -1,0 +1,6 @@
+# 158f3c1df8565e3e2ed8476c3e1ec4fc84ed79467c521f74c2ed765226b55973
+mutation MarkAllGroupMessagesAsSeenClients($groupId: ID!, $messageId: ID!) {
+  markAllGroupMessagesAsSeen(input: {groupId: $groupId, messageId: $messageId}) {
+    groupId
+  }
+}

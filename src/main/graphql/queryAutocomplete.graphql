@@ -1,0 +1,84 @@
+# 0055d09b4b7f917e812e9947d84227b1dd209f2cad8e39fa61b860affc2e1509
+query AutocompleteClients($text: String!, $countEach: Int = 20, $includeGroups: Boolean = true, $includeUsers: Boolean = true, $includeTopics: Boolean = true, $groupIds: [ID!], $groupResultFilter: AutocompleteGroupResultFilter = null, $userResultFilter: AutocompleteUserResultFilter = null, $includeTopicDescription: Boolean = false) {
+  autocompleteSuggestions(query: $text) {
+    groups(first: $countEach, resultFilter: $groupResultFilter) @include(if: $includeGroups) {
+      edges {
+        sortKey
+        node {
+          ...GroupFields
+        }
+      }
+    }
+    users(first: $countEach, resultFilter: $userResultFilter, groupIds: $groupIds) @include(if: $includeUsers) {
+      edges {
+        sortKey
+        node {
+          ...UserFields
+        }
+      }
+    }
+    topics(first: $countEach) @include(if: $includeTopics) {
+      edges {
+        sortKey
+        node {
+          ...TopicWithDescriptionFields
+        }
+      }
+    }
+  }
+}
+
+fragment TopicWithDescriptionFields on Topic {
+  ...TopicFields
+  description @include(if: $includeTopicDescription)
+}
+
+fragment TopicFields on Topic {
+  id
+  displayName
+  databaseId
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}

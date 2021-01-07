@@ -1,0 +1,6 @@
+# fc4c2652fb86b34b7343784f97f7a00ace51c383097736ee8ad65cd0664b411e
+mutation MarkThreadsAsSeenClients($markThreadAsSeenInputValues: [MarkThreadAsSeenInput!]!, $feedType: MessageSeenInFeedType, $telemetryContext: FeedThreadTelemetryContextInput, $viewerHasSeen: Boolean) {
+  markThreadsAsSeen(input: {markThreadAsSeenInputValues: $markThreadAsSeenInputValues, feedType: $feedType, telemetryContext: $telemetryContext, viewerHasSeen: $viewerHasSeen}) {
+    threadIds
+  }
+}

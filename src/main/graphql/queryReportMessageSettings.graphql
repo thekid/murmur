@@ -1,0 +1,16 @@
+# 6c51a316cd591bf992edbed6fc8bcc53486e305120b83ea8be737a9c79119f99
+query ReportMessageSettingsClients {
+  settings {
+    network {
+      ...ReportMessageSettingsFields
+    }
+  }
+}
+
+fragment ReportMessageSettingsFields on NetworkSettings {
+  conversationReporting {
+    isEnabled
+    postSubmissionInstructions
+    preSubmissionInstructions
+  }
+}

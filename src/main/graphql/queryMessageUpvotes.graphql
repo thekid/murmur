@@ -1,0 +1,47 @@
+# d53cc3079c884d0aab3e7860a285f58bceeb7bb70899797590c0513f62a18c32
+query MessageUpvotesClients($messageId: ID!, $after: String, $voteCount: Int) {
+  answerUpvotes: node(id: $messageId) {
+    ... on Message {
+      ...QuestionReplyUpvotesFields
+    }
+  }
+}
+
+fragment QuestionReplyUpvotesFields on Message {
+  id
+  questionReplyUpvotes(first: $voteCount, after: $after) {
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+    edges {
+      node {
+        ...UserFields
+      }
+    }
+  }
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}

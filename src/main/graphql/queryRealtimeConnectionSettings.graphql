@@ -1,0 +1,8 @@
+# dd6631a3e6aa525be6d96c7dc8dfd457493c628270eefec304ebdfaa3cc4dc6c
+query RealtimeConnectionSettingsClients {
+  settings {
+    realtimeConnectionSettings {
+      cometdBaseUrl
+    }
+  }
+}

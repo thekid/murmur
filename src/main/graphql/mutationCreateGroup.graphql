@@ -1,0 +1,8 @@
+# f44f39da0b48bb1b612f785510963c8d1be09ec05bddc483bc1ad9eb548397a2
+mutation CreateGroupClients($displayName: String!, $description: String, $isExternal: Boolean!, $isPrivate: Boolean!, $isUnlisted: Boolean, $addMemberUserIds: [ID!], $classificationName: String, $officeSensitivityLabelId: String = null, $threadStarterDefaultContentType: MessageContentType = null, $isThreadStarterRestricted: Boolean = null) {
+  createGroup(input: {displayName: $displayName, description: $description, isExternal: $isExternal, isPrivate: $isPrivate, isUnlisted: $isUnlisted, addMemberUserIds: $addMemberUserIds, classificationName: $classificationName, officeSensitivityLabelId: $officeSensitivityLabelId, threadStarterDefaultContentType: $threadStarterDefaultContentType, isThreadStarterRestricted: $isThreadStarterRestricted}) {
+    group {
+      id
+    }
+  }
+}

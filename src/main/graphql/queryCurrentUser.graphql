@@ -1,0 +1,54 @@
+# f670cdb1b27f535d383325c1f16a63f93b728fe82f76c8e1db745b4035dd51f0
+query CurrentUserClients($includeIsLegacyExternalNetwork: Boolean = false) {
+  viewer {
+    userPreferences {
+      webClientPreference
+    }
+    user {
+      ...UserFields
+      reactionAccentColor
+    }
+    locale
+    isNetworkAdmin
+    isVerifiedNetworkAdmin
+    canSendOnBehalfOf
+  }
+  settings {
+    network {
+      ...NetworkSettingsFields
+    }
+  }
+}
+
+fragment NetworkSettingsFields on NetworkSettings {
+  permalink
+  webClientSettings {
+    isForceOptInModernClient
+  }
+  isLegacyExternalNetwork @include(if: $includeIsLegacyExternalNetwork)
+  isTranslationEnabled
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}

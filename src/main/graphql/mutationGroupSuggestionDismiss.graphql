@@ -1,0 +1,6 @@
+# 312306fa1b803c98c516764c6cd0055b4974dc60336841508135f422a8f36ddd
+mutation DismissSuggestedGroupClients($groupId: ID!) {
+  dismissSuggestedGroup(input: {groupId: $groupId}) {
+    groupId
+  }
+}

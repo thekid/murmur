@@ -1,0 +1,25 @@
+# a9609238d2edb761b5a5c6d70e7329e17ff101fb6e42139961120d5363f89a37
+query UnseenThreadIdsInCommunitiesClients($communityIds: [ID!]!) {
+  nodes(ids: $communityIds) {
+    ...CommunityUnseenThreadIdsFields
+  }
+}
+
+fragment CommunityUnseenThreadIdsFields on Group {
+  id
+  feed {
+    threads(last: 0, type: UNSEEN) {
+      realtimeChannelId
+    }
+    ...UnseenThreadIds
+  }
+}
+
+fragment UnseenThreadIds on GroupFeed {
+  unseenThreads: groupUnseenCount(last: 40) {
+    hasMore
+    threads: unseenThreadsInfo {
+      id: threadId
+    }
+  }
+}

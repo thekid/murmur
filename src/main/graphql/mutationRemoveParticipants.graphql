@@ -1,0 +1,8 @@
+# 70288bf38a0a153f0bb5e73f23410bad1ff0f0decdbf2f2f35bd9072b18176a7
+mutation RemoveParticipantsClients($input: RemoveParticipantsInput!) {
+  removeParticipants(input: $input) {
+    thread {
+      id
+    }
+  }
+}

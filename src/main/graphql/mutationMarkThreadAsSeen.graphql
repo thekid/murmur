@@ -1,0 +1,6 @@
+# 6cd784e6b10dc0b57581d7c271b1bc920e408c2d0cbed19fc51a1b24312a29b2
+mutation MarkGroupMessagesAsSeenClients($markMessageOfThreadAsSeenInputValues: [MarkMessageOfThreadAsSeenInput!]!, $feedType: MessageSeenInFeedType, $telemetryContext: FeedThreadTelemetryContextInput, $viewerHasSeen: Boolean) {
+  markGroupMessagesAsSeen(input: {markMessageOfThreadAsSeenInputValues: $markMessageOfThreadAsSeenInputValues, feedType: $feedType, telemetryContext: $telemetryContext, viewerHasSeen: $viewerHasSeen}) {
+    messageIds
+  }
+}

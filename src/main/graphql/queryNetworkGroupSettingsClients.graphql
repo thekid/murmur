@@ -1,0 +1,39 @@
+# 80b242dee2732b403c822be034a4921e9c858d609c3947a6c8e10923cadf2b2a
+query NetworkGroupSettingsClients {
+  settings {
+    group {
+      ...NetworkGroupSettingsFields
+    }
+  }
+}
+
+fragment NetworkGroupSettingsFields on GroupSettings {
+  usageGuidelinesUrl
+  viewerNamingConventions {
+    prefix
+    suffix
+  }
+  classifications {
+    ...GroupClassificationFields
+  }
+  sensitivityLabels {
+    ...GroupSensitivityLabelFields
+  }
+  isSensitivityLabelEnabled
+  isSensitivityLabelRequired
+}
+
+fragment GroupSensitivityLabelFields on GroupSensitivityLabel {
+  officeSensitivityLabelId
+  displayName
+  description
+  isDefault
+  enforcedGroupPrivacyLevel
+  isGuestGroupAccessEnabled
+}
+
+fragment GroupClassificationFields on GroupClassification {
+  name
+  description
+  isDefault
+}

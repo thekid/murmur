@@ -1,0 +1,50 @@
+# 1fdcd9ea0d6ed6de6411a429e466b1a27f992c97ea6b56f861c1d56a17bb6bca
+mutation JoinGroupClients($groupId: ID!) {
+  joinGroup(input: {groupMutationId: $groupId}) {
+    group {
+      ...GroupFields
+      ...ViewerCommunityRelationshipFields
+    }
+  }
+}
+
+mutation LeaveGroupClients($groupId: ID!) {
+  leaveGroup(input: {groupMutationId: $groupId}) {
+    group {
+      ...ViewerCommunityRelationshipFields
+    }
+  }
+}
+
+fragment ViewerCommunityRelationshipFields on Group {
+  id
+  privacy
+  state
+  viewerMembershipStatus
+  viewerIsAdmin
+  viewerHasFavorited
+  viewerCanStartThread
+  isThreadStarterRestricted
+  isDynamicMembership
+  isAllCompanyGroup
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}

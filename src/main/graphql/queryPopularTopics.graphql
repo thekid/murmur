@@ -1,0 +1,28 @@
+# c9143b55aa4a768932fcebe8e1f7b46b69be84ea248c354989ad757fff55e5b7
+query PopularTopicsClients($first: Int = 5, $groupId: ID!) {
+  group: node(id: $groupId) {
+    ... on Group {
+      id
+      featuredTopics(first: $first) {
+        ...PopularTopicsFields
+      }
+    }
+  }
+}
+
+fragment PopularTopicsFields on GroupTopicConnection {
+  edges {
+    ... on GroupTopicEdge {
+      node {
+        ...TopicFields
+      }
+      threadCount
+    }
+  }
+}
+
+fragment TopicFields on Topic {
+  id
+  displayName
+  databaseId
+}

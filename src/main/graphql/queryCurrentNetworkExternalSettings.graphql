@@ -1,0 +1,12 @@
+# e8b611d5da6f49b5fb62c3a66fe05adf5066b4b6330ef66c2f95c29c97553c5a
+query CurrentNetworkExternalSettingsClients {
+  settings {
+    network {
+      ...NetworkExternalSettingsFields
+    }
+  }
+}
+
+fragment NetworkExternalSettingsFields on NetworkSettings {
+  isGuestGroupAccessEnabled
+}

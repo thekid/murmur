@@ -1,0 +1,13 @@
+# cef74c7a3bf1bb95e6c5c0503a7ff87b26d4a333c44830e03480bab9b9b4020c
+query GroupEmailOptionsClients($groupId: ID!) {
+  group: node(id: $groupId) {
+    ... on Group {
+      ...GroupEmailOptionsFields
+    }
+  }
+}
+
+fragment GroupEmailOptionsFields on Group {
+  viewerSubscriptions
+  officeGroupEmail
+}

@@ -1,0 +1,126 @@
+# 16234c17db06ad6ce001f7b8477b939baca5c22b99e027669acc1c7a1b33967f
+query BroadcastClients($broadcastGuid: String!) {
+  broadcast: broadcast(broadcastGuid: $broadcastGuid) {
+    ...BroadcastFields
+  }
+  ...BroadcastRealtimeChannels
+}
+
+fragment BroadcastRealtimeChannels on Query {
+  publicGroupEventRealtimeChannelId
+  viewer {
+    privateGroupEventRealtimeChannelId
+  }
+}
+
+fragment BroadcastFields on Broadcast {
+  id
+  broadcastEventType
+  organizer {
+    ...UserFields
+  }
+  network {
+    id
+  }
+  title
+  description
+  isDiscoverable
+  startAt
+  endAt
+  isEmbeddable
+  isPublished
+  isThreadStarterRestricted
+  isThreadStarterAdminModerated
+  viewerCanStartThread
+  presenters {
+    ...UserFields
+  }
+  producers {
+    ...UserFields
+  }
+  joinLink
+  editLink
+  streamsLink
+  metricsLink
+  productionEmbedUrl
+  isGroupCalendarInviteSent
+  realtimeChannelId
+  createdAt
+  calendarDownloadUrl
+  ingest {
+    ...BroadcastIngestFields
+  }
+  ...BroadcastStatusFields
+}
+
+fragment BroadcastIngestFields on Ingest {
+  urls {
+    ...BroadcastIngestUrlFields
+  }
+}
+
+fragment BroadcastIngestUrlFields on IngestUrl {
+  url
+  protocol
+  type
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}
+
+fragment BroadcastStatusFields on Broadcast {
+  broadcastId
+  group {
+    ...GroupFields
+    ...GroupCoverImageFields
+  }
+  status
+  isCancelled
+}
+
+fragment GroupCoverImageFields on Group {
+  coverImageUrlTemplate
+  hasDefaultCoverImage
+  defaultCoverImageUrlTemplate
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}

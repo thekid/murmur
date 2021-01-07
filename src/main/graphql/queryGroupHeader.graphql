@@ -1,0 +1,67 @@
+# 6f242f2b6e099404ce7132a68504ff521096728e05c08108af56a66e47d27619
+query GroupHeaderClients($groupId: ID!) {
+  group: node(id: $groupId) {
+    ... on Group {
+      ...GroupHeaderFields
+    }
+  }
+}
+
+fragment GroupHeaderFields on Group {
+  ...GroupFields
+  ...ViewerCommunityRelationshipFields
+  category
+  classification {
+    name
+  }
+  sensitivityLabel {
+    officeSensitivityLabelId
+    displayName
+    description
+  }
+  participatingNetworks(excludeHostNetwork: true) {
+    id
+  }
+  ...GroupCoverImageFields
+  hiddenForNetworkInDiscovery
+  hiddenForViewerInDiscovery
+}
+
+fragment ViewerCommunityRelationshipFields on Group {
+  id
+  privacy
+  state
+  viewerMembershipStatus
+  viewerIsAdmin
+  viewerHasFavorited
+  viewerCanStartThread
+  isThreadStarterRestricted
+  isDynamicMembership
+  isAllCompanyGroup
+}
+
+fragment GroupCoverImageFields on Group {
+  coverImageUrlTemplate
+  hasDefaultCoverImage
+  defaultCoverImageUrlTemplate
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}

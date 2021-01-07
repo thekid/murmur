@@ -1,0 +1,20 @@
+# d4ddfa3c53fbd4f127996fcfc7e625d2bfc40a42d75244fd9202d983fd197d72
+query InboxUnreadCountClients($threadCount: Int = 20) {
+  viewer {
+    inbox {
+      inboxUnreadCount(last: $threadCount) {
+        ...UnreadThreadsForInboxCountsFields
+      }
+      threads(last: 1) {
+        realtimeChannelId
+      }
+    }
+  }
+}
+
+fragment UnreadThreadsForInboxCountsFields on InboxUnreadCount {
+  hasMore
+  unreadThreadsInfo {
+    threadId
+  }
+}

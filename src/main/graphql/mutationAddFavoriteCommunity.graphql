@@ -1,0 +1,8 @@
+# ad041c602efb465df434e1556c01870e73682e1dc6cc059b0a13c0cef3c3dc04
+mutation AddFavoriteGroupClients($input: AddFavoriteGroupInput!) {
+  addFavoriteGroup(input: $input) {
+    group {
+      id
+    }
+  }
+}

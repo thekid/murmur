@@ -1,0 +1,22 @@
+# 9aa40c40b5bb2e3bdb2c94d8b3ccfd959196fa184cffaaabf9fa0e845eab3f92
+query TrendingTopicsClients($first: Int = 5) {
+  viewer {
+    trendingTopics(first: $first) {
+      ...TrendingTopicsFields
+    }
+  }
+}
+
+fragment TrendingTopicsFields on TrendingTopicConnection {
+  edges {
+    node {
+      ...TopicFields
+    }
+  }
+}
+
+fragment TopicFields on Topic {
+  id
+  displayName
+  databaseId
+}

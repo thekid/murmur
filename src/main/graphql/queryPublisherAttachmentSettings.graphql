@@ -1,0 +1,15 @@
+# 61f36485be13769002ae23e5891532df023b45c04c2ea19c79a5befee979f00b
+query PublisherAttachmentSettingsClients {
+  settings {
+    network {
+      ...PublisherAttachmentSettingsFields
+    }
+  }
+}
+
+fragment PublisherAttachmentSettingsFields on NetworkSettings {
+  allowedUploadFileType
+  canUploadFilesForDirectMessages
+  isAllCompanyGroupMigrated
+  isGifShortcutEnabled
+}

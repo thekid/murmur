@@ -1,0 +1,22 @@
+# ecc8129b640c056b99f6c95aab367b56d64bff919aa4b0ac2f827f15fe9be90c
+mutation ApproveGroupMembershipRequestClients($groupId: ID!, $userId: ID!) {
+  approveGroupMembershipRequest(input: {groupId: $groupId, userId: $userId}) {
+    group {
+      id
+    }
+    user {
+      id
+    }
+  }
+}
+
+mutation DenyGroupMembershipRequestClients($groupId: ID!, $userId: ID!) {
+  denyGroupMembershipRequest(input: {groupId: $groupId, userId: $userId}) {
+    group {
+      id
+    }
+    user {
+      id
+    }
+  }
+}

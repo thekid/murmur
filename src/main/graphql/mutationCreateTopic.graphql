@@ -1,0 +1,20 @@
+# 6bbdd2fe4be5f708289ab759bb23cc7ca9b4e67a19b32dd736e5006de70eef97
+mutation CreateTopicClients($displayName: String!, $description: String!, $includeTopicDescription: Boolean = true) {
+  createTopic(input: {displayName: $displayName, description: $description}) {
+    topic {
+      ...TopicWithDescriptionFields
+    }
+    isExistingTopic
+  }
+}
+
+fragment TopicWithDescriptionFields on Topic {
+  ...TopicFields
+  description @include(if: $includeTopicDescription)
+}
+
+fragment TopicFields on Topic {
+  id
+  displayName
+  databaseId
+}

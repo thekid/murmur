@@ -1,0 +1,26 @@
+# c3930e971bd2d25d68108d1bc1e46a58fa02dff589e0a276c68fd157e889f23b
+query GroupClients($groupId: ID!) {
+  group: node(id: $groupId) {
+    ...GroupFields
+  }
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}

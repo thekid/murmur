@@ -1,0 +1,9 @@
+# c30661e5bed5aeb83d103fcfbc93a20287d249cbfe46a79243c10420df75dbf8
+mutation AddPinnedObjectRelationshipClients($input: AddPinnedObjectRelationshipInput!) {
+  addPinnedObjectRelationship(input: $input) {
+    edgeId
+    group {
+      id
+    }
+  }
+}

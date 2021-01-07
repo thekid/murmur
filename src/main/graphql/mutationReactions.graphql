@@ -1,0 +1,16 @@
+# ee7180a432b4989816db532257b2b5fb69d54c443fdc78b33a99aa8f8a23d1d6
+mutation LikeClients($messageId: ID!, $reaction: Reaction = LIKE) {
+  addMessageReaction(input: {messageMutationId: $messageId, reaction: $reaction}) {
+    message {
+      id
+    }
+  }
+}
+
+mutation UnlikeClients($messageId: ID!) {
+  removeMessageReaction(input: {messageMutationId: $messageId}) {
+    message {
+      id
+    }
+  }
+}

@@ -1,0 +1,202 @@
+# cba3cff29d5a5b9cc40edd92d86cf6d57687c8c80f0665ae5e27983da8ed7e7f
+query GroupSidebarClients($groupId: ID!) {
+  group: node(id: $groupId) {
+    ... on Group {
+      ...GroupSidebarFields
+    }
+  }
+}
+
+fragment GroupSidebarFields on Group {
+  id
+  databaseId
+  ...GroupsMembersFields
+  ...GroupMemberCountFields
+  extendedDescription
+  pinnedObjects(first: 100) {
+    ...PinnedObjectFields
+  }
+}
+
+fragment PinnedObjectFields on PinnedObjectConnection {
+  edges {
+    ...PinnedObjectEdgeFields
+  }
+}
+
+fragment PinnedObjectEdgeFields on PinnedObjectEdge {
+  id
+  pinnedLinkTitle
+  node {
+    __typename
+    ...FileFields
+    ...ImageFileFields
+    ...VideoFileFields
+    ...WebLinkFields
+    ...WebImageFields
+    ...WebVideoFields
+  }
+}
+
+fragment GroupMemberCountFields on Group {
+  id
+  memberCount: members {
+    totalCount
+  }
+}
+
+fragment GroupsMembersFields on Group {
+  id
+  databaseId
+  admins: members(first: 7, memberTypeFilter: ADMINS) {
+    ...GroupMemberEdges
+  }
+  nonAdmins: members(first: 11, memberTypeFilter: EXCLUDE_ADMINS) {
+    ...GroupMemberEdges
+  }
+  pending: members(first: 10, memberTypeFilter: PENDING) {
+    ...GroupMemberEdges
+  }
+  featuredMembers(first: 4) {
+    ...GroupMemberEdges
+  }
+}
+
+fragment GroupMemberEdges on GroupMembersConnection {
+  edges {
+    isAdmin
+    node {
+      ...UserFields
+    }
+  }
+}
+
+fragment FileFields on File {
+  __typename
+  id
+  displayName
+  fileDescription: description
+  fullPageEditorUrl
+  mimeType
+  downloadLink
+  previewImage
+  embeddablePreviewUrl
+  databaseId
+  state
+  group {
+    ...GroupFields
+  }
+}
+
+fragment ImageFileFields on ImageFile {
+  __typename
+  id
+  displayName
+  fileDescription: description
+  downloadLink
+  width
+  height
+  smallImage
+  mediumImage
+  largeImage
+  databaseId
+  state
+  storageProvider
+}
+
+fragment VideoFileFields on VideoFile {
+  __typename
+  id
+  displayName
+  fileDescription: description
+  downloadLink
+  previewImage
+  databaseId
+  state
+  width
+  height
+  group {
+    ...GroupFields
+  }
+  azureVideoSource {
+    streamUrlProvider
+    transcodingStatus
+  }
+  sharePointVideoSource {
+    embeddablePreviewUrl
+    streamUrlProvider
+  }
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment WebVideoFields on WebVideo {
+  __typename
+  id
+  url
+  title
+  description
+  previewImage
+  embedUrl
+  provider
+}
+
+fragment WebLinkFields on WebLink {
+  __typename
+  id
+  url
+  title
+  description
+  previewImage
+}
+
+fragment WebImageFields on WebImage {
+  __typename
+  id
+  url
+  title
+  description
+  previewImage
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}

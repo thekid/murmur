@@ -1,0 +1,55 @@
+# c31c9af4a392c4caf7168b310e339cfaf8be6b1a4bcfe8a4aa8455c9e3ad030b
+query GroupMemberPanelClients($groupId: ID!, $after: String) {
+  group: node(id: $groupId) {
+    ... on Group {
+      ...GroupMemberPanelFields
+    }
+  }
+}
+
+fragment GroupMemberPanelFields on Group {
+  id
+  pending: members(first: 20, memberTypeFilter: PENDING, after: $after) {
+    ...MemberFields
+  }
+  members: members(first: 50, memberTypeFilter: ALL, after: $after) {
+    ...MemberFields
+  }
+}
+
+fragment MemberFields on GroupMembersConnection {
+  pageInfo {
+    hasNextPage
+  }
+  edges {
+    cursor
+    isAdmin
+    node {
+      ...UserFields
+    }
+  }
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}

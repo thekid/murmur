@@ -1,0 +1,9 @@
+# 122f6dc85baba3871c88a9d4cfa8922edad266ae6f095b109f7bfd8a259896fc
+mutation DeleteCoverImageClients($groupId: ID!) {
+  removeGroupCoverImage(input: {groupId: $groupId}) {
+    group {
+      id
+      coverImageUrlTemplate
+    }
+  }
+}

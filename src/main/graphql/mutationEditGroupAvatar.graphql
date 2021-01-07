@@ -1,0 +1,8 @@
+# 073eabe5fc9a948696429c88999f0d2b91adbd4c0513e49c3f725e904ca715c1
+mutation EditGroupAvatarClients($groupId: ID!, $avatarMutationId: String!) {
+  editAvatarMutation(input: {groupId: $groupId, avatarMutationId: $avatarMutationId}) {
+    group {
+      id
+    }
+  }
+}

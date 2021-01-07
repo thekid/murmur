@@ -1,0 +1,51 @@
+# 6a57fa4a6145effc70a397044e7c1c7a795e9a11111bca60a92ebd4553b6576f
+mutation EditPinnedLinkGlobalTitleClients($link: URI!, $pinnedLinkOverrideTitle: String!) {
+  editPinnedLinkGlobalTitle(input: {link: $link, pinnedLinkTitle: $pinnedLinkOverrideTitle}) {
+    webObject {
+      __typename
+      ...WebLinkFields
+      ...WebImageFields
+      ...WebVideoFields
+      ...SharePointFileLinkFields
+    }
+  }
+}
+
+fragment SharePointFileLinkFields on SharePointFileLink {
+  __typename
+  id
+  url
+  title
+  displayName
+  description
+  previewImage
+}
+
+fragment WebVideoFields on WebVideo {
+  __typename
+  id
+  url
+  title
+  description
+  previewImage
+  embedUrl
+  provider
+}
+
+fragment WebImageFields on WebImage {
+  __typename
+  id
+  url
+  title
+  description
+  previewImage
+}
+
+fragment WebLinkFields on WebLink {
+  __typename
+  id
+  url
+  title
+  description
+  previewImage
+}

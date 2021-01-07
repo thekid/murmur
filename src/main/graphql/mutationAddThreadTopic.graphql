@@ -1,0 +1,14 @@
+# abb0fd1a3f98b8ce4bdc4819081aa0fa63662d0fc21fc913e3abea2949d67775
+mutation AddThreadTopicClients($input: AddThreadTopicInput!) {
+  addThreadTopic(input: $input) {
+    topic {
+      ...TopicFields
+    }
+  }
+}
+
+fragment TopicFields on Topic {
+  id
+  displayName
+  databaseId
+}

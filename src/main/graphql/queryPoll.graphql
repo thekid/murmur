@@ -1,0 +1,24 @@
+# e4ab0258616ef43fea74b9433d531fd08dd43c026de91a08a1d5203d16607287
+query PollLoadClients($messageId: ID!) {
+  message: node(id: $messageId) {
+    __typename
+    ... on Message {
+      id
+      content {
+        __typename
+        ... on PollMessageContent {
+          options {
+            ...PollOptionFields
+          }
+        }
+      }
+    }
+  }
+}
+
+fragment PollOptionFields on PollOption {
+  displayName
+  index
+  viewerHasSelected
+  voteCount
+}

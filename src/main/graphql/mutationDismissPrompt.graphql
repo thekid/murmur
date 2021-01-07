@@ -1,0 +1,9 @@
+# 5976081714269a5dd2dd8b1d9c18fb38956222729beb0aeb740161a78dbbb3e1
+mutation DismissPromptClients($promptKey: String!) {
+  dismissPrompt(input: {promptKey: $promptKey}) {
+    prompt {
+      isDismissed
+      promptKey
+    }
+  }
+}

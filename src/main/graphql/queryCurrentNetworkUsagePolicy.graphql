@@ -1,0 +1,18 @@
+# 01c1f8a0dfd520f42c2cc3b9f57903d8bacbf54c5982900913768a0699c5d56d
+query CurrentNetworkUsagePolicyClients {
+  settings {
+    network {
+      usagePolicy {
+        ...NetworkUsagePolicyFields
+      }
+    }
+  }
+}
+
+fragment NetworkUsagePolicyFields on NetworkUsagePolicy {
+  body
+  summary
+  title
+  viewerHasAccepted
+  shouldShowSummary
+}

@@ -1,0 +1,32 @@
+# 37a8a6e19fc381ce5042aea59506aa0a45f20ef8b575ed19abbdc80db268fa1b
+mutation MarkBestReplyClients($threadStarterMessageId: ID!, $bestReplyMessageId: ID!) {
+  markBestReply(input: {threadStarterMessageId: $threadStarterMessageId, bestReplyMessageId: $bestReplyMessageId}) {
+    thread {
+      id
+      bestReply {
+        message {
+          id
+        }
+        markedBy {
+          id
+        }
+      }
+    }
+  }
+}
+
+mutation UnmarkBestReplyClients($threadStarterMessageId: ID!, $bestReplyMessageId: ID!) {
+  unmarkBestReply(input: {threadStarterMessageId: $threadStarterMessageId, bestReplyMessageId: $bestReplyMessageId}) {
+    thread {
+      id
+      bestReply {
+        message {
+          id
+        }
+        markedBy {
+          id
+        }
+      }
+    }
+  }
+}

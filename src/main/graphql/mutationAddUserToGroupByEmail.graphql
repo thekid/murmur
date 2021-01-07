@@ -1,0 +1,33 @@
+# a3a598d14551b37140243be772a5db526dfdddb04ca86b4f9263f455c523525b
+mutation AddUserToGroupByEmailClients($groupId: ID!, $email: Email!) {
+  addUserToGroupByEmail(input: {groupId: $groupId, email: $email}) {
+    groupId
+    user {
+      ...UserFields
+    }
+  }
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}

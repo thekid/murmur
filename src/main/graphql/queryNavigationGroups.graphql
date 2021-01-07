@@ -1,0 +1,92 @@
+# 1ce7563fd1bb24c86fe009d6c0dfae2a5030cf6132b61a1e8ef221c76ade3748
+query NavigationGroupsClients($groupMembershipCount: Int = 1000) {
+  ...NavigationGroupsEventRealtimeChannels
+  viewer {
+    groups(first: $groupMembershipCount, orderBy: PROXIMITY_RANK) {
+      ...NavigationGroups
+    }
+    favoriteGroups(first: $groupMembershipCount) {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+  }
+}
+
+fragment NavigationGroups on GroupMembershipConnection {
+  edges {
+    node {
+      ...GroupFieldsWithLiveEvents
+      ...ViewerCommunityRelationshipFields
+    }
+  }
+}
+
+fragment NavigationGroupsEventRealtimeChannels on Query {
+  publicGroupEventRealtimeChannelId
+  viewer {
+    privateGroupEventRealtimeChannelId
+  }
+}
+
+fragment GroupFieldsWithLiveEvents on Group {
+  ...GroupFields
+  broadcasts(first: 20, filter: STARTED) {
+    edges {
+      node {
+        ...BroadcastStatusFields
+      }
+    }
+  }
+}
+
+fragment ViewerCommunityRelationshipFields on Group {
+  id
+  privacy
+  state
+  viewerMembershipStatus
+  viewerIsAdmin
+  viewerHasFavorited
+  viewerCanStartThread
+  isThreadStarterRestricted
+  isDynamicMembership
+  isAllCompanyGroup
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment BroadcastStatusFields on Broadcast {
+  broadcastId
+  group {
+    ...GroupFields
+    ...GroupCoverImageFields
+  }
+  status
+  isCancelled
+}
+
+fragment GroupCoverImageFields on Group {
+  coverImageUrlTemplate
+  hasDefaultCoverImage
+  defaultCoverImageUrlTemplate
+}

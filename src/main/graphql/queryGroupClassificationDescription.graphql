@@ -1,0 +1,10 @@
+# e1881b203a6c829d5dfa9ff5affee731da7bf84ce82005c0bacb37cf23375adc
+query GroupClassificationDescriptionClients($groupId: ID!) {
+  group: node(id: $groupId) {
+    ... on Group {
+      classification {
+        description
+      }
+    }
+  }
+}

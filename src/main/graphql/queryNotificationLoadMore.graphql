@@ -1,0 +1,749 @@
+# 50f4a43cd6a226cdfea2cb029cc1cc3cee95608cab56269a536c35091b133a00
+query NotificationLoadMoreClients($beforeCursor: String, $notificationCount: Int = 20) {
+  viewer {
+    notifications(before: $beforeCursor, last: $notificationCount) {
+      ...NotificationList
+    }
+  }
+}
+
+fragment NotificationFields on Notification {
+  id
+  createdAt
+  isUnseen
+  details {
+    ...NotificationDetailsField
+  }
+}
+
+fragment NotificationList on NotificationConnection {
+  edges {
+    node {
+      ...NotificationFields
+    }
+  }
+  pageInfo {
+    ...PageInfoFields
+  }
+}
+
+fragment NotificationDetailsField on NotificationDetails {
+  ...NotificationTypeNames
+  ...ReactionNotificationFields
+  ...MarkedBestReplyMyReplyNotificationFields
+  ...MarkedBestReplyMyThreadNotificationFields
+  ...MarkedBestReplyFollowedThreadNotificationFields
+  ...StartedBroadcastEventNotificationFields
+  ...RequestedGroupJoinNotificationFields
+  ...AddedToGroupNotificationFields
+  ...ChangedGroupPrivacyNotificationFields
+  ...FollowedByUserNotificationFields
+  ...VotedOnPollNotificationFields
+  ...UpvotedQuestionReplyNotificationFields
+  ...PostedMessageOnBehalfOfUserNotificationFields
+}
+
+fragment NotificationTypeNames on NotificationDetails {
+  __typename
+}
+
+fragment PostedMessageOnBehalfOfUserNotificationFields on PostedMessageOnBehalfOfUserNotification {
+  __typename
+  postingUser {
+    ...UserFields
+  }
+  onBehalfOfUser {
+    ...UserFields
+  }
+  viewerIsOnBehalfOfUser
+  thread {
+    ...ThreadFieldsForNotification
+  }
+  message {
+    ...MessageFields
+  }
+}
+
+fragment ReactionNotificationFields on ReactionNotification {
+  __typename
+  reactingUsersCount
+  featuredReactionUsers {
+    ... on User {
+      ...UserReactionFields
+    }
+  }
+  thread {
+    ...ThreadFieldsForNotification
+  }
+  messages {
+    ...MessageFields
+  }
+}
+
+fragment MarkedBestReplyMyReplyNotificationFields on MarkedBestReplyMyReplyNotification {
+  __typename
+  markingUser {
+    ...UserFields
+  }
+  thread {
+    ...ThreadFieldsForNotification
+  }
+  messages {
+    ...MessageFields
+  }
+}
+
+fragment MarkedBestReplyMyThreadNotificationFields on MarkedBestReplyMyThreadNotification {
+  __typename
+  markingUser {
+    ...UserFields
+  }
+  thread {
+    ...ThreadFieldsForNotification
+  }
+  messages {
+    ...MessageFields
+  }
+}
+
+fragment MarkedBestReplyFollowedThreadNotificationFields on MarkedBestReplyFollowedThreadNotification {
+  __typename
+  markingUser {
+    ...UserFields
+  }
+  thread {
+    ...ThreadFieldsForNotification
+  }
+  messages {
+    ...MessageFields
+  }
+}
+
+fragment StartedBroadcastEventNotificationFields on StartedBroadcastEventNotification {
+  __typename
+  broadcast {
+    ...BroadcastFieldsForNotification
+  }
+}
+
+fragment RequestedGroupJoinNotificationFields on RequestedGroupJoinNotification {
+  __typename
+  group {
+    ...GroupFields
+  }
+  isResolved
+  requestingUser {
+    ...UserFields
+  }
+}
+
+fragment AddedToGroupNotificationFields on AddedToGroupNotification {
+  __typename
+  addingUser {
+    ...UserFields
+  }
+  group {
+    ...GroupFields
+  }
+}
+
+fragment ChangedGroupPrivacyNotificationFields on ChangedGroupPrivacyNotification {
+  __typename
+  fromPrivacy
+  toPrivacy
+  group {
+    ...GroupFields
+  }
+  user {
+    ...UserFields
+  }
+}
+
+fragment FollowedByUserNotificationFields on FollowedByUserNotification {
+  __typename
+  featuredFollowerUsers {
+    ... on User {
+      ...UserFields
+    }
+  }
+  followingUsersCount
+}
+
+fragment VotedOnPollNotificationFields on VotedOnPollNotification {
+  __typename
+  featuredVotingUsers {
+    ... on User {
+      ...UserFields
+    }
+  }
+  thread {
+    ...ThreadFieldsForNotification
+  }
+  votingUsersCount
+}
+
+fragment ThreadFieldsForNotification on Thread {
+  id
+  threadStarter {
+    id
+  }
+  group {
+    ...GroupFields
+  }
+}
+
+fragment BroadcastFieldsForNotification on Broadcast {
+  group {
+    ...GroupFields
+  }
+  broadcastId
+  status
+  title
+}
+
+fragment UpvotedQuestionReplyNotificationFields on UpvotedQuestionReplyNotification {
+  __typename
+  featuredUpvotingUsers {
+    ... on User {
+      ...UserFields
+    }
+  }
+  thread {
+    ...ThreadFieldsForNotification
+  }
+  upvotingUsersCount
+}
+
+fragment BaseMessageFields on Message {
+  id
+  viewerMutationId
+  telemetryId
+  thread {
+    id
+  }
+  sender {
+    ...MessageSenderFields
+  }
+  content {
+    ...MessageContentFields
+  }
+  body {
+    ...MessageBodyFields
+  }
+  language
+  createdAt
+  updatedAt
+  version
+  isEdited
+  viewerCanEdit
+  isDeleted
+  viewerCanDelete
+  viewerHasUpvoted
+  messageParticipants: participants(first: 100) {
+    ...MessageParticipantList
+  }
+  isQuestion
+  sharedMessage {
+    ...SharedMessageFields
+  }
+}
+
+fragment SharedMessageFields on Message {
+  __typename
+  id
+  sender {
+    ...MessageSenderFields
+  }
+  content {
+    ...MessageContentFields
+  }
+  body {
+    ...MessageBodyFields
+  }
+  language
+  attachments {
+    totalCount
+  }
+  createdAt
+  thread {
+    id
+    group {
+      ...GroupLinkFields
+    }
+    threadStarter {
+      id
+    }
+    seenByCount
+    shares {
+      totalCount
+    }
+  }
+  isQuestion
+  repliedTo {
+    id
+  }
+}
+
+fragment MessageAttachmentEdgeFields on MessageAttachmentEdge {
+  node {
+    __typename
+    ...FileFields
+    ...ImageFileFields
+    ...VideoFileFields
+    ...WebLinkFields
+    ...WebImageFields
+    ...WebVideoFields
+    ...SharePointFileLinkFields
+  }
+}
+
+fragment RepliedToMessageFields on Message {
+  ...BaseMessageFields
+  ...FeaturedReactionMessageFields
+  featuredQuestionReplyUpvotes(first: 10) {
+    totalCount
+    edges {
+      node {
+        ...UserFields
+      }
+    }
+  }
+  viewerMutationId
+  attachments(first: 1000) {
+    totalCount
+    edges {
+      ...MessageAttachmentEdgeFields
+    }
+  }
+}
+
+fragment MessageFields on Message {
+  ...RepliedToMessageFields
+  repliedTo {
+    ...RepliedToMessageFields
+  }
+}
+
+fragment GroupLinkFields on Group {
+  id
+  displayName
+}
+
+fragment SharePointFileLinkFields on SharePointFileLink {
+  __typename
+  id
+  url
+  title
+  displayName
+  description
+  previewImage
+}
+
+fragment FileFields on File {
+  __typename
+  id
+  displayName
+  fileDescription: description
+  fullPageEditorUrl
+  mimeType
+  downloadLink
+  previewImage
+  embeddablePreviewUrl
+  databaseId
+  state
+  group {
+    ...GroupFields
+  }
+}
+
+fragment ImageFileFields on ImageFile {
+  __typename
+  id
+  displayName
+  fileDescription: description
+  downloadLink
+  width
+  height
+  smallImage
+  mediumImage
+  largeImage
+  databaseId
+  state
+  storageProvider
+}
+
+fragment VideoFileFields on VideoFile {
+  __typename
+  id
+  displayName
+  fileDescription: description
+  downloadLink
+  previewImage
+  databaseId
+  state
+  width
+  height
+  group {
+    ...GroupFields
+  }
+  azureVideoSource {
+    streamUrlProvider
+    transcodingStatus
+  }
+  sharePointVideoSource {
+    embeddablePreviewUrl
+    streamUrlProvider
+  }
+}
+
+fragment GroupFields on Group {
+  databaseId
+  telemetryId
+  id
+  officeUnifiedGroupId
+  network {
+    id
+  }
+  ...GroupAvatarFields
+  displayName
+  description
+  isExternal
+  guestsCount
+}
+
+fragment GroupAvatarFields on Group {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment WebVideoFields on WebVideo {
+  __typename
+  id
+  url
+  title
+  description
+  previewImage
+  embedUrl
+  provider
+}
+
+fragment WebLinkFields on WebLink {
+  __typename
+  id
+  url
+  title
+  description
+  previewImage
+}
+
+fragment WebImageFields on WebImage {
+  __typename
+  id
+  url
+  title
+  description
+  previewImage
+}
+
+fragment FeaturedReactionMessageConnectionFields on MessageReactionConnection {
+  edges {
+    node {
+      ...UserReactionFields
+    }
+  }
+}
+
+fragment FeaturedReactionMessageFields on Message {
+  reactionsConnection {
+    totalCount
+    likeCount: count(reaction: LIKE)
+    loveCount: count(reaction: LOVE)
+    laughCount: count(reaction: LAUGH)
+    thankCount: count(reaction: THANK)
+    celebrateCount: count(reaction: CELEBRATE)
+    sadCount: count(reaction: SAD)
+  }
+  featuredReactions(first: 8) {
+    ...FeaturedReactionMessageConnectionFields
+  }
+  likeFeaturedReactions: featuredReactions(first: 8, filterByReaction: LIKE) {
+    ...FeaturedReactionMessageConnectionFields
+  }
+  loveFeaturedReactions: featuredReactions(first: 8, filterByReaction: LOVE) {
+    ...FeaturedReactionMessageConnectionFields
+  }
+  laughFeaturedReactions: featuredReactions(first: 8, filterByReaction: LAUGH) {
+    ...FeaturedReactionMessageConnectionFields
+  }
+  celebrateFeaturedReactions: featuredReactions(first: 8, filterByReaction: CELEBRATE) {
+    ...FeaturedReactionMessageConnectionFields
+  }
+  thankFeaturedReactions: featuredReactions(first: 8, filterByReaction: THANK) {
+    ...FeaturedReactionMessageConnectionFields
+  }
+  sadFeaturedReactions: featuredReactions(first: 8, filterByReaction: SAD) {
+    ...FeaturedReactionMessageConnectionFields
+  }
+  viewerHasLiked
+  viewerReaction
+}
+
+fragment UserReactionFields on User {
+  ...UserFields
+  reactionAccentColor
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}
+
+fragment MessageParticipantList on MessageParticipantConnection {
+  totalCount
+  pageInfo {
+    ...PageInfoFields
+  }
+  edges {
+    isTagged
+    isNotified
+    node {
+      ...UserFields
+    }
+  }
+}
+
+fragment PageInfoFields on PageInfo {
+  hasPreviousPage
+  startCursor
+  hasNextPage
+  endCursor
+}
+
+fragment MessageBodyFields on MessageBody {
+  serializedContentState
+  references {
+    __typename
+    ... on User {
+      ...UserFields
+    }
+    ... on Group {
+      ...GroupFields
+    }
+    ... on HashTag {
+      ...HashTagFields
+    }
+  }
+}
+
+fragment HashTagFields on HashTag {
+  databaseId
+  displayName
+  topic {
+    __typename
+    ...TopicFields
+  }
+}
+
+fragment TopicFields on Topic {
+  id
+  displayName
+  databaseId
+}
+
+fragment MessageContentFields on MessageContent {
+  __typename
+  ...AnnouncementMessageContentFields
+  ...PollMessageContentFields
+  ...PraiseMessageContentFields
+  ...AddedParticipantSystemMessageContentFields
+  ...CreatedGroupSystemMessageContentFields
+  ...MovedGroupThreadToGroupSystemMessageContentFields
+  ...RemovedParticipantSystemMessageContentFields
+  ...MovedDirectMessageToGroupSystemMessageContentFields
+  ...JoinedNetworkSystemMessageContentFields
+  ...DisabledForeignNetworksSystemMessageContentFields
+  ...RemovedForeignNetworkSystemMessageContentFields
+  ...ClosedThreadSystemMessageContentFields
+  ...ReopenedThreadSystemMessageContentFields
+  ...CreatedNetworkSystemMessageContentFields
+  ...MarkedMessageAsQuestionSystemMessageContentFields
+  ...UnmarkedMessageAsQuestionSystemMessageContentFields
+}
+
+fragment PraiseMessageContentFields on PraiseMessageContent {
+  __typename
+  badge
+  users {
+    ...UserFields
+  }
+}
+
+fragment PollMessageContentFields on PollMessageContent {
+  __typename
+  options {
+    ...PollOptionFields
+  }
+}
+
+fragment PollOptionFields on PollOption {
+  displayName
+  index
+  viewerHasSelected
+  voteCount
+}
+
+fragment AddedParticipantSystemMessageContentFields on AddedParticipantSystemMessageContent {
+  __typename
+  users {
+    __typename
+    ...UserFields
+  }
+}
+
+fragment CreatedGroupSystemMessageContentFields on CreatedGroupSystemMessageContent {
+  __typename
+  group {
+    __typename
+    ...GroupFields
+  }
+}
+
+fragment MovedGroupThreadToGroupSystemMessageContentFields on MovedGroupThreadToGroupSystemMessageContent {
+  __typename
+  sourceGroup {
+    __typename
+    ...GroupFields
+  }
+  destinationGroup {
+    __typename
+    ...GroupFields
+  }
+}
+
+fragment RemovedParticipantSystemMessageContentFields on RemovedParticipantSystemMessageContent {
+  __typename
+  users {
+    __typename
+    ...UserFields
+  }
+}
+
+fragment MovedDirectMessageToGroupSystemMessageContentFields on MovedDirectMessageToGroupSystemMessageContent {
+  __typename
+  group {
+    __typename
+    ...GroupFields
+  }
+}
+
+fragment JoinedNetworkSystemMessageContentFields on JoinedNetworkSystemMessageContent {
+  __typename
+  hashTag {
+    __typename
+    ...HashTagFields
+  }
+  network {
+    __typename
+    ...NetworkFields
+  }
+  user {
+    __typename
+    ...UserFields
+  }
+}
+
+fragment DisabledForeignNetworksSystemMessageContentFields on DisabledForeignNetworksSystemMessageContent {
+  __typename
+  network {
+    __typename
+    ...NetworkFields
+  }
+}
+
+fragment RemovedForeignNetworkSystemMessageContentFields on RemovedForeignNetworkSystemMessageContent {
+  __typename
+  network {
+    __typename
+    ...NetworkFields
+  }
+}
+
+fragment ClosedThreadSystemMessageContentFields on ClosedThreadSystemMessageContent {
+  __typename
+  user {
+    __typename
+    ...UserFields
+  }
+}
+
+fragment ReopenedThreadSystemMessageContentFields on ReopenedThreadSystemMessageContent {
+  __typename
+  user {
+    __typename
+    ...UserFields
+  }
+}
+
+fragment CreatedNetworkSystemMessageContentFields on CreatedNetworkSystemMessageContent {
+  __typename
+  network {
+    __typename
+    ...NetworkFields
+  }
+}
+
+fragment MarkedMessageAsQuestionSystemMessageContentFields on MarkedMessageAsQuestionSystemMessageContent {
+  __typename
+  user {
+    __typename
+    ...UserFields
+  }
+}
+
+fragment UnmarkedMessageAsQuestionSystemMessageContentFields on UnmarkedMessageAsQuestionSystemMessageContent {
+  __typename
+  user {
+    __typename
+    ...UserFields
+  }
+}
+
+fragment AnnouncementMessageContentFields on AnnouncementMessageContent {
+  __typename
+  title
+}
+
+fragment MessageSenderFields on MessageSender {
+  __typename
+  ... on User {
+    ...UserFields
+  }
+  ... on Bot {
+    ...BotFields
+  }
+}
+
+fragment BotFields on Bot {
+  id
+  displayName
+  avatarUrlTemplate
+}

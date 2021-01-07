@@ -1,0 +1,12 @@
+# 451a192b9868bd1ff62293f2ddd4ff3ee235bd46a54ee9bdb7f3a1e14d8d8dd8
+mutation HideGroupForNetworkInDiscoveryClients($groupId: ID!) {
+  hideForNetworkInDiscovery(input: {id: $groupId}) {
+    id
+  }
+}
+
+mutation UnhideGroupForNetworkInDiscoveryClients($groupId: ID!) {
+  unhideForNetworkInDiscovery(input: {id: $groupId}) {
+    id
+  }
+}

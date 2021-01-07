@@ -1,0 +1,12 @@
+# a5ae24e49a014ce6e74520f0f99100b69679ace0cfb380a88c8ce5ba6e2f821e
+mutation SubscribeToGroupEmailClients($groupId: ID!) {
+  subscribeToGroup(input: {groupId: $groupId, target: EMAIL}) {
+    groupId
+  }
+}
+
+mutation UnsubscribeFromGroupEmailClients($groupId: ID!) {
+  unsubscribeFromGroup(input: {groupId: $groupId, target: EMAIL}) {
+    groupId
+  }
+}

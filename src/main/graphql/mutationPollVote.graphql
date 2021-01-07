@@ -1,0 +1,8 @@
+# 1a7d554bc39172f3997d7b61cfd12d4e0a4d28758a3283e0292db30f73a2a220
+mutation PollVoteClients($messageId: ID!, $index: Int!) {
+  votePoll(input: {messageMutationId: $messageId, index: $index}) {
+    message {
+      id
+    }
+  }
+}

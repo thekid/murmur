@@ -1,0 +1,46 @@
+# cb97f3edbf9906249e882f2279de4d5fd2cb32030e6a9ba7e494f6c72bc165a0
+query GroupPublisherSettingsClients($groupId: ID!) {
+  group: node(id: $groupId) {
+    ... on Group {
+      ...GroupPublisherSettingsFields
+    }
+  }
+}
+
+fragment GroupPublisherSettingsFields on Group {
+  id
+  threadStarterDefaultContentType
+  onBehalfOfSenders(first: 20) {
+    edges {
+      node {
+        ...UserFields
+      }
+      canViewThreadsInGroup
+      canStartThreadInGroup
+    }
+  }
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}

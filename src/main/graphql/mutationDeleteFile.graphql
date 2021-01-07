@@ -1,0 +1,6 @@
+# e745ba51995b8b8c42f52c669248eebc394395757f221ee61ea190c90830dba9
+mutation DeleteFileClients($fileId: ID!) {
+  deleteFile(input: {id: $fileId}) {
+    fileId
+  }
+}

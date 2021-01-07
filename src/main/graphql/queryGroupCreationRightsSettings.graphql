@@ -1,0 +1,7 @@
+# 20596bbde07a1405459144f1a7d598d3dae36fa863e0bbf47c2fa443fc6a8a54
+query GroupCreationRightsSettingsClients {
+  viewer {
+    canCreateGroup
+    canCreateExternalGroup
+  }
+}

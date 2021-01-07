@@ -1,0 +1,30 @@
+# e9942f53eadea5a2cbd099dd4ed6b663763bbc8e39a5a2d88f7edc4cf1f894d2
+query UserClients($userId: ID!) {
+  user: node(id: $userId) {
+    ...UserFields
+  }
+}
+
+fragment UserFields on User {
+  databaseId
+  telemetryId
+  id
+  network {
+    ...NetworkFields
+  }
+  displayName
+  email
+  jobTitle
+  isGuest
+  ...UserAvatarFields
+}
+
+fragment UserAvatarFields on User {
+  avatarUrlTemplate
+  hasDefaultAvatar
+}
+
+fragment NetworkFields on Network {
+  id
+  displayName
+}
