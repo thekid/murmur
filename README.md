@@ -40,7 +40,7 @@ Currently running public live events are shown on the application's front page. 
 
 A word on Yammer's API
 ----------------------
-The official "v1" Yammer API is incomplete and horribly slow: Fetching the newest 20 or so messages from a feed comes in at somewhere between 2.5 and 6.5 seconds, depending on payload and whether we're aggregating replies or not. By reverse engineering the new Yammer frontend, I've been able to discover their new API based on GraphQL, which is undocumented but *much* faster - the same feed requests clock in at 1.2 to 1.8 seconds. The freedom you might suspect GraphQL could give is (understandly) limited by using [persisted queries](https://www.apollographql.com/blog/persisted-graphql-queries-with-apollo-client-119fd7e6bba5/). Still, when merging multiple feeds this work is done asynchronously via `fetch` in the frontend to no overstress users' patience.
+The official "v1" Yammer API is incomplete and horribly slow: Fetching the newest 20 or so messages from a feed comes in at somewhere between 2.5 and 6.5 seconds, depending on payload and whether we're aggregating replies or not. By reverse engineering the new Yammer frontend, I've been able to discover their new API based on GraphQL, which is undocumented but *much* faster - the same feed requests clock in at 1.2 to 1.8 seconds. The freedom you might suspect GraphQL could give is (understandly) limited by using [persisted queries](https://www.apollographql.com/blog/persisted-graphql-queries-with-apollo-client-119fd7e6bba5/). This means `n` queries for `n` feeds, so when merging this work is done asynchronously via `fetch` in the frontend to not overstress users' patience.
 
 
 Integrating with your AAD
