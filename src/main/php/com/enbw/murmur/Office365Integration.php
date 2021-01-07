@@ -7,7 +7,7 @@ use web\auth\{Authentication, SessionBased, UseURL, UseRequest};
 use web\session\Sessions;
 
 /**
- * Integrates platform with Office 365 OAuth and Microsoft Graph,
+ * Integrates platform with Office 365 OAuth, Yammer and Microsoft Graph,
  * using the well-known endpoints for these services
  *
  * @see  https://developer.microsoft.com/en-us/graph/graph-explorer
