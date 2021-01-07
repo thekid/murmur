@@ -18,7 +18,7 @@ The web frontend offers a variety of streams and possibilities of configuring th
 
 Integrating with your AAD
 -------------------------
-To run the software, you need to create an application in the [Azure Portal](https://portal.azure.com/).
+To run the software, you need to create an application in the [Azure Portal](https://portal.azure.com/). Go to "App registrations" and add a new application.
 
 First, add the redirect URI you'll be running the service at, e.g. `http://localhost/`:
 
@@ -35,7 +35,7 @@ Last but not least, be sure to add the Yammer impersonation permission:
 
 Running the software
 --------------------
-The software is dockerized. The application (client) ID, directory (tenat) ID as well as the client secret need to be passed via environment variables as follows:
+The software is dockerized. The application (client) ID, directory (tenant) ID as well as the client secret need to be passed via environment variables as follows:
 
 ```bash
 $ docker run -it -p 80:8080 \
