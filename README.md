@@ -16,6 +16,21 @@ The web frontend offers a variety of streams and possibilities of configuring th
 * **Questions** - as above, but filtered to only include questions
 * **Topics** - like *Grouped* view, but based on Yammer topics rather than groups
 
+All feed items are shown in a card form, with an excerpt of the content. The following post types are highlighted:
+
+* **Announcement** - with an orange icon
+* **Praise** - with a pink heart icon showing the recipient(s)
+* **Poll** - with a yellow chart icon showing the poll's options and current outcome
+* **Questions** - with a range from blue until green: questions without answers, questions with answers, questions where a "best answer" has been selected
+
+Posts in feed views may be grouped and sorted.
+
+Live events
+-----------
+Currently running public live events are shown on the application's front page. When drilling down into a group, the software is able to show scheduled, running as well as past live events:
+
+![Screenshot Murmur/Group](https://user-images.githubusercontent.com/696742/103904464-97e13980-50fd-11eb-8179-12c54549cd35.png)
+
 Integrating with your AAD
 -------------------------
 To run the software, you need to create an application in the [Azure Portal](https://portal.azure.com/). Go to "App registrations" and add a new application.
