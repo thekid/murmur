@@ -41,16 +41,16 @@ class Office365Integration {
    * in the session for later 
    */
   public function using(Sessions $sessions): Authentication {
-    return new SessionBased($this->flow, $sessions, fn($session) => {
-      $response= $session->fetch(self::YAMMER_API.'/v1/oauth/tokens.json');
+    return new SessionBased($this->flow, $sessions, function($auth) {
+      $response= $auth->fetch(self::YAMMER_API.'/v1/oauth/tokens.json');
       if (200 !== $response->status()) {
         throw new IllegalAccessException(Streams::readAll($response->stream()));
       }
 
       $token= $response->value()[0]['token'];
-      $identity= $session->fetch(self::YAMMER_API.'/v1/users/current.json')->value();
-      $groups= $session->fetch(self::YAMMER_API.'/v1/groups/for_user/'.$identity['id'].'.json')->value();
-      return ['identity' => $identity, 'token' => $token, 'groups' => $groups];
+      $identity= $auth->fetch(self::YAMMER_API.'/v1/users/current.json')->value();
+      $groups= $auth->fetch(self::YAMMER_API.'/v1/groups/for_user/'.$identity['id'].'.json')->value();
+      return ['token' => $token, 'identity' => $identity, 'groups' => $groups];
     });
   }
 }
