@@ -26,8 +26,7 @@ class TemplateEngine implements Templates {
         return str_replace('{{', '\\{{', $source->code());
       })
       ->withHelper('sub', fn($in, $context, $options) => {
-        parse_str($options[1], $params);
-        return preg_replace_callback('/\{([a-z]+)\}/', fn($matches) => $params[$matches[1]], $options[0]);
+        return preg_replace_callback('/\{([a-z]+)\}/', fn($matches) => $options[$matches[1]], $options[0]);
       })
     ;
     $this->backing->withLogger(Logging::named('trace')->toConsole());
