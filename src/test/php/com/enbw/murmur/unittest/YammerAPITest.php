@@ -13,9 +13,7 @@ class YammerAPITest {
 
   /** Returns an Endpoints instance which echoes HTTP requests */
   private function echoing($func): Endpoints {
-    $fixture= new YammerAPI()->as(self::TOKEN);
-    $fixture->endpoint->connecting(fn($uri) => new EchoingConnection($uri, $func));
-    return $fixture;
+    return new YammerAPI()->as(self::TOKEN)->connecting(fn($uri) => new EchoingConnection($uri, $func));
   }
 
   #[Test]

@@ -1,9 +1,11 @@
 <?php namespace com\enbw\murmur\yammer;
 
+use peer\http\HttpConnection;
+use util\URI;
 use webservices\rest\{Endpoint, RestResource};
 
 class Endpoints {
-  public $endpoint;
+  private $endpoint;
 
   /** Creates an endpoints collection */
   public function __construct(string $base, string $token) {
@@ -11,6 +13,12 @@ class Endpoints {
       'Authorization' => 'Bearer '.$token,
       'User-Agent'    => 'XP/YammerAPI'
     ]);
+  }
+
+  /** Replace connection function */
+  public function connecting(function(URI): HttpConnection $connection): self {
+    $this->endpoint->connecting($connection);
+    return $this;
   }
 
   /**
@@ -27,7 +35,7 @@ class Endpoints {
    *
    * @see  https://www.apollographql.com/blog/persisted-graphql-queries-with-apollo-client-119fd7e6bba5/
    */
-  public function query(string $operation, string $hash) {
+  public function query(string $operation, string $hash): GraphQLQuery {
     return new GraphQLQuery($this->endpoint->resource('/graphql'), null, $operation, [
       'persistedQuery' => ['version' => 1, 'sha256Hash' => $hash]
     ]);
