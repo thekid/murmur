@@ -46,16 +46,6 @@ class TemplateEngine implements Templates {
   }
 
   /**
-   * Transforms a named partial
-   *
-   * @param  string $name Template name
-   * @param  [:var] $context
-   */
-  public function partial($name, $context= []) {
-    return $this->backing->transform('partials/'.$name, $context + ['scope' => $name]);
-  }
-
-  /**
    * Transforms a named template
    *
    * @param  string $name Template name
