@@ -22,7 +22,6 @@ class App extends Application {
       ->properties($credentials->expanding($this->environment->properties('inject')))
       ->singleton(Templates::class, TemplateEngine::class)
       ->singleton(YammerAPI::class)
-      ->singleton(Cache::class)
       ->named('templates', new Path($webroot, 'src/main/handlebars'))
       ->named('service', (string)getenv('SERVICE_URL'))
     );
