@@ -3,10 +3,18 @@
 use com\enbw\murmur\YammerAPI;
 use com\enbw\murmur\yammer\Endpoints;
 use lang\IllegalArgumentException;
-use unittest\{Test, Assert};
+use unittest\{Test, Assert, Expect};
 
 class YammerAPITest {
   private const ID = 'eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI1MDE4NjkxOTkzNiJ9';
+  private const TOKEN = '174967-nr5Y0xAluWmiNnvtUQNNfg';
+
+  /** Returns an Endpoints instance which echoes HTTP requests */
+  private function echoing($func): Endpoints {
+    $fixture= new YammerAPI()->as(self::TOKEN);
+    $fixture->endpoint->connecting(fn($uri) => new EchoingConnection($uri, $func));
+    return $fixture;
+  }
 
   #[Test]
   public function can_create() {
@@ -35,6 +43,35 @@ class YammerAPITest {
 
   #[Test]
   public function as_returns_authenticated_endpoints() {
-    Assert::instance(Endpoints::class, new YammerAPI()->as('174967-nr5Y0xAluWmiNnvtUQNNfg'));
+    Assert::instance(Endpoints::class, new YammerAPI()->as(self::TOKEN));
+  }
+
+  #[Test]
+  public function rest_api_request() {
+    $res= $this->echoing(fn($req, $payload) => [200, $req->method.' '.$req->target()])
+      ->api('users/current')
+      ->get()
+      ->value()
+    ;
+
+    Assert::equals('GET /api/v1/users/current.json', $res);
+  }
+
+  #[Test]
+  public function graphql_query() {
+    $res= $this->echoing(fn($req, $payload) => [200, ['data' => [$req->method.' '.$req->target(), $payload]]])
+      ->query('AutocompleteClients', '0055d...')
+      ->execute(['text' => 'Test'])
+    ;
+
+    Assert::equals(
+      ['POST /graphql', json_encode([
+        'query'         => null,
+        'operationName' => 'AutocompleteClients',
+        'variables'     => ['text' => 'Test'],
+        'extensions'    => ['persistedQuery' => ['version' => 1, 'sha256Hash' => '0055d...']]
+      ])],
+      $res
+    );
   }
 }
