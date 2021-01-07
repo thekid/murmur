@@ -25,6 +25,11 @@ All feed items are shown in a card form, with an excerpt of the content. The fol
 
 Posts in feed views may be grouped and sorted.
 
+Grouping
+--------
+Grouping messages is done to create a "cleaner" feed. There are two methods - **by adjacent** which groups adjacent messages in the same group by the same author and the more "greedy" **by author**, which simply groups all posts in a feed by a given person.
+
+![Grouping](https://user-images.githubusercontent.com/696742/103909787-63bd4700-5104-11eb-9176-7e95a4080248.png)
 
 Live events
 -----------
