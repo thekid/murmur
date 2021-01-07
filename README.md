@@ -1,6 +1,8 @@
 Murmur - Yammer feeds reimagined
 ================================
 
+[![Build status on GitHub](https://github.com/thekid/murmur/workflows/Tests/badge.svg)](https://github.com/thekid/murmur/actions)
+
 This is an experiment to see how [Yammer](https://web.yammer.com/) feeds could be grouped together to create more relevant streams of information.
 
 Feeds
