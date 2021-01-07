@@ -29,7 +29,8 @@ Live events
 -----------
 Currently running public live events are shown on the application's front page. When drilling down into a group, the software is able to show scheduled, running as well as past live events:
 
-![Screenshot Murmur/Group](https://user-images.githubusercontent.com/696742/103904464-97e13980-50fd-11eb-8179-12c54549cd35.png)
+![Screenshot Murmur/Group](https://user-images.githubusercontent.com/696742/103905268-b136b580-50fe-11eb-94f7-418be227c185.png)
+
 
 Integrating with your AAD
 -------------------------
