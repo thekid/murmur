@@ -21,7 +21,7 @@ class Office365Integration {
   /**
    * Instantiate integration with a given oauth URI, which is of the form:
    *
-   * `oauth2://${oauth_clientid}:${oauth_secret}@{oauth_appid}?{scopes}`
+   * `oauth2://${oauth_client}:${oauth_secret}@{oauth_tenant}?{scopes}`
    */
   public function __construct(string $oauth, string $service) {
     $uri= parse_url($oauth);
