@@ -42,17 +42,12 @@ Integrating with your AAD
 -------------------------
 To run the software, you need to create an application in the [Azure Portal](https://portal.azure.com/). Go to "App registrations" and add a new application.
 
-First, add the redirect URI you'll be running the service at, e.g. `http://localhost/`:
-
-![Redirect URL](https://user-images.githubusercontent.com/696742/103903820-af6bf280-50fc-11eb-8324-268b97f11ab7.png)
-
-Then, add a client secret and note that value:
-
-![Client secret](https://user-images.githubusercontent.com/696742/103904067-112c5c80-50fd-11eb-8ed2-843967a9e369.png)
-
-Last but not least, be sure to add the Yammer impersonation permission:
-
-![API permissions](https://user-images.githubusercontent.com/696742/103903691-80558100-50fc-11eb-89ca-f9bb1bf6c923.png)
+1. Add the redirect URI you'll be running the service at, e.g. `http://localhost/`:
+   ![Redirect URL](https://user-images.githubusercontent.com/696742/103903820-af6bf280-50fc-11eb-8324-268b97f11ab7.png)
+2. Then, add a client secret and note that value:
+   ![Client secret](https://user-images.githubusercontent.com/696742/103904067-112c5c80-50fd-11eb-8ed2-843967a9e369.png)
+3. Last but not least, be sure to add the Yammer impersonation permission:
+   ![API permissions](https://user-images.githubusercontent.com/696742/103903691-80558100-50fc-11eb-89ca-f9bb1bf6c923.png)
 
 
 Running the software
