@@ -7,7 +7,7 @@ Feeds
 -----
 The web frontend offers a variety of streams and possibilities of configuring them:
 
-`[IMAGE]`
+![Screenshot Murmur/Home](https://user-images.githubusercontent.com/696742/103903450-310f5080-50fc-11eb-9adf-692c0cfe084f.png)
 
 * **All** - corresponds the "All conversations" in the Yammer web interface
 * **Discovery** - lets users discover people and groups that may be interesting to them, suggested by an undisclosed algorithm
