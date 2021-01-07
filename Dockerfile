@@ -12,7 +12,7 @@ RUN mkdir /app
 
 COPY class.pth /app/
 
-COPY src/ /app/src/
+COPY src/main /app/src/main/
 
 COPY vendor/ /app/vendor/
 
