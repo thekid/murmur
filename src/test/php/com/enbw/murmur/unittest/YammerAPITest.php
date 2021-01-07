@@ -4,10 +4,12 @@ use com\enbw\murmur\YammerAPI;
 use com\enbw\murmur\yammer\Endpoints;
 use lang\IllegalArgumentException;
 use unittest\{Test, Assert, Expect};
+use webservices\rest\RestException;
 
 class YammerAPITest {
   private const ID = 'eyJfdHlwZSI6Ikdyb3VwIiwiaWQiOiI1MDE4NjkxOTkzNiJ9';
   private const TOKEN = '174967-nr5Y0xAluWmiNnvtUQNNfg';
+  private const HASH = '0055d09b4b7f917e812e9947d84227b1dd209f2cad8e39fa61b860affc2e1509';
 
   /** Returns an Endpoints instance which echoes HTTP requests */
   private function echoing($func): Endpoints {
@@ -60,7 +62,7 @@ class YammerAPITest {
   #[Test]
   public function graphql_query() {
     $res= $this->echoing(fn($req, $payload) => [200, ['data' => [$req->method.' '.$req->target(), $payload]]])
-      ->query('AutocompleteClients', '0055d...')
+      ->query('AutocompleteClients', self::HASH)
       ->execute(['text' => 'Test'])
     ;
 
@@ -69,9 +71,17 @@ class YammerAPITest {
         'query'         => null,
         'operationName' => 'AutocompleteClients',
         'variables'     => ['text' => 'Test'],
-        'extensions'    => ['persistedQuery' => ['version' => 1, 'sha256Hash' => '0055d...']]
+        'extensions'    => ['persistedQuery' => ['version' => 1, 'sha256Hash' => self::HASH]]
       ])],
       $res
     );
+  }
+
+  #[Test, Expect(RestException::class)]
+  public function graphql_query_raising_error() {
+    $this->echoing(fn($req, $payload) => [200, ['errors' => ['Incorrect hash']]])
+      ->query('AutocompleteClients', 'incorrect-hash')
+      ->execute(['text' => 'Test'])
+    ;
   }
 }
