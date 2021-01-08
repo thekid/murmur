@@ -1,0 +1,104 @@
+{{#> layout}}
+  {{#*inline "title"}}{{user.full_name}} feed{{/inline}}
+  {{#*inline "content"}}
+
+    <!-- User information -->
+    <div class="ui vertical segment user-info" style="border-bottom: none">
+      <div style="display: grid; grid-template-columns: 80px auto">
+        <img class="ui circular image" src="{{sub user.mugshot_url_template width='76' height='76'}}" width="76" height="76">
+        <div style="padding: 0 2.4em 0 2em">
+          <h2 class="ui header" style="margin-bottom: 0.2em">
+            {{user.full_name}}
+            <a href="https://web.yammer.com/main/users/{{identifier}}"><i class="external link square alternate icon"></i></a>
+          </h2>
+          <p>
+            <a href="{{user.email}}">{{user.email}}</a>, {{user.department}}, {{user.location}}<br>
+            <span style="color: rgba(0,0,0,.4)">
+              On <strong>{{user.network_name}}</strong> Yammer since {{date user.activated_at 'd.m.Y'}}
+            </span>
+          </p>
+        </div>
+      </div>
+      <div class="ui statistics" style="margin-top: 0">
+        <div class="violet statistic">
+          <div class="value">{{user.stats.following}}</div>
+          <div class="label">Following</div>
+        </div>
+        <div class="violet statistic">
+          <div class="value">{{user.stats.followers}}</div>
+          <div class="label">Followers</div>
+        </div>
+        <div class="violet statistic">
+          <div class="value">{{size groups}}</div>
+          <div class="label">Groups</div>
+        </div>
+      </div>
+    </div>
+    <div class="ui vertical clearing segment">
+      <button class="ui right floated tiny labeled icon button" type="submit" onclick="update()"><i class="refresh icon"></i> Refresh</button>
+      <p>
+        <i class="clock icon"></i> <span id="timing">...</span>
+      </p>
+    </div>
+
+    <!-- Feed -->
+    <div class="ui vertical segment" id="content">
+      <div class="ui stackable cards" id="feed">
+        <div class="card">
+          <div class="content">
+            <div class="ui placeholder">
+              <div class="header"><div class="medium line"></div></div>
+              <div class="meta"><div class="short line"></div></div>
+            </div>
+            <div class="ui placeholder">
+              <div class="description"><div class="line"></div></div>
+            </div>
+          </div>
+          <div class="extra content">
+            <div class="center aligned author">
+              <div class="ui placeholder">
+                <div class="avatar image"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{/inline}}
+  {{#*inline "script"}}
+    <script type="text/javascript">
+      function update() {
+        const $content = document.getElementById('content');
+        const $feed = document.getElementById('feed');
+        const $timing = document.getElementById('timing');
+
+        const start = new Date().getTime();
+        const template = Handlebars.compile(`{{{source 'templates/messages'}}}`);
+
+        const feed = function(result, error) {
+          if (result !== null) {
+            const edges = result.user.feed.threads.edges;
+            edges.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
+            $feed.innerHTML = template({edges: edges, errors: []});
+          } else {
+            $feed.innerHTML = template({edges: [], errors: [error.name + ': ' + error.message]});
+          }
+
+          $content.classList.remove('loading');
+          $timing.innerHTML = ((new Date().getTime() - start) / 1000) + ' seconds';
+          $('.excerpt').popup();
+        }
+
+
+        $content.classList.add('loading');
+        fetch('/api/feed/users/{{identifier}}?limit=20', {method: 'GET', credentials: 'same-origin'})
+          .then(res => res.ok ? res.json() : (function() { throw new Error(res.status + ': ' + res.statusText); })())
+          .then(result => feed(result, null))
+          .catch(error => feed(null, error))
+        ;
+      };
+
+      window.onload = update;
+    </script>
+  {{/inline}}
+{{/layout}}

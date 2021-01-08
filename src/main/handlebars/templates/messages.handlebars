@@ -6,7 +6,7 @@
       <div class="content">
         <img class="ui left floated avatar image" src="{{avatar node.threadStarter.sender}}" onerror="this.src='/static/default-avatar.png'">
         <div class="header">
-          <a href="https://web.yammer.com/main/users/{{node.threadStarter.sender.id}}">{{node.threadStarter.sender.displayName}}</a>
+          <a href="/user/{{node.threadStarter.sender.databaseId}}">{{node.threadStarter.sender.displayName}}</a>
         </div>
         <div class="meta">
           {{add stacked.length 1}} posts
@@ -91,7 +91,7 @@
       <div class="content">
         <img class="ui left floated avatar image" src="{{avatar node.threadStarter.sender}}" onerror="this.src='/static/default-avatar.png'">
         <div class="header">
-          <a href="https://web.yammer.com/main/users/{{node.threadStarter.sender.id}}">{{node.threadStarter.sender.displayName}}</a>
+          <a href="/user/{{node.threadStarter.sender.databaseId}}">{{node.threadStarter.sender.displayName}}</a>
         </div>
         <div class="date">
           <a href="https://web.yammer.com/main/threads/{{node.id}}">{{date node.updatedAt}}</a> 

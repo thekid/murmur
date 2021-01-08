@@ -28,6 +28,6 @@ class Home {
   #[Get]
   public function index(#[Value] $user) {
     usort($user['groups'], fn($a, $b) => $b['stats']['last_message_id'] <=> $a['stats']['last_message_id']);
-    return ['user' => $user['identity'], 'groups' => $user['groups']];
+    return ['self' => $user['identity'], 'groups' => $user['groups']];
   }
 }

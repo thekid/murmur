@@ -101,6 +101,9 @@
       {{#if group}}
         <a class="active item" href="{{request.uri.path}}" style="background-color: {{group.color}}">{{group.full_name}}</a>
       {{/if}}
+      {{#if user}}
+        <a class="active purple item" href="{{request.uri.path}}">{{user.full_name}}</a>
+      {{/if}}
       <button class="hamburger" onclick="$(this).parent().toggleClass('open')">
         <div></div>
         <div></div>

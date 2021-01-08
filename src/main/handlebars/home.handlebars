@@ -6,24 +6,24 @@
     <!-- User information -->
     <div class="ui vertical segment user-info" style="border-bottom: none">
       <div style="display: grid; grid-template-columns: 80px auto">
-        <img class="ui circular image" src="{{sub user.mugshot_url_template width='76' height='76'}}" width="76" height="76">
+        <img class="ui circular image" src="{{sub self.mugshot_url_template width='76' height='76'}}" width="76" height="76">
         <div style="padding: 0 2.4em 0 2em">
-          <h2 class="ui header" style="margin-bottom: 0.2em">{{user.full_name}}</h2>
+          <h2 class="ui header" style="margin-bottom: 0.2em">{{self.full_name}}</h2>
           <p>
-            <a href="{{user.email}}">{{user.email}}</a>, {{user.department}}, {{user.location}}<br>
+            <a href="{{self.email}}">{{self.email}}</a>, {{self.department}}, {{self.location}}<br>
             <span style="color: rgba(0,0,0,.4)">
-              On <strong>{{user.network_name}}</strong> Yammer since {{date user.activated_at 'd.m.Y'}}
+              On <strong>{{self.network_name}}</strong> Yammer since {{date self.activated_at 'd.m.Y'}}
             </span>
           </p>
         </div>
       </div>
       <div class="ui statistics" style="margin-top: 0">
         <div class="violet statistic">
-          <div class="value">{{user.stats.following}}</div>
+          <div class="value">{{self.stats.following}}</div>
           <div class="label">Following</div>
         </div>
         <div class="violet statistic">
-          <div class="value">{{user.stats.followers}}</div>
+          <div class="value">{{self.stats.followers}}</div>
           <div class="label">Followers</div>
         </div>
         <div class="violet statistic">

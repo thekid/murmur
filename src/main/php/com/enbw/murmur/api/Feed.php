@@ -32,4 +32,12 @@ class Feed {
       ->execute(['topicId' => $id, 'topicFeedType' => self::TOPIC_TYPES[$type], 'threadCount' => $limit, 'replyCount' => 0])
     ;
   }
+
+  #[Get('/users/{id}')]
+  public function user(#[Value] $user, string $id, #[Param] int $limit= 10) {
+    return $this->yammer->as($user['token'])
+      ->query('FeedUserClients', 'b3eabbdc728ef68430299256fd180f909a80c7a5204f634de51327f76755dc01')
+      ->execute(['userId' => $id, 'threadCount' => $limit, 'replyCount' => 0])
+    ;
+  }
 }
