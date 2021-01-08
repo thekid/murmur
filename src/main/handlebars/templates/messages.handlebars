@@ -14,11 +14,11 @@
         <div class="description" style="margin-top: 1em; max-height: 8em; overflow-y: scroll">
           <ul class="ui list">
             <li title="{{type node}} @ {{date node.updatedAt}}" class="item">
-              <a class="excerpt" data-html="<div class='header'>{{type node}} @ {{date node.updatedAt}}</div>{{body node.threadStarter}}" data-variation="wide inverted" href="https://web.yammer.com/main/threads/{{node.id}}">{{first node.threadStarter}}</a>
+              <a class="excerpt" data-html="<div class='header'>{{type node}} @ {{date node.updatedAt}}</div>{{body node.threadStarter}}" data-variation="wide inverted" href="https://web.yammer.com/main/threads/{{node.id}}">{{first node}}</a>
             </li>
             {{#each stacked}}
               <li class="item">
-                <a class="excerpt" data-html="<div class='header'>{{type node}} @ {{date node.updatedAt}}</div>{{body node.threadStarter}}" data-variation="wide inverted" href="https://web.yammer.com/main/threads/{{node.id}}">{{first node.threadStarter}}</a>
+                <a class="excerpt" data-html="<div class='header'>{{type node}} @ {{date node.updatedAt}}</div>{{body node.threadStarter}}" data-variation="wide inverted" href="https://web.yammer.com/main/threads/{{node.id}}">{{first node}}</a>
               </li>
             {{/each}}
           </ul>
@@ -97,7 +97,7 @@
           <a href="https://web.yammer.com/main/threads/{{node.id}}">{{date node.updatedAt}}</a> 
         </div>
         <div class="description" style="margin-top: 1em">
-          <p class="excerpt" data-content="{{body node.threadStarter}}" data-variation="wide inverted">{{first node.threadStarter}}</p>
+          <p class="excerpt" data-content="{{body node.threadStarter}}" data-variation="wide inverted">{{first node}}</p>
         </div>
       </div>
       <div class="extra content">

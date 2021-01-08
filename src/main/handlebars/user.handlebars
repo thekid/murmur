@@ -81,6 +81,7 @@
             edges.sort((a, b) => ((a.node.updatedAt === b.node.updatedAt) ? 0 : ((a.node.updatedAt > b.node.updatedAt) ? -1 : 1)));
             $feed.innerHTML = template({edges: edges, errors: []});
           } else {
+            console.error(error);
             $feed.innerHTML = template({edges: [], errors: [error.name + ': ' + error.message]});
           }
 

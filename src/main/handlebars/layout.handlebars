@@ -187,16 +187,16 @@
         return '';
       });
 
-      Handlebars.registerHelper('first', function(threadStarter) {
-        const content = contentState(threadStarter).blocks[0].text;
+      Handlebars.registerHelper('first', function(node) {
+        const body = contentState(node.threadStarter);
 
-        if (content.length > 100) {
-          return content.substring(0, 100) + '…';
-        } else if (content) {
-          return content;
-        } else {
-          return '…';
+        let content = '';
+        for (const block of body.blocks) {
+          content += block.text;
+          if (content.length > 100) return content.substring(0, 100) + '…';
         }
+
+        return content || '…';
       });
 
       Handlebars.registerHelper('body', function(threadStarter) {
