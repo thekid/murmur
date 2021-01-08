@@ -3,6 +3,17 @@
   {{#*inline "content"}}
     <h1>Murmur <small style="color: rgba(0,0,0,.4)">Yammer Feeds reimagined</small></h1>
 
+    <!-- Search -->
+    <div style="width: 100%; display: flex; justify-content: center;">
+      <div class="ui category search">
+        <div class="ui icon input">
+          <input class="prompt" type="text" size="30" placeholder="Search...">
+          <i class="search icon"></i>
+        </div>
+        <div class="results"></div>
+      </div>
+    </div>
+
     <!-- User information -->
     <div class="ui vertical segment user-info" style="border-bottom: none">
       <div style="display: grid; grid-template-columns: 80px auto">
@@ -148,6 +159,8 @@
       }
 
       window.onload = update;
+
+        $('.ui.category.search').search({type : 'category', apiSettings : {url: '/api/autocomplete?q={query}'}});
     </script>
   {{/inline}}
 {{/layout}}
