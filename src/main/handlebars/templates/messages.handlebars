@@ -30,7 +30,7 @@
             {{#if (lookup ../following node.group.databaseId)}}
               <i title="You are following this group" class="check circle outline icon"></i>
             {{/if}}
-            <a title="{{node.group.displayName}}" href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a>
+            <a title="{{node.group.displayName}}" href="/group/{{node.group.databaseId}}">{{node.group.displayName}}</a>
           </div>
         {{else}}
           <div class="right floated content">
@@ -43,7 +43,7 @@
                     {{#if (lookup ../../following databaseId)}}
                       <i title="You are following this group" class="check circle outline icon"></i>
                     {{/if}}
-                    <a title="{{displayName}}" href="https://web.yammer.com/main/groups/{{@key}}">{{displayName}}</a>
+                    <a title="{{displayName}}" href="/group/{{databaseId}}">{{displayName}}</a>
                   </div>
                 {{/each}}
               </div>
@@ -105,7 +105,7 @@
           {{#if (lookup ../following node.group.databaseId)}}
             <i title="You are following this group" class="check circle outline icon"></i>
           {{/if}}
-          <a title="{{node.group.displayName}}" href="https://web.yammer.com/main/groups/{{node.group.id}}">{{node.group.displayName}}</a>
+          <a title="{{node.group.displayName}}" href="/group/{{node.group.databaseId}}">{{node.group.displayName}}</a>
         </div>
 
         <i class="heart outline icon"></i> {{stats.liked}}
