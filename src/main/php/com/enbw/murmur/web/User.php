@@ -2,7 +2,7 @@
 
 use com\enbw\murmur\YammerAPI;
 use web\Error;
-use web\frontend\{Handler, Get, Value, View};
+use web\frontend\{Handler, Get, Value};
 
 #[Handler('/user')]
 class User {
