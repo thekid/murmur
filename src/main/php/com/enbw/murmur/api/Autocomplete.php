@@ -24,12 +24,10 @@ class Autocomplete {
       ])
     ;
 
-    $r= [
-      'results' => [
-        'users'  => ['name' => 'Users', 'results' => []],
-        'groups' => ['name' => 'Groups', 'results' => []],
-      ]
-    ];
+    $r= ['results' => [
+      'users'  => ['name' => 'Users', 'results' => []],
+      'groups' => ['name' => 'Groups', 'results' => []],
+    ]];
     foreach ($result['autocompleteSuggestions']['users']['edges'] as $edge) {
       $r['results']['users']['results'][]= [
         'title'       => $edge['node']['displayName'],
@@ -42,6 +40,7 @@ class Autocomplete {
         'title'       => $edge['node']['displayName'],
         'url'         => '/group/'.$edge['node']['databaseId'],
         'description' => $edge['node']['description'],
+        'image'       => preg_replace('/\{(width|height)\}/', 48, $edge['node']['avatarUrlTemplate'])
       ];
     }
     return $r;
