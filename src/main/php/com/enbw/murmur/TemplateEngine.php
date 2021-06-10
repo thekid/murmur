@@ -11,7 +11,7 @@ use web\frontend\Templates;
 class TemplateEngine implements Templates {
   private $backing;
 
-  public function __construct(#[Inject('templates')] Path $templates= null) {
+  public function __construct(#[Inject('templates')] Path $templates) {
     $this->backing= new HandlebarsEngine()
       ->withHelper('date', fn($in, $context, $options) => new Date($options[0])->toString($options[1] ?? 'd.m.Y'))
       ->withHelper('size', fn($in, $context, $options) => sizeof($options[0]))
