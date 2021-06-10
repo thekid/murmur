@@ -15,7 +15,7 @@ class Groups {
   #[Get('/{type}/{id}')]
   public function all(#[Value] $user, string $type, string $id, #[Param] int $limit= 10) {
     return $this->yammer->as($user['token'])
-      ->query('FeedGroupClients', '0079bf67919fe5d57572a9144e3eb6efc3354a7da8713a68c1e804061f928fed')
+      ->query('FeedGroupClients', '0d280e317d30a254a2578eb4ed0d4c83ffda40a7c317605cd92c69b08cb6f4ea')
       ->execute([
         'groupId'       => $this->yammer->id('Group', $id),
         'threadCount'   => $limit,

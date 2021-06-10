@@ -5,7 +5,7 @@ use web\rest\{Get, Resource, Param, Value};
 
 #[Resource('/api/autocomplete')]
 class Autocomplete {
-  private const HASH = '0055d09b4b7f917e812e9947d84227b1dd209f2cad8e39fa61b860affc2e1509';
+  private const HASH = '898aa10f570d3466a8e27a92fbf9cd4d4d0ba6cfb88616ca9d07ff7d2a797eea';
 
   public function __construct(private YammerAPI $yammer) { }
 

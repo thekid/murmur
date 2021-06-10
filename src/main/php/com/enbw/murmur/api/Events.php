@@ -12,7 +12,7 @@ class Events {
   #[Get]
   public function all(#[Value] $user, #[Param] int $limit= 10) {
     return $this->yammer->as($user['token'])
-      ->query('NetworkLiveEventsClients', hash: 'd0e0c0055f8df84dbd9fb54b8f03c8cf6efc0e9175c8a967ca344e422fa2608f')
+      ->query('NetworkLiveEventsClients', hash: '05fed28f2e520807e25e299e7590a818f3a42bdd72e87af69d8338f4f4408f7c')
       ->execute(['first' => $limit])
     ;
   }
